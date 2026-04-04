@@ -3,8 +3,8 @@ import numpy as np
 import scipy
 import cmath 
 import scipy.sparse as sp
-import PauliStrings as pauli_strings
-from Hamiltonian import TrotterHamiltonian
+from . import PauliStrings as pauli_strings
+from .Hamiltonian import TrotterHamiltonian
 
 def _soft_threshold_real(x: np.ndarray, threshold: float) -> np.ndarray:
     """Real soft-thresholding used by proximal methods."""
