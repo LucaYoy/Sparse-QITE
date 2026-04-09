@@ -95,7 +95,8 @@ def QITE(n_qubits: int,
          method: str = 'LU',
          lasso_lambda: float = 1e-5,
          lasso_max_iter: int = 500,
-         lasso_tol: float = 1e-8) -> Tuple[np.ndarray, sp.lil_matrix, np.ndarray]:
+         lasso_tol: float = 1e-8,
+         objective_tol:float = 0.001) -> Tuple[np.ndarray, sp.lil_matrix, np.ndarray]:
     """
     Quantum Imaginary Time Evolution (QITE) algorithm for simulating ground state preparation.
     
@@ -116,7 +117,7 @@ def QITE(n_qubits: int,
         lasso_lambda: L1 penalty weight used when method='lasso'. Default is 1e-5.
         lasso_max_iter: Maximum proximal iterations when method='lasso'. Default is 500.
         lasso_tol: Proximal convergence tolerance when method='lasso'. Default is 1e-8.
-    
+        objective_tol: Tolerance for the objective function convergence. Default is 0.001.
     Returns:
         A tuple containing:
             - E_QITE: Array of energies at each time step (length varies if early termination occurs).
@@ -146,6 +147,7 @@ def QITE(n_qubits: int,
     a=np.zeros((N,H_trot.Nk,num_paulis),dtype=complex)
     E_QITE=np.zeros(N+1)
     E_QITE[0]=np.real((psi_QITE.getH()@H@psi_QITE).trace())
+    #errors = []
     for i in range(0,N):
         #ara en aquest pas de temps anem a calcular els coeffs per a cada qubit
         for l in range(H_trot.Nk):
@@ -154,7 +156,9 @@ def QITE(n_qubits: int,
             X=sp.lil_matrix((2**n_qubits,num_paulis),dtype=complex)
             b=np.zeros((num_paulis),dtype=complex)
             aux=np.real((psi_QITE.getH()@sp.linalg.expm(-2*H_trot.Hk[l]*dt)@psi_QITE).trace())
+            aux2 = np.real((psi_QITE.getH()@sp.linalg.expm(-H_trot.Hk[l]*dt)@psi_QITE).trace())
             c=cmath.sqrt(aux)
+            constant = 2*(1-aux2/c)/dt**2
             expHdt=sp.linalg.expm(-H_trot.Hk[l]*dt)
             for j in range(num_paulis):
                 b[j] = -1j*(psi_QITE.getH()@(expHdt@PD[l][j]-PD[l][j]@expHdt)@psi_QITE).trace()/c/dt
@@ -180,7 +184,8 @@ def QITE(n_qubits: int,
             elif method=='LU':
                 ep=1e-10
                 a[i,l]=(scipy.linalg.solve(A+ep*np.eye(num_paulis),b,assume_a='her'))
-            elif method=='lasso':
+                #errors.append(a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant)
+            elif method=='vanilla_lasso':
                 x0 = np.real(a[i-1,l]) if i > 0 else None
                 a[i,l] = _solve_lasso_qite(
                     A,
@@ -192,9 +197,30 @@ def QITE(n_qubits: int,
                     support_tol=1e-10,
                     x0=x0,
                 )
+            elif method=='adaptive_lasso_v1':
+                lambda_max = 2*max(np.abs(b))
+                lambda_grid = [lambda_max,lambda_max*0.5,lambda_max*0.2,lambda_max*0.1]
+                x0 = np.real(a[i-1,l]) if i > 0 else None
+                for ld in lambda_grid:
+                    # Solve LASSO problem for each lambda in the grid
+                    a[i,l] = _solve_lasso_qite(
+                        A,
+                        b,
+                        lam=ld,
+                        max_iter=lasso_max_iter,
+                        tol=lasso_tol,
+                        ridge=1e-10,
+                        support_tol=1e-10,
+                        x0=x0,
+                    )
+                    objective = np.real_if_close((a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant).item())
+                    if objective < objective_tol:
+                        print(f"Step {i}, Lambda {ld}: Objective function is within tolerance.")  # Check if the objective function is within the tolerance
+                        break
+
             else:
                 raise ValueError(
-                    f"Unknown method '{method}'. Use one of: 'LU', 'lstsq', 'pinv', 'lasso'."
+                    f"Unknown method '{method}'. Use one of: 'LU', 'lstsq', 'pinv', 'vanilla_lasso', 'adaptive_lasso_v1'."
                 )
             
             #construction of the evolution operator (steps 5 and 6 in the algorithm)
@@ -202,6 +228,7 @@ def QITE(n_qubits: int,
             for j in range(num_paulis):
                 operator+=a[i,l,j]*PD[l][j]
             psi_QITE = sp.linalg.expm(-1j*operator*dt)@psi_QITE
+            
             
         #Enegy of the state at time step i
         if np.real((psi_QITE.getH()@H@psi_QITE).trace())>E_QITE[i]:
