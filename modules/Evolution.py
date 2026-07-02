@@ -200,6 +200,7 @@ def QITE(n_qubits: int,
             elif method=='adaptive_lasso_v1':
                 lambda_max = 2*max(np.abs(b))
                 lambda_grid = [lambda_max,lambda_max*0.5,lambda_max*0.2,lambda_max*0.1]
+
                 x0 = np.real(a[i-1,l]) if i > 0 else None
                 for ld in lambda_grid:
                     # Solve LASSO problem for each lambda in the grid
@@ -215,7 +216,7 @@ def QITE(n_qubits: int,
                     )
                     objective = np.real_if_close((a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant).item())
                     if objective < objective_tol:
-                        print(f"Step {i}, Lambda {ld}: Objective function is within tolerance.")  # Check if the objective function is within the tolerance
+                        print(f"Step {i}, Lambda {ld}: Objective function is within tolerance. with  lambda at index  {lambda_grid.index(ld)}")  # Check if the objective function is within the tolerance
                         break
 
             else:
