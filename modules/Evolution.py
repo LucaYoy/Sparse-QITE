@@ -198,7 +198,7 @@ def QITE(n_qubits: int,
                     x0=x0,
                 )
             elif method=='adaptive_lasso_v1':
-                lambda_max = 2*max(np.abs(b))
+                lambda_max = max(np.abs(b))
                 lambda_grid = [lambda_max,lambda_max*0.5,lambda_max*0.2,lambda_max*0.1]
 
                 x0 = np.real(a[i-1,l]) if i > 0 else None
