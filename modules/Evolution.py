@@ -16,7 +16,7 @@ def _solve_lasso_qite(A: np.ndarray,
                       max_iter: int = 500,
                       tol: float = 1e-8,
                       ridge: float = 1e-10,
-                      support_tol: float = 1e-10,
+                      support_tol: float = 1e-14,
                       x0: Optional[np.ndarray] = None) -> np.ndarray:
     """
     Solve the QITE LASSO subproblem:
@@ -93,7 +93,7 @@ def QITE(n_qubits: int,
          dt: float, 
          vervose: bool = False, 
          method: str = 'LU',
-         lasso_lambda: float = 1e-5,
+         lasso_lambda: float = 1e-3,
          lasso_max_iter: int = 500,
          lasso_tol: float = 1e-8,
          objective_tol:float = 0.001) -> Tuple[np.ndarray, sp.lil_matrix, np.ndarray]:
@@ -133,9 +133,18 @@ def QITE(n_qubits: int,
           * 'lasso': L1-penalized least squares (sparse coefficients)
     """
 
-    #checking whick method to obtain pauli strings is used
-    if np.isreal(H.data).all() and np.isreal(psi_0.data).all():
-        #print("Using Real Pauli Strings") 
+    # Check which method to obtain Pauli strings is used.
+    if H_trot.BC == 'OBC':
+        if D == n_qubits:
+            num_paulis,PD,fail = pauli_strings.OBC_DN(H_trot,n_qubits)
+        elif np.isreal(H.data).all() and np.isreal(psi_0.data).all():
+            #print("Using Real Pauli Strings")
+            num_paulis,PD,fail = pauli_strings.real_OBC(H_trot,D,n_qubits)
+        else:
+            #print("Using General Pauli Strings")
+            num_paulis,PD,fail = pauli_strings.general_OBC(H_trot,D,n_qubits)
+    elif np.isreal(H.data).all() and np.isreal(psi_0.data).all():
+        #print("Using Real Pauli Strings")
         num_paulis,PD,fail = pauli_strings.real(H_trot,D,n_qubits)
     else:
         #print("Using General Pauli Strings")
@@ -183,7 +192,7 @@ def QITE(n_qubits: int,
                 a[i,l]=np.real(invS_ex@b).flatten()
             elif method=='LU':
                 ep=1e-10
-                a[i,l]=(scipy.linalg.solve(A+ep*np.eye(num_paulis),b,assume_a='her'))
+                a[i,l]=np.real(scipy.linalg.solve(A+ep*np.eye(num_paulis),b,assume_a='her'))
                 #errors.append(a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant)
             elif method=='vanilla_lasso':
                 x0 = np.real(a[i-1,l]) if i > 0 else None
@@ -194,7 +203,7 @@ def QITE(n_qubits: int,
                     max_iter=lasso_max_iter,
                     tol=lasso_tol,
                     ridge=1e-10,
-                    support_tol=1e-10,
+                    support_tol= 1e-14,
                     x0=x0,
                 )
             elif method=='adaptive_lasso_v1':
@@ -211,7 +220,7 @@ def QITE(n_qubits: int,
                         max_iter=lasso_max_iter,
                         tol=lasso_tol,
                         ridge=1e-10,
-                        support_tol=1e-10,
+                        support_tol= 1e-14,
                         x0=x0,
                     )
                     objective = np.real_if_close((a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant).item())

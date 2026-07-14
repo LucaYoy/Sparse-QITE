@@ -21,12 +21,13 @@ class TrotterHamiltonian:
         Hk: List of sparse matrices representing each Hamiltonian term/piece.
         indk: Array of starting qubit indices for each Hamiltonian piece.
     """
-    def __init__(self, T: int, Nk: int, Rq: int, Hk: List[sp.spmatrix], indk: np.ndarray):
+    def __init__(self, T: int, Nk: int, Rq: int, Hk: List[sp.spmatrix], indk: np.ndarray, BC: str):
         self.T = T          #Trotter size
         self.Nk = Nk        #number of pieces
         self.Rq = Rq        #number of times each single qubit operator acts
         self.Hk = Hk        #list of all the Hammiltonian terms
         self.indk = indk    #first qbit on which each piece acts on
+        self.BC = BC        #string stabishing if the Hamiltonian's Boundary condition (BC) is OBC or PBC
 
 # %%
 def TFIM(J: float, 
@@ -61,6 +62,7 @@ def TFIM(J: float,
             - H_trot: TrotterHamiltonian object containing the decomposed Hamiltonian pieces.
 
     """
+    BC = 'PBC'
     X=[]
     ZZ=[]
     M=[]
@@ -127,9 +129,9 @@ def TFIM(J: float,
     ###################################################
     #This is a check to see if the trotterization is the same as the original Hamiltonian
     if sparse:
-        difH=sp.linalg.norm((H-sum(H_T)),ord=2)
+        difH=sp.linalg.norm((H-sum(H_T)),ord=1)
     else:
-        difH=np.linalg.norm((H-sum(H_T)),ord=2)
+        difH=np.linalg.norm((H-sum(H_T)),ord=1)
     if difH<1e-14:
         if verbose:
             print('Succesfull Troterization')
@@ -138,7 +140,7 @@ def TFIM(J: float,
     else:
         print('Failed Trotterization, you can still use the generated full Hamiltonian')
 
-    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index)
+    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index,BC)
 
     return H,H_trot
 
@@ -172,6 +174,7 @@ def ClusterIsing(Lambda: float,
             - H: The full Cluster-Ising Hamiltonian (sparse or dense based on 'sparse' parameter).
             - H_trot: TrotterHamiltonian object containing the decomposed Hamiltonian pieces.
     """
+    BC = 'PBC'
     ZXZ=[]
     YY=[]
     for i in range(n_qubits):
@@ -240,9 +243,9 @@ def ClusterIsing(Lambda: float,
     ###################################################
     #This is a check to see if the trotterization is the same as the original Hamiltonian
     if sparse:
-        difH=sp.linalg.norm((H-sum(H_T)),ord=2)
+        difH=sp.linalg.norm((H-sum(H_T)),ord=1)
     else:
-        difH=np.linalg.norm((H-sum(H_T)),ord=2)
+        difH=np.linalg.norm((H-sum(H_T)),ord=1)
     if difH<1e-14:
         if verbose:
             print('Succesfull Troterization')
@@ -251,12 +254,12 @@ def ClusterIsing(Lambda: float,
     else:
         print('Failed Trotterization, you can still use the generated full Hamiltonian')
 
-    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index)
+    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index,BC)
     
     return H,H_trot
 
 
-def Heisenberg(J: float, 
+def Heisenberg_OBC(J: float, 
                n_qubits: int, 
                sparse: bool = True) -> Tuple[Union[np.ndarray, sp.csc_matrix], TrotterHamiltonian]:
     """
@@ -265,7 +268,7 @@ def Heisenberg(J: float,
     The Heisenberg Hamiltonian is defined as:
     H = ∑ᵢ (Xᵢ Xᵢ₊₁ + Yᵢ Yᵢ₊₁ + J Zᵢ Zᵢ₊₁)
     
-    Uses periodic boundary conditions
+    Uses open boundary conditions
     
     Args:
         J: Coupling strength for the ZZ interaction terms.
@@ -276,6 +279,7 @@ def Heisenberg(J: float,
         Tuple of (H, H_trot) where H is the full Hamiltonian and H_trot 
         is the TrotterHamiltonian decomposition with T=2.
     """
+    BC = 'OBC'
     XX=[]
     YY=[]
     ZZ=[]
@@ -326,9 +330,9 @@ def Heisenberg(J: float,
     ###################################################
     #This is a check to see if the trotterization is the same as the original Hamiltonian
     if sparse:
-        difH=sp.linalg.norm((H-sum(H_T)),ord=2)
+        difH=sp.linalg.norm((H-sum(H_T)),ord=1)
     else:
-        difH=np.linalg.norm((H-sum(H_T)),ord=2)
+        difH=np.linalg.norm((H-sum(H_T)),ord=1)
     print('Heisenberg model with OBC and Hamiltonian pieces of locality T=2')
     if difH<1e-14:
         print('Succesfull Troterization')
@@ -336,6 +340,130 @@ def Heisenberg(J: float,
     else:
         print('Failed Trotterization, you can still use the generated full Hamiltonian')
 
+    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index[0:-1],BC)
+
+    return H,H_trot
+
+
+
+def Heisenberg_PBC(J: float, 
+               n_qubits: int,
+               T: int = 2,
+               sparse: bool = True) -> Tuple[Union[np.ndarray, sp.csc_matrix], TrotterHamiltonian]:
+    """
+    Generate the Heisenberg model Hamiltonian and its Trotterization.
+    
+    The Heisenberg Hamiltonian is defined as:
+    H = ∑ᵢ (Xᵢ Xᵢ₊₁ + Yᵢ Yᵢ₊₁ + J Zᵢ Zᵢ₊₁)
+    
+    Uses periodic boundary conditions
+    
+    Args:
+        J: Coupling strength for the ZZ interaction terms.
+        n_qubits: Number of qubits in the chain.
+        sparse: If True, returns sparse matrices. Default is True.
+    
+    Returns:
+        Tuple of (H, H_trot) where H is the full Hamiltonian and H_trot 
+        is the TrotterHamiltonian decomposition with T=2.
+    """
+    BC = 'PBC'
+    XX=[]
+    YY=[]
+    ZZ=[]
+    for i in range(n_qubits): #periodic boundary
+        # Hamiltonian
+        sxx=["I"]*n_qubits
+        syy=["I"]*n_qubits
+        szz=["I"]*n_qubits
+        i1= (i+1)%n_qubits #periodic index
+        sxx[i]="X"
+        sxx[i1]="X"
+        syy[i]="Y"
+        syy[i1]="Y"
+        szz[i]="Z"
+        szz[i1]="Z"
+        XX.append(Pauli(''.join(sxx)).to_matrix(sparse=sparse))
+        YY.append(Pauli(''.join(syy)).to_matrix(sparse=sparse))
+        ZZ.append(Pauli(''.join(szz)).to_matrix(sparse=sparse))
+        
+    H = np.sum(XX,axis=0) + np.sum(YY,axis=0) + J*np.sum(ZZ,axis=0)
+    if sparse:
+        H = sp.csc_matrix(H)
+    #############################################################
+    H_T=[]
+    if T>n_qubits:
+        print("Your Trotterization size is bigger than you system")
+    if T<2:
+        print("Your Trotterization size is too small, min value is T=2")
+    N_k=Fraction(n_qubits,T).numerator
+    R=Fraction(n_qubits,T).denominator
+    if R==1:
+        N_k=N_k*2
+        R=R*2
+    index=np.floor(n_qubits/N_k*np.arange(N_k)).astype(int).tolist()
+    for i in range(N_k):
+        ind=index[i]
+        h_k=np.zeros((2**n_qubits,2**n_qubits),dtype=complex)
+        #Two body terms
+        for j in range(T-1):
+            indT=(ind+j)%n_qubits
+            ocr=index.count((indT+1)%n_qubits)
+            h_k=h_k+(XX[indT]+YY[indT]+J*ZZ[indT])/(R-ocr)
+            #print('YY in {',indT,indT+1,'} appears',R-ocr,'times')
+        
+        if sparse:
+            H_T.append(sp.csc_matrix(h_k))
+        else:
+            H_T.append(h_k)
+    ###################################################
+    #This is a check to see if the trotterization is the same as the original Hamiltonian
+    if sparse:
+        difH=sp.linalg.norm((H-sum(H_T)),ord=1)
+    else:
+        difH=np.linalg.norm((H-sum(H_T)),ord=1)
+    print('Heisenberg model with OBC and Hamiltonian pieces of locality T=2')
+    if difH<1e-14:
+        print('Succesfull Troterization')
+        print("The Trotterization consists of",N_k,"terms with the starting qubit of each piece at",index)
+    else:
+        print('Failed Trotterization, you can still use the generated full Hamiltonian')
+
+    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index,BC)
+
+    return H,H_trot
+
+def Heisenberg_OBC_DN(J,n_qubits,sparse=True):
+    # same as the previous but the Hamiltonian is not trotterized T=N, then paulis require D=N
+    BC = 'OBC'
+    XX=[]
+    YY=[]
+    ZZ=[]
+    for i in range(n_qubits-1): #open boundary
+        # Hamiltonian
+        sxx=["I"]*n_qubits
+        syy=["I"]*n_qubits
+        szz=["I"]*n_qubits
+        i1= (i+1)
+        sxx[i]="X"
+        sxx[i1]="X"
+        syy[i]="Y"
+        syy[i1]="Y"
+        szz[i]="Z"
+        szz[i1]="Z"
+        XX.append(Pauli(''.join(sxx)).to_matrix(sparse=sparse))
+        YY.append(Pauli(''.join(syy)).to_matrix(sparse=sparse))
+        ZZ.append(Pauli(''.join(szz)).to_matrix(sparse=sparse))
+
+    H = np.sum(XX,axis=0) + np.sum(YY,axis=0) + J*np.sum(ZZ,axis=0)
+    if sparse:
+        H = sp.csc_matrix(H)
+    #############################################################
+    H_T=[H]
+    T=n_qubits
+    N_k=1
+    R=1
+    index=[0]
     H_trot=TrotterHamiltonian(T,N_k,R,H_T,index)
 
     return H,H_trot
