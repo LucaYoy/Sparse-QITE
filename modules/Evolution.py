@@ -241,12 +241,12 @@ def QITE(n_qubits: int,
             
             
         #Enegy of the state at time step i
-        if np.real((psi_QITE.getH()@H@psi_QITE).trace())>E_QITE[i]:
-            print('Energy doubly increased at step',i)
-            break
+        # if np.real((psi_QITE.getH()@H@psi_QITE).trace())>E_QITE[i]:
+        #     print('Energy doubly increased at step',i)
+        #     break
         E_QITE[i+1] = np.real((psi_QITE.getH()@H@psi_QITE).trace())
         psi_out[:,i+1]=psi_QITE.copy()
         if vervose:
             print("Step",i+1,"/",N,"with energy",E_QITE[i+1])
-    return E_QITE[0:i+1],psi_out[:,0:i+1],a[0:i+1,:,:]
+    return E_QITE[0:i+2],psi_out[:,0:i+2],a[0:i+1,:,:]
         
