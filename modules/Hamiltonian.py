@@ -422,7 +422,7 @@ def Heisenberg_PBC(J: float,
         difH=sp.linalg.norm((H-sum(H_T)),ord=1)
     else:
         difH=np.linalg.norm((H-sum(H_T)),ord=1)
-    print('Heisenberg model with OBC and Hamiltonian pieces of locality T=2')
+    print('Heisenberg model with PBC and Hamiltonian pieces of locality T=2')
     if difH<1e-14:
         print('Succesfull Troterization')
         print("The Trotterization consists of",N_k,"terms with the starting qubit of each piece at",index)

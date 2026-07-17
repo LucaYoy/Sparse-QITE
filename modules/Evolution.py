@@ -120,7 +120,7 @@ def QITE(n_qubits: int,
         objective_tol: Tolerance for the objective function convergence. Default is 0.001.
     Returns:
         A tuple containing:
-            - E_QITE: Array of energies at each time step (length varies if early termination occurs).
+            - E_QITE: Array of energies at each time step (length N + 1).
             - psi_out: Sparse matrix where each column is the state at a given time step.
             - a: Array of coefficients for Pauli operators at each time step and qubit.
               Shape: (num_steps, num_trotter_terms, num_paulis).
@@ -157,6 +157,7 @@ def QITE(n_qubits: int,
     E_QITE=np.zeros(N+1)
     E_QITE[0]=np.real((psi_QITE.getH()@H@psi_QITE).trace())
     #errors = []
+    completed_steps = 0
     for i in range(0,N):
         #ara en aquest pas de temps anem a calcular els coeffs per a cada qubit
         for l in range(H_trot.Nk):
@@ -240,13 +241,12 @@ def QITE(n_qubits: int,
             psi_QITE = sp.linalg.expm(-1j*operator*dt)@psi_QITE
             
             
-        #Enegy of the state at time step i
-        if np.real((psi_QITE.getH()@H@psi_QITE).trace())>E_QITE[i]:
-            print('Energy doubly increased at step',i)
-            break
-        E_QITE[i+1] = np.real((psi_QITE.getH()@H@psi_QITE).trace())
+        # Energy of the state after time step i.
+        new_energy = float(np.real((psi_QITE.getH()@H@psi_QITE).trace()))
+        E_QITE[i+1] = new_energy
         psi_out[:,i+1]=psi_QITE.copy()
+        completed_steps = i + 1
         if vervose:
             print("Step",i+1,"/",N,"with energy",E_QITE[i+1])
-    return E_QITE[0:i+1],psi_out[:,0:i+1],a[0:i+1,:,:]
+    return E_QITE[0:completed_steps+1],psi_out[:,0:completed_steps+1],a[0:completed_steps,:,:]
         
