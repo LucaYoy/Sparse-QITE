@@ -62,7 +62,13 @@ def selected_configurations(
 
     for job in parameter_jobs(parameters):
         folder = physical_folder_name(job)
-        file_tag = method_file_tag(job["method"], job["lasso_lambda"])
+        file_tag = method_file_tag(
+            job["method"],
+            job["lasso_lambda"],
+            job["jaccard_cumulative_min"],
+            job["jaccard_patience"],
+            job["support_tol"],
+        )
         config_path = config_root / folder / f"{file_tag}.toml"
         if not config_path.is_file():
             missing.append(config_path)
@@ -257,10 +263,12 @@ def main() -> None:
     # -----------------------------------------------------------------------
     parameters = {
         "n_qubits": [8],
-        "D": [8],
+        "D": [6],
         "N": [100],
         "dt": [0.05],
-        "method": ["default", "vanilla_lasso"],
+        #"method": ["default", "vanilla_lasso"],
+        # Add "Jaccard_lasso" to select generated support-freezing jobs.
+        "method": ["Jaccard_lasso"],
         "model": ["tfim"],
         #"model" : ["heisenberg_pbc"],
 
@@ -270,10 +278,16 @@ def main() -> None:
         "cluster_lambda": [0.5],
 
         # Must match the exploratory grid generated in Generate_QITE_configs.py.
-        "lasso_lambda": [1e-5,3e-5,1e-4,3e-4,1e-3,3e-3,1e-2,3e-2,1e-1,3e-1,1.0,],
-        #"lasso_lambda": [1e-3],
+        #"lasso_lambda": [1e-5,3e-5,1e-4,3e-4,1e-3,3e-3,1e-2,3e-2,1e-1,3e-1,1.0,],
+        "lasso_lambda": [1e-3],
         "lasso_max_iter": 500,
         "lasso_tol": 1e-8,
+
+        # These lists must match the values used by Generate_QITE_configs.py.
+        # They are combined only when method="Jaccard_lasso".
+        "jaccard_cumulative_min": [0.90,0.99],
+        "jaccard_patience": [3],
+        "support_tol": [1e-14],
         "initial_basis_state": 0,
         "verbose": False,
     }
@@ -285,11 +299,11 @@ def main() -> None:
     batch_suffix = ""
     batch_name = make_batch_name(parameters, label=batch_label, suffix=batch_suffix)
     cpus = 1
-    memory = "128GB"
+    memory = "16GB"
     disk = "4GB"
-    #job_flavour = "tomorrow"
+    job_flavour = "tomorrow"
     #job_flavour = "testmatch"
-    job_flavour = "nextweek"
+    #job_flavour = "nextweek"
     overwrite = True
     # -----------------------------------------------------------------------
 

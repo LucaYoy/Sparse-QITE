@@ -96,6 +96,9 @@ def QITE(n_qubits: int,
          lasso_lambda: float = 1e-3,
          lasso_max_iter: int = 500,
          lasso_tol: float = 1e-8,
+         jaccard_cumulative_min: float = 0.99,
+         jaccard_patience: int = 3,
+         support_tol: float = 1e-14,
          objective_tol:float = 0.001) -> Tuple[np.ndarray, sp.lil_matrix, np.ndarray]:
     """
     Quantum Imaginary Time Evolution (QITE) algorithm for simulating ground state preparation.
@@ -113,10 +116,15 @@ def QITE(n_qubits: int,
         N: Number of time steps for the evolution.
         dt: Time step size for the imaginary time evolution.
         vervose: If True, prints energy at each step. Default is False.
-        method: Method for solving linear system ('LU', 'lstsq', 'pinv', or 'lasso'). Default is 'LU'.
-        lasso_lambda: L1 penalty weight used when method='lasso'. Default is 1e-5.
-        lasso_max_iter: Maximum proximal iterations when method='lasso'. Default is 500.
-        lasso_tol: Proximal convergence tolerance when method='lasso'. Default is 1e-8.
+        method: Linear-system method. ``'vanilla_lasso'`` always uses the
+            complete pool; ``'Jaccard_lasso'`` freezes cumulative support.
+        lasso_lambda: L1 penalty used by the LASSO methods.
+        lasso_max_iter: Maximum proximal iterations used by LASSO.
+        lasso_tol: Proximal convergence tolerance used by LASSO.
+        jaccard_cumulative_min: Minimum cumulative-Jaccard value considered
+            stable by ``'Jaccard_lasso'``.
+        jaccard_patience: Required number of consecutive stable time steps.
+        support_tol: Absolute coefficient threshold defining active support.
         objective_tol: Tolerance for the objective function convergence. Default is 0.001.
     Returns:
         A tuple containing:
@@ -130,7 +138,8 @@ def QITE(n_qubits: int,
           * 'LU': LU decomposition with small regularization
           * 'lstsq': Least squares solution
           * 'pinv': Pseudo-inverse method
-          * 'lasso': L1-penalized least squares (sparse coefficients)
+          * 'vanilla_lasso': L1-penalized solve over the complete Pauli pool
+          * 'Jaccard_lasso': LASSO followed by cumulative-support freezing
     """
 
     # Check which method to obtain Pauli strings is used.
@@ -150,6 +159,22 @@ def QITE(n_qubits: int,
         #print("Using General Pauli Strings")
         num_paulis,PD,fail = pauli_strings.general(H_trot,D,n_qubits)
 
+    if method == 'Jaccard_lasso':
+        if not 0.0 <= jaccard_cumulative_min <= 1.0:
+            raise ValueError("jaccard_cumulative_min must lie between 0 and 1.")
+        if jaccard_patience < 1:
+            raise ValueError("jaccard_patience must be at least 1.")
+        if support_tol < 0.0:
+            raise ValueError("support_tol must be non-negative.")
+
+    # Jaccard_lasso starts with every coefficient slot available. After the
+    # cumulative support stabilizes, the mask retains only discovered slots.
+    allowed_mask = np.ones((H_trot.Nk, num_paulis), dtype=bool)
+    cumulative_support: set[int] = set()
+    jaccard_streak = 0
+    frozen = False
+    freeze_step: Optional[int] = None
+
     psi_out=sp.lil_matrix((2**n_qubits,N+1),dtype=complex)
     psi_out[:,0]=psi_0.copy()
     psi_QITE=psi_0.copy()
@@ -163,16 +188,20 @@ def QITE(n_qubits: int,
         for l in range(H_trot.Nk):
             #print('Time step',i+1,'/',N-1,'acting on qubit',l)
             #computing matrix S and coeffcient b (steps 1-3 in the algorithm)
-            X=sp.lil_matrix((2**n_qubits,num_paulis),dtype=complex)
-            b=np.zeros((num_paulis),dtype=complex)
+            if method == 'Jaccard_lasso':
+                basis_indices = np.flatnonzero(allowed_mask[l])
+            else:
+                basis_indices = np.arange(num_paulis)
+            X=sp.lil_matrix((2**n_qubits,len(basis_indices)),dtype=complex)
+            b=np.zeros((len(basis_indices)),dtype=complex)
             aux=np.real((psi_QITE.getH()@sp.linalg.expm(-2*H_trot.Hk[l]*dt)@psi_QITE).trace())
             aux2 = np.real((psi_QITE.getH()@sp.linalg.expm(-H_trot.Hk[l]*dt)@psi_QITE).trace())
             c=cmath.sqrt(aux)
             constant = 2*(1-aux2/c)/dt**2
             expHdt=sp.linalg.expm(-H_trot.Hk[l]*dt)
-            for j in range(num_paulis):
-                b[j] = -1j*(psi_QITE.getH()@(expHdt@PD[l][j]-PD[l][j]@expHdt)@psi_QITE).trace()/c/dt
-                X[:,j]=PD[l][j]@psi_QITE
+            for column,j in enumerate(basis_indices):
+                b[column] = -1j*(psi_QITE.getH()@(expHdt@PD[l][j]-PD[l][j]@expHdt)@psi_QITE).trace()/c/dt
+                X[:,column]=PD[l][j]@psi_QITE
             S=(X.getH()@X).todense()
            
             #obtencio coefficients a
@@ -204,9 +233,26 @@ def QITE(n_qubits: int,
                     max_iter=lasso_max_iter,
                     tol=lasso_tol,
                     ridge=1e-10,
-                    support_tol= 1e-14,
+                    support_tol=support_tol,
                     x0=x0,
                 )
+            elif method=='Jaccard_lasso':
+                if basis_indices.size == 0:
+                    a[i,l] = 0.0
+                else:
+                    x0 = np.real(a[i-1,l,basis_indices]) if i > 0 else None
+                    reduced_coefficients = _solve_lasso_qite(
+                        A,
+                        b,
+                        lam=lasso_lambda,
+                        max_iter=lasso_max_iter,
+                        tol=lasso_tol,
+                        ridge=1e-10,
+                        support_tol=support_tol,
+                        x0=x0,
+                    )
+                    a[i,l] = 0.0
+                    a[i,l,basis_indices] = reduced_coefficients
             elif method=='adaptive_lasso_v1':
                 lambda_max = max(np.abs(b))
                 lambda_grid = [lambda_max,lambda_max*0.5,lambda_max*0.2,lambda_max*0.1]
@@ -231,7 +277,9 @@ def QITE(n_qubits: int,
 
             else:
                 raise ValueError(
-                    f"Unknown method '{method}'. Use one of: 'LU', 'lstsq', 'pinv', 'vanilla_lasso', 'adaptive_lasso_v1'."
+                    f"Unknown method '{method}'. Use one of: 'LU', 'lstsq', "
+                    "'pinv', 'vanilla_lasso', 'Jaccard_lasso', "
+                    "'adaptive_lasso_v1'."
                 )
             
             #construction of the evolution operator (steps 5 and 6 in the algorithm)
@@ -240,7 +288,43 @@ def QITE(n_qubits: int,
                 operator+=a[i,l,j]*PD[l][j]
             psi_QITE = sp.linalg.expm(-1j*operator*dt)@psi_QITE
             
-            
+        if method == 'Jaccard_lasso' and not frozen:
+            active_support = set(
+                int(index)
+                for index in np.flatnonzero(
+                    np.abs(np.asarray(a[i]).reshape(-1)) > support_tol
+                )
+            )
+            previous_cumulative_size = len(cumulative_support)
+            cumulative_support |= active_support
+
+            if cumulative_support:
+                cumulative_jaccard = (
+                    previous_cumulative_size / len(cumulative_support)
+                )
+                stable = cumulative_jaccard >= jaccard_cumulative_min
+            else:
+                cumulative_jaccard = 1.0
+                stable = False
+
+            jaccard_streak = jaccard_streak + 1 if stable else 0
+            if jaccard_streak >= jaccard_patience:
+                frozen = True
+                freeze_step = i
+                allowed_mask[:] = False
+                for flat_index in cumulative_support:
+                    piece, pauli_index = divmod(flat_index, num_paulis)
+                    allowed_mask[piece, pauli_index] = True
+                if vervose:
+                    print(
+                        "Cumulative-Jaccard support frozen after step",
+                        i + 1,
+                        "with",
+                        len(cumulative_support),
+                        "coefficient slots and Jaccard",
+                        cumulative_jaccard,
+                    )
+
         # Energy of the state after time step i.
         new_energy = float(np.real((psi_QITE.getH()@H@psi_QITE).trace()))
         E_QITE[i+1] = new_energy
