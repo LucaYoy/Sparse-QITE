@@ -5,10 +5,11 @@ Usage from the ``Sparse-QITE-via-LASSO-main`` directory::
 
     python scripts/Run_QITE_cluster.py configs/qite_job.toml
 
-The script uses standard QITE when ``method`` is ``"default"`` (or ``"LU"``)
-and sparse-QITE when it is ``"vanilla_lasso"``. Results are written as two NPZ
-files: ``trajectory.npz`` contains ``Energy`` and ``a``, while ``states.npz``
-contains the sparse state trajectory ``Psi``.
+The script uses standard QITE when ``method`` is ``"default"`` (or ``"LU"``),
+sparse-QITE when it is ``"vanilla_lasso"``, and cumulative-support freezing
+when it is ``"Jaccard_lasso"``. Results are written as two NPZ files:
+``trajectory.npz`` contains ``Energy`` and ``a``, while ``states.npz`` contains
+the sparse state trajectory ``Psi``.
 """
 
 from __future__ import annotations
@@ -47,6 +48,7 @@ ALLOWED_METHODS = {
     "lstsq": "lstsq",
     "pinv": "pinv",
     "vanilla_lasso": "vanilla_lasso",
+    "Jaccard_lasso": "Jaccard_lasso",
 }
 
 
@@ -65,7 +67,7 @@ def load_config(path: Path) -> dict[str, Any]:
         document = tomllib.load(handle)
 
     config: dict[str, Any] = {}
-    for section in ("simulation", "hamiltonian", "lasso", "output"):
+    for section in ("simulation", "hamiltonian", "lasso", "jaccard", "output"):
         values = document.get(section, {})
         if not isinstance(values, dict):
             raise ValueError(f"[{section}] must be a TOML table.")
@@ -95,8 +97,18 @@ def validate_config(config: dict[str, Any]) -> None:
     basis_state = config.get("initial_basis_state", 0)
     if not 0 <= basis_state < 2 ** config["n_qubits"]:
         raise ValueError("initial_basis_state must be in [0, 2**n_qubits).")
-    if config["method"] == "vanilla_lasso" and config.get("lasso_lambda", 1e-3) < 0:
+    if config["method"] in {"vanilla_lasso", "Jaccard_lasso"} and config.get(
+        "lasso_lambda", 1e-3
+    ) < 0:
         raise ValueError("lasso_lambda cannot be negative.")
+    if config["method"] == "Jaccard_lasso":
+        jaccard_min = config.get("jaccard_cumulative_min", 0.99)
+        if not 0.0 <= jaccard_min <= 1.0:
+            raise ValueError("jaccard_cumulative_min must lie between 0 and 1.")
+        if config.get("jaccard_patience", 3) < 1:
+            raise ValueError("jaccard_patience must be at least 1.")
+        if config.get("support_tol", 1e-14) < 0:
+            raise ValueError("support_tol must be non-negative.")
 
 
 def build_hamiltonian(config: dict[str, Any]):
@@ -142,6 +154,9 @@ def run_qite(config: dict[str, Any]):
         lasso_lambda=config.get("lasso_lambda", 1e-3),
         lasso_max_iter=config.get("lasso_max_iter", 500),
         lasso_tol=config.get("lasso_tol", 1e-8),
+        jaccard_cumulative_min=config.get("jaccard_cumulative_min", 0.99),
+        jaccard_patience=config.get("jaccard_patience", 3),
+        support_tol=config.get("support_tol", 1e-14),
     )
     return energy, states, coefficients
 
@@ -186,7 +201,11 @@ def main() -> None:
     validate_config(config)
     output_dir = resolve_output_dir(config)
 
-    method_label = "sparse-QITE" if config["method"] == "vanilla_lasso" else "QITE"
+    method_labels = {
+        "vanilla_lasso": "sparse-QITE",
+        "Jaccard_lasso": "Jaccard sparse-QITE",
+    }
+    method_label = method_labels.get(config["method"], "QITE")
     print(f"Starting {method_label} from {config['config_path']}", flush=True)
     print(
         f"model={config['model']}, n={config['n_qubits']}, D={config['D']}, "

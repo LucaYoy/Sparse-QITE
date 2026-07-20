@@ -5,8 +5,9 @@ Edit the clearly marked parameter block inside ``main()``, then run::
 
     python scripts/Generate_QITE_configs.py
 
-Every list is combined as a Cartesian product. Standard QITE gets one file per
-physical setup; sparse-QITE gets one file per physical setup and LASSO lambda.
+Every relevant list is combined as a Cartesian product. Standard QITE gets one
+file per physical setup, vanilla sparse-QITE gets one per LASSO lambda, and
+Jaccard-LASSO additionally scans its cumulative-support parameters.
 """
 
 from __future__ import annotations
@@ -32,9 +33,24 @@ def quoted(value: str | Path) -> str:
     return f'"{text}"'
 
 
-def method_file_tag(method: str, lasso_lambda: float | None) -> str:
+def method_file_tag(
+    method: str,
+    lasso_lambda: float | None,
+    jaccard_cumulative_min: float | None = None,
+    jaccard_patience: int | None = None,
+    support_tol: float | None = None,
+) -> str:
+    """Return a unique, readable output name for one evolution method."""
     if method == "vanilla_lasso":
         return f"sparse_qite_lambda_{number_tag(lasso_lambda)}"
+    if method == "Jaccard_lasso":
+        if None in (jaccard_cumulative_min, jaccard_patience, support_tol):
+            raise ValueError("Jaccard_lasso requires all Jaccard parameters.")
+        return (
+            f"jaccard_lasso_lambda_{number_tag(lasso_lambda)}_"
+            f"Jcum{number_tag(jaccard_cumulative_min)}_"
+            f"P{jaccard_patience}_stol{number_tag(support_tol)}"
+        )
     if method == "default":
         return "qite_default"
     return f"qite_{method}"
@@ -87,6 +103,11 @@ def render_toml(job: dict[str, Any], result_dir: Path, config_dir: Path) -> str:
         f"lasso_max_iter = {job['lasso_max_iter']}",
         f"lasso_tol = {job['lasso_tol']!r}",
         "",
+        "[jaccard]",
+        f"jaccard_cumulative_min = {job['jaccard_cumulative_min']!r}",
+        f"jaccard_patience = {job['jaccard_patience']}",
+        f"support_tol = {job['support_tol']!r}",
+        "",
         "[output]",
         f"output_dir = {quoted(output_dir)}",
         "",
@@ -130,12 +151,38 @@ def parameter_jobs(parameters: dict[str, Any]) -> Iterable[dict[str, Any]]:
                 print(f"Skipping Cluster-Ising combination with T={T}; it requires T >= 3.")
                 continue
 
-            lambdas = (
-                parameters["lasso_lambda"]
-                if method == "vanilla_lasso"
-                else [parameters["lasso_lambda"][0]]
-            )
-            for lasso_lambda in lambdas:
+            jaccard_min_values = parameters.get("jaccard_cumulative_min", [0.99])
+            jaccard_patience_values = parameters.get("jaccard_patience", [3])
+            support_tolerances = parameters.get("support_tol", [1e-14])
+
+            if method == "Jaccard_lasso":
+                method_values = itertools.product(
+                    parameters["lasso_lambda"],
+                    jaccard_min_values,
+                    jaccard_patience_values,
+                    support_tolerances,
+                )
+            elif method == "vanilla_lasso":
+                method_values = itertools.product(
+                    parameters["lasso_lambda"],
+                    [jaccard_min_values[0]],
+                    [jaccard_patience_values[0]],
+                    [support_tolerances[0]],
+                )
+            else:
+                method_values = [(
+                    parameters["lasso_lambda"][0],
+                    jaccard_min_values[0],
+                    jaccard_patience_values[0],
+                    support_tolerances[0],
+                )]
+
+            for (
+                lasso_lambda,
+                jaccard_cumulative_min,
+                jaccard_patience,
+                support_tol,
+            ) in method_values:
                 yield {
                     "model": model,
                     "n_qubits": n,
@@ -150,6 +197,9 @@ def parameter_jobs(parameters: dict[str, Any]) -> Iterable[dict[str, Any]]:
                     "lasso_lambda": lasso_lambda,
                     "lasso_max_iter": parameters["lasso_max_iter"],
                     "lasso_tol": parameters["lasso_tol"],
+                    "jaccard_cumulative_min": jaccard_cumulative_min,
+                    "jaccard_patience": jaccard_patience,
+                    "support_tol": support_tol,
                     "initial_basis_state": parameters["initial_basis_state"],
                     "verbose": parameters["verbose"],
                 }
@@ -174,30 +224,38 @@ def main() -> None:
     # -----------------------------------------------------------------------
     parameters = {
         "n_qubits": [8],
-        "D": [2],
+        "D": [6],
         "N": [100],
         "dt": [0.05],
-        "method": ["default", "vanilla_lasso"],
-        #"model": ["tfim"],
-        "model" : ["heisenberg_pbc"],
+        #"method": ["default", "vanilla_lasso"],
+        # Add "Jaccard_lasso" to generate cumulative-Jaccard configurations.
+        "method": ["Jaccard_lasso"],
+        "model": ["tfim"],
+        #"model" : ["heisenberg_pbc"],
 
         # Hamiltonian parameters
         "J": [1.0],
-        "h": [1.0],
+        "h": [0.5],
         "T": [2],
         "cluster_lambda": [0.5],
 
         # Sparse-QITE parameters
         #"lasso_lambda": [1e-2,1e-3,1e-4],
-        #"lasso_lambda": [1e-3],
+        "lasso_lambda": [1e-3],
         #"lasso_lambda" : [1e-5,3e-5,1e-4,3e-4,1e-3,3e-3,1e-2,3e-2,1e-1,3e-1,1.0,],
-        "lasso_lambda" : [0.02, 0.05, 0.15, 0.20, 0.25],
+        #"lasso_lambda" : [0.02, 0.05, 0.15, 0.20, 0.25],
         "lasso_max_iter": 500,
         "lasso_tol": 1e-8,
 
+        # Cumulative-Jaccard support-freezing parameters. These lists are
+        # combined only when method="Jaccard_lasso".
+        "jaccard_cumulative_min": [0.99],
+        "jaccard_patience": [3],
+        "support_tol": [1e-14],
+
         # Initial state |initial_basis_state>
-        #"initial_basis_state": 0,
-        "initial_basis_state": 85,
+        "initial_basis_state": 0,
+        #"initial_basis_state": 85,
         "verbose": False,
     }
 
@@ -214,7 +272,13 @@ def main() -> None:
     for job in parameter_jobs(parameters):
         folder_name = physical_folder_name(job)
         config_dir = config_root / folder_name
-        file_tag = method_file_tag(job["method"], job["lasso_lambda"])
+        file_tag = method_file_tag(
+            job["method"],
+            job["lasso_lambda"],
+            job["jaccard_cumulative_min"],
+            job["jaccard_patience"],
+            job["support_tol"],
+        )
         config_path = config_dir / f"{file_tag}.toml"
         result_dir = results_root / folder_name / file_tag
         contents = render_toml(job, result_dir, config_dir)
