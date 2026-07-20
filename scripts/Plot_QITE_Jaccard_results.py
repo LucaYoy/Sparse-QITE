@@ -124,10 +124,24 @@ def save_time_curve(
     curve_label: str,
     ylim: tuple[float, float] | None = None,
     horizontal_line: tuple[float, str, str] | None = None,
+    baseline_times: np.ndarray | None = None,
+    baseline_values: np.ndarray | None = None,
+    baseline_label: str = "QITE",
 ) -> None:
     """Save one time-series PDF with consistent freeze-line styling."""
     figure, axis = plt.subplots(figsize=(8, 5))
     axis.plot(times, values, marker="o", markersize=3, label=curve_label)
+    if baseline_times is not None and baseline_values is not None:
+        axis.plot(
+            baseline_times,
+            baseline_values,
+            color="tab:orange",
+            linestyle="-",
+            linewidth=1.4,
+            marker="s",
+            markersize=2.5,
+            label=baseline_label,
+        )
     if horizontal_line is not None:
         value, label, color = horizontal_line
         axis.axhline(value, color=color, linestyle=":", linewidth=1.2, label=label)
@@ -401,6 +415,39 @@ def plot_job(
 
     exact_energy, exact_state = ground_state(job)
     ground_fidelity = fidelity_with_vector(states, exact_state)
+
+    # Load the matching standard-QITE trajectory once and reuse it in every
+    # plot for which a direct baseline has a well-defined meaning.
+    qite_dir = results_root / folder_name / "qite_default"
+    qite_energy = None
+    qite_states = None
+    qite_coefficients = None
+    qite_state_times = None
+    qite_coefficient_times = None
+    qite_ground_fidelity = None
+    qite_metrics = None
+    try:
+        qite_energy, qite_states, qite_coefficients = load_result(qite_dir)
+    except FileNotFoundError:
+        print(f"No completed QITE baseline found in {qite_dir}")
+    else:
+        if qite_coefficients.shape[1:] != coefficients.shape[1:]:
+            raise ValueError(
+                "QITE and Jaccard coefficient pools have different shapes: "
+                f"{qite_coefficients.shape[1:]} != {coefficients.shape[1:]}."
+            )
+        qite_state_times = np.arange(len(qite_energy)) * job["dt"]
+        qite_coefficient_times = (
+            np.arange(qite_coefficients.shape[0]) + 1
+        ) * job["dt"]
+        qite_ground_fidelity = fidelity_with_vector(qite_states, exact_state)
+        qite_metrics = reconstruct_jaccard_metrics(
+            qite_coefficients,
+            job["support_tol"],
+            job["jaccard_cumulative_min"],
+            job["jaccard_patience"],
+        )
+
     save_time_curve(
         state_times,
         energy,
@@ -410,6 +457,8 @@ def plot_job(
         freeze_time,
         label,
         horizontal_line=(exact_energy, "Exact ground energy", "black"),
+        baseline_times=qite_state_times,
+        baseline_values=qite_energy,
     )
     save_time_curve(
         state_times,
@@ -421,21 +470,44 @@ def plot_job(
         label,
         ylim=(-0.02, 1.02),
         horizontal_line=(1.0, "Unit fidelity", "gray"),
+        baseline_times=qite_state_times,
+        baseline_values=qite_ground_fidelity,
     )
 
     slots_per_step = coefficients.shape[1] * coefficients.shape[2]
     active_percentage = 100.0 * metrics["active_terms"] / slots_per_step
+    qite_active_percentage = (
+        None
+        if qite_metrics is None
+        else 100.0 * qite_metrics["active_terms"] / slots_per_step
+    )
     support_plots = [
-        ("active_terms.pdf", metrics["active_terms"], "Active coefficient slots"),
-        ("new_terms.pdf", metrics["new_terms"], "New coefficient slots"),
+        (
+            "active_terms.pdf",
+            metrics["active_terms"],
+            None if qite_metrics is None else qite_metrics["active_terms"],
+            "Active coefficient slots",
+        ),
+        (
+            "new_terms.pdf",
+            metrics["new_terms"],
+            None if qite_metrics is None else qite_metrics["new_terms"],
+            "New coefficient slots",
+        ),
         (
             "cumulative_terms.pdf",
             metrics["cumulative_terms"],
+            None if qite_metrics is None else qite_metrics["cumulative_terms"],
             "Cumulative coefficient slots",
         ),
-        ("active_terms_percentage.pdf", active_percentage, "Active slots (%)"),
+        (
+            "active_terms_percentage.pdf",
+            active_percentage,
+            qite_active_percentage,
+            "Active slots (%)",
+        ),
     ]
-    for filename, values, ylabel in support_plots:
+    for filename, values, qite_values, ylabel in support_plots:
         save_time_curve(
             coefficient_times,
             values,
@@ -444,6 +516,8 @@ def plot_job(
             ylabel,
             freeze_time,
             label,
+            baseline_times=qite_coefficient_times,
+            baseline_values=qite_values,
         )
 
     save_time_curve(
@@ -459,6 +533,10 @@ def plot_job(
             job["jaccard_cumulative_min"],
             "Jaccard threshold",
             "gray",
+        ),
+        baseline_times=qite_coefficient_times,
+        baseline_values=(
+            None if qite_metrics is None else qite_metrics["cumulative_jaccard"]
         ),
     )
     save_time_curve(
@@ -489,10 +567,7 @@ def plot_job(
 
     figures_written = 9
     final_fidelity_qite = float("nan")
-    qite_dir = results_root / folder_name / "qite_default"
-    try:
-        _qite_energy, qite_states, _qite_coefficients = load_result(qite_dir)
-    except FileNotFoundError:
+    if qite_states is None or qite_coefficients is None:
         print(f"Skipping fidelity with QITE: no completed reference in {qite_dir}")
     else:
         fidelity = trajectory_fidelity(qite_states, states)
@@ -513,7 +588,7 @@ def plot_job(
         write_support_measurement_summary(
             plot_dir / "support_measurement_summary.csv",
             job,
-            _qite_coefficients,
+            qite_coefficients,
             coefficients,
             metrics,
         )
@@ -558,7 +633,7 @@ def main() -> None:
         "lasso_lambda": [1e-3],
         "lasso_max_iter": 500,
         "lasso_tol": 1e-8,
-        "jaccard_cumulative_min": [0.8],
+        "jaccard_cumulative_min": [0.99],
         "jaccard_patience": [3],
         "support_tol": [1e-14],
 

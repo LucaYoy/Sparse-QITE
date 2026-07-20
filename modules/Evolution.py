@@ -1,4 +1,4 @@
-from typing import Tuple, Callable, List, Optional
+from typing import Any, Tuple, Callable, List, Optional
 import numpy as np
 import scipy
 import cmath 
@@ -99,6 +99,8 @@ def QITE(n_qubits: int,
          jaccard_cumulative_min: float = 0.99,
          jaccard_patience: int = 3,
          support_tol: float = 1e-14,
+         resume_state: Optional[dict[str, Any]] = None,
+         checkpoint_callback: Optional[Callable[[dict[str, Any]], None]] = None,
          objective_tol:float = 0.001) -> Tuple[np.ndarray, sp.lil_matrix, np.ndarray]:
     """
     Quantum Imaginary Time Evolution (QITE) algorithm for simulating ground state preparation.
@@ -125,6 +127,10 @@ def QITE(n_qubits: int,
             stable by ``'Jaccard_lasso'``.
         jaccard_patience: Required number of consecutive stable time steps.
         support_tol: Absolute coefficient threshold defining active support.
+        resume_state: Previously saved state returned to this routine by the
+            cluster runner. Evolution resumes at ``resume_state['next_step']``.
+        checkpoint_callback: Optional function called after each complete QITE
+            update with all numerical and Jaccard state required for resuming.
         objective_tol: Tolerance for the objective function convergence. Default is 0.001.
     Returns:
         A tuple containing:
@@ -176,14 +182,62 @@ def QITE(n_qubits: int,
     freeze_step: Optional[int] = None
 
     psi_out=sp.lil_matrix((2**n_qubits,N+1),dtype=complex)
-    psi_out[:,0]=psi_0.copy()
-    psi_QITE=psi_0.copy()
     a=np.zeros((N,H_trot.Nk,num_paulis),dtype=complex)
     E_QITE=np.zeros(N+1)
-    E_QITE[0]=np.real((psi_QITE.getH()@H@psi_QITE).trace())
+    start_step = 0
+
+    if resume_state is None:
+        psi_out[:,0]=psi_0.copy()
+        psi_QITE=psi_0.copy()
+        E_QITE[0]=np.real((psi_QITE.getH()@H@psi_QITE).trace())
+    else:
+        start_step = int(resume_state["next_step"])
+        if not 0 <= start_step <= N:
+            raise ValueError("Checkpoint next_step is outside the requested evolution.")
+
+        saved_energy = np.asarray(resume_state["energy"])
+        saved_states = sp.csc_matrix(resume_state["states"])
+        saved_coefficients = np.asarray(resume_state["coefficients"])
+        expected_coefficient_shape = (start_step, H_trot.Nk, num_paulis)
+        if saved_energy.shape != (start_step + 1,):
+            raise ValueError("Checkpoint energy length does not match next_step.")
+        if saved_states.shape != (2**n_qubits, start_step + 1):
+            raise ValueError("Checkpoint state trajectory does not match next_step.")
+        if saved_coefficients.shape != expected_coefficient_shape:
+            raise ValueError(
+                "Checkpoint coefficient shape does not match this Pauli pool: "
+                f"{saved_coefficients.shape} != {expected_coefficient_shape}."
+            )
+
+        E_QITE[:start_step+1] = saved_energy
+        psi_out[:,:start_step+1] = saved_states
+        a[:start_step] = saved_coefficients
+        saved_current_state = resume_state.get("current_state")
+        if saved_current_state is None:
+            psi_QITE = saved_states[:,-1].tocsc()
+        else:
+            psi_QITE = saved_current_state.copy()
+            if psi_QITE.shape != (2**n_qubits, 1):
+                raise ValueError("Checkpoint current_state has an incompatible shape.")
+
+        if method == 'Jaccard_lasso':
+            saved_mask = np.asarray(resume_state["allowed_mask"], dtype=bool)
+            if saved_mask.shape != allowed_mask.shape:
+                raise ValueError("Checkpoint allowed_mask has an incompatible shape.")
+            allowed_mask[:] = saved_mask
+            cumulative_support = {
+                int(index) for index in resume_state["cumulative_support"]
+            }
+            jaccard_streak = int(resume_state["jaccard_streak"])
+            frozen = bool(resume_state["frozen"])
+            saved_freeze_step = resume_state.get("freeze_step")
+            freeze_step = (
+                None if saved_freeze_step is None else int(saved_freeze_step)
+            )
+
     #errors = []
-    completed_steps = 0
-    for i in range(0,N):
+    completed_steps = start_step
+    for i in range(start_step,N):
         #ara en aquest pas de temps anem a calcular els coeffs per a cada qubit
         for l in range(H_trot.Nk):
             #print('Time step',i+1,'/',N-1,'acting on qubit',l)
@@ -332,5 +386,22 @@ def QITE(n_qubits: int,
         completed_steps = i + 1
         if vervose:
             print("Step",i+1,"/",N,"with energy",E_QITE[i+1])
+        if checkpoint_callback is not None:
+            checkpoint_callback(
+                {
+                    "next_step": completed_steps,
+                    "energy": E_QITE[:completed_steps+1],
+                    "states": psi_out[:,:completed_steps+1].tocsc(),
+                    "current_state": psi_QITE.copy(),
+                    "coefficients": a[:completed_steps],
+                    "allowed_mask": allowed_mask,
+                    "cumulative_support": np.asarray(
+                        sorted(cumulative_support), dtype=np.int64
+                    ),
+                    "jaccard_streak": jaccard_streak,
+                    "frozen": frozen,
+                    "freeze_step": freeze_step,
+                }
+            )
     return E_QITE[0:completed_steps+1],psi_out[:,0:completed_steps+1],a[0:completed_steps,:,:]
         
