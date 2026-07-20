@@ -233,7 +233,7 @@ def main() -> None:
     # Every combination of these values will become a TOML job configuration.
     # -----------------------------------------------------------------------
     parameters = {
-        "n_qubits": [4],
+        "n_qubits": [6],
         "D": [2],
         "N": [100],
         "dt": [0.05],
