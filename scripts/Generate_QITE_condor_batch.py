@@ -288,6 +288,8 @@ def main() -> None:
         "jaccard_cumulative_min": [0.90,0.99],
         "jaccard_patience": [3],
         "support_tol": [1e-14],
+        "checkpoint_enabled": True,
+        "checkpoint_every_steps": 5,
         "initial_basis_state": 0,
         "verbose": False,
     }

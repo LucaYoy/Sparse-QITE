@@ -108,6 +108,10 @@ def render_toml(job: dict[str, Any], result_dir: Path, config_dir: Path) -> str:
         f"jaccard_patience = {job['jaccard_patience']}",
         f"support_tol = {job['support_tol']!r}",
         "",
+        "[checkpoint]",
+        f"checkpoint_enabled = {str(job['checkpoint_enabled']).lower()}",
+        f"checkpoint_every_steps = {job['checkpoint_every_steps']}",
+        "",
         "[output]",
         f"output_dir = {quoted(output_dir)}",
         "",
@@ -200,6 +204,12 @@ def parameter_jobs(parameters: dict[str, Any]) -> Iterable[dict[str, Any]]:
                     "jaccard_cumulative_min": jaccard_cumulative_min,
                     "jaccard_patience": jaccard_patience,
                     "support_tol": support_tol,
+                    "checkpoint_enabled": parameters.get(
+                        "checkpoint_enabled", True
+                    ),
+                    "checkpoint_every_steps": parameters.get(
+                        "checkpoint_every_steps", 5
+                    ),
                     "initial_basis_state": parameters["initial_basis_state"],
                     "verbose": parameters["verbose"],
                 }
@@ -223,13 +233,13 @@ def main() -> None:
     # Every combination of these values will become a TOML job configuration.
     # -----------------------------------------------------------------------
     parameters = {
-        "n_qubits": [8],
-        "D": [6],
+        "n_qubits": [4],
+        "D": [2],
         "N": [100],
         "dt": [0.05],
-        #"method": ["default", "vanilla_lasso"],
+        "method": ["default", "vanilla_lasso"],
         # Add "Jaccard_lasso" to generate cumulative-Jaccard configurations.
-        "method": ["Jaccard_lasso"],
+        #"method": ["Jaccard_lasso"],
         "model": ["tfim"],
         #"model" : ["heisenberg_pbc"],
 
@@ -253,6 +263,10 @@ def main() -> None:
         "jaccard_patience": [3],
         "support_tol": [1e-14],
 
+        # Resume interrupted Condor jobs from the latest complete QITE update.
+        "checkpoint_enabled": True,
+        "checkpoint_every_steps": 5,
+
         # Initial state |initial_basis_state>
         "initial_basis_state": 0,
         #"initial_basis_state": 85,
@@ -261,7 +275,7 @@ def main() -> None:
 
     config_root = PROJECT_DIR / "configs" / "generated"
     results_root = PROJECT_DIR / "outputs" / "qite_runs"
-    overwrite = False
+    overwrite = True
     # -----------------------------------------------------------------------
 
     config_root = config_root.expanduser().resolve()
