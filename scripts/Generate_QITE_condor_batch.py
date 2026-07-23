@@ -262,13 +262,13 @@ def main() -> None:
     # Values must match TOML files already created by Generate_QITE_configs.py.
     # -----------------------------------------------------------------------
     parameters = {
-        "n_qubits": [8],
-        "D": [6],
+        "n_qubits": [6],
+        "D": [2],
         "N": [100],
         "dt": [0.05],
-        #"method": ["default", "vanilla_lasso"],
+        "method": ["default", "vanilla_lasso"],
         # Add "Jaccard_lasso" to select generated support-freezing jobs.
-        "method": ["Jaccard_lasso"],
+        #"method": ["Jaccard_lasso"],
         "model": ["tfim"],
         #"model" : ["heisenberg_pbc"],
 
