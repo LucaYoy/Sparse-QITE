@@ -4,10 +4,7 @@ from qiskit.quantum_info import SparsePauliOp,Pauli
 from qiskit.circuit.library import PauliEvolutionGate,HamiltonianGate
 import scipy.sparse as sp
 from qiskit import QuantumCircuit, transpile
-from qiskit_aer import Aer
-from qiskit_ibm_runtime.fake_provider import FakeValenciaV2,FakeBelemV2,FakeQuitoV2
 from qiskit.quantum_info import Operator
-from qiskit.synthesis import qs_decomposition,LieTrotter
 
 def cyclic_range(start: int, stop: int, n: int) -> List[int]:
     """
@@ -86,7 +83,10 @@ def transpile_circuit_qite(n_qubits: int,
                             steps: int, 
                             backend, 
                             op_level: int, 
-                            PEvolution: bool = False) -> Tuple[QuantumCircuit, np.ndarray, float]:
+                            PEvolution: bool = False,
+                            compute_unitary_error: bool = True,
+                            coefficient_threshold: float = 0.0,
+                            ) -> Tuple[QuantumCircuit, np.ndarray | None, float | None]:
     """
     Transpile a QITE circuit to native gates and compute transpilation error.
     
@@ -110,6 +110,12 @@ def transpile_circuit_qite(n_qubits: int,
                   Higher levels apply more aggressive optimization.
         PEvolution: If True, uses PauliEvolutionGate for circuit construction.
                     If False, uses HamiltonianGate. Default is False.
+        compute_unitary_error: If True, construct full-system unitaries and
+                    calculate their Frobenius-norm difference. Disable this
+                    for large systems, where a 2**n by 2**n matrix is costly.
+        coefficient_threshold: Exclude coefficients whose absolute value is
+                    less than or equal to this threshold. The default 0.0
+                    preserves the original exact-nonzero behavior.
     
     Returns:
         A tuple containing:
@@ -119,21 +125,26 @@ def transpile_circuit_qite(n_qubits: int,
                           quantifying the transpilation error.
     """
     # set up the quantum circuit and backend
+    if coefficient_threshold < 0.0:
+        raise ValueError("coefficient_threshold must be non-negative.")
     qc_v = QuantumCircuit(n_qubits)
-    v_true = np.eye(2**n_qubits)
+    v_true = np.eye(2**n_qubits) if compute_unitary_error else None
 
     # loop through the Pauli operators and construct the circuits
     for step in range(steps):
         for k in range(len(PD)):
             coeffs = a[step,k,:]
-            mask = np.abs(coeffs*dt)> 0
+            mask = np.abs(coeffs) > coefficient_threshold
+            filtered_coeffs = np.where(mask, coeffs, 0.0)
 
             if np.any(mask):
                 support = support_of_Ak(k,D,T,n_qubits)
                 PD_k_reduced = np.asarray([''.join(string[i] for i in support) for string in PD[k]])
                 #print(PD_k_reduced,PD[k],support)
 
-                Ak_reduced = SparsePauliOp(PD_k_reduced[mask],coeffs[mask])
+                Ak_reduced = SparsePauliOp(
+                    PD_k_reduced[mask], filtered_coeffs[mask]
+                )
 
                 qiskit_support = [n_qubits-1-i for i in support[::-1]]  #reverse order for qiskit
                 if PEvolution:
@@ -141,16 +152,20 @@ def transpile_circuit_qite(n_qubits: int,
                 else:
                     qc_v.append(HamiltonianGate(Ak_reduced,dt),qiskit_support) #use support to reduce qubits
                 
-            Ak = SparsePauliOp(PD[k],a[step,k,:]).to_matrix()
-            v_true = sp.linalg.expm(-1j *Ak*dt) @ v_true
+            if compute_unitary_error:
+                Ak = SparsePauliOp(PD[k], filtered_coeffs).to_matrix()
+                v_true = sp.linalg.expm(-1j *Ak*dt) @ v_true
             
     # transpile the circuits to the native gates of the backend
     tr_qc_v = transpile(qc_v,backend,seed_transpiler=40,optimization_level=op_level)
     
     # Calculate error using trace norm
-    tr_unitary = Operator(tr_qc_v)
-    error = (tr_unitary.data - v_true) 
-    trace_norm = np.linalg.norm(error)  #trace norm
+    if compute_unitary_error:
+        tr_unitary = Operator(tr_qc_v)
+        error = (tr_unitary.data - v_true)
+        trace_norm = np.linalg.norm(error)
+    else:
+        trace_norm = None
     #print(f'Error (trace norm) between transpiled circuit unitary and target unitary: {trace_norm:e}')
 
     return tr_qc_v, v_true, trace_norm
