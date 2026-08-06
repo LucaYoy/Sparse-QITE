@@ -129,12 +129,18 @@ def load_scan_rows(
         qite_steps = qite_coefficients.shape[0]
         exact_energy, exact_state = ground_state(qite_job)
         qite_support = support_metrics(qite_coefficients, coefficient_threshold)
-        qite_ground_fidelity = float(fidelity_with_vector(qite_states, exact_state)[-1])
+        qite_ground_fidelities = fidelity_with_vector(qite_states, exact_state)
+        qite_best_fidelity_step = int(np.argmax(qite_ground_fidelities))
+        qite_ground_fidelity = float(qite_ground_fidelities[-1])
         qite_rows[D] = {
             "D": D,
             "qite_steps": qite_steps,
             "qite_final_energy": float(qite_energy[-1]),
             "qite_ground_fidelity": qite_ground_fidelity,
+            "qite_best_ground_fidelity": float(
+                qite_ground_fidelities[qite_best_fidelity_step]
+            ),
+            "qite_best_fidelity_step": qite_best_fidelity_step,
             "qite_energy_abs_error": abs(float(qite_energy[-1]) - exact_energy),
             **{f"qite_{key}": value for key, value in qite_support.items()},
             "qite_result_dir": str(qite_dir),
@@ -154,15 +160,21 @@ def load_scan_rows(
             sparse_steps = sparse_coefficients.shape[0]
             reaches_horizon = sparse_steps >= qite_steps
             comparison_step = min(qite_steps, sparse_steps)
-            comparison_fidelity = state_fidelity(
-                qite_states[:, comparison_step], sparse_states[:, comparison_step]
+            trajectory_fidelities_qite = np.asarray(
+                [
+                    state_fidelity(qite_states[:, step], sparse_states[:, step])
+                    for step in range(comparison_step + 1)
+                ]
             )
+            comparison_fidelity = float(trajectory_fidelities_qite[-1])
             comparable_coefficients = sparse_coefficients[:comparison_step]
             sparse_support = support_metrics(comparable_coefficients, coefficient_threshold)
             comparison_energy = float(sparse_energy[comparison_step])
-            ground_fidelity = float(
-                fidelity_with_vector(sparse_states[:, : comparison_step + 1], exact_state)[-1]
+            ground_fidelities = fidelity_with_vector(
+                sparse_states[:, : comparison_step + 1], exact_state
             )
+            best_fidelity_step = int(np.argmax(ground_fidelities))
+            ground_fidelity = float(ground_fidelities[-1])
             coefficient_slots = (
                 sparse_coefficients.shape[1] * sparse_coefficients.shape[2]
             )
@@ -179,8 +191,15 @@ def load_scan_rows(
                     "comparison_step": comparison_step,
                     "comparison_time": comparison_step * float(sparse_job["dt"]),
                     "fidelity_qite": comparison_fidelity,
+                    "mean_fidelity_qite": float(
+                        np.mean(trajectory_fidelities_qite)
+                    ),
                     "infidelity_qite": 1.0 - comparison_fidelity,
                     "fidelity_ground_state": ground_fidelity,
+                    "best_fidelity_ground_state": float(
+                        ground_fidelities[best_fidelity_step]
+                    ),
+                    "best_fidelity_step": best_fidelity_step,
                     "energy": comparison_energy,
                     "energy_abs_error": abs(comparison_energy - exact_energy),
                     "coefficient_slots_per_step": coefficient_slots,
@@ -233,7 +252,19 @@ def select_best_lambdas(
                         "selected": True,
                         "best_lambda": best["lambda"],
                         "fidelity_qite": best["fidelity_qite"],
+                        "infidelity_qite": max(1.0 - best["fidelity_qite"], 0.0),
+                        "mean_fidelity_qite": best["mean_fidelity_qite"],
                         "fidelity_ground_state": best["fidelity_ground_state"],
+                        "infidelity_ground_state": max(
+                            1.0 - best["fidelity_ground_state"], 0.0
+                        ),
+                        "best_fidelity_ground_state": best[
+                            "best_fidelity_ground_state"
+                        ],
+                        "best_infidelity_ground_state": max(
+                            1.0 - best["best_fidelity_ground_state"], 0.0
+                        ),
+                        "best_fidelity_step": best["best_fidelity_step"],
                         "energy_abs_error": best["energy_abs_error"],
                         "average_active_terms": best["average_active_terms"],
                         "total_active_terms": best["total_active_terms"],
@@ -242,6 +273,19 @@ def select_best_lambdas(
                         "total_active_fraction_vs_qite": total_fraction,
                         "cumulative_fraction_vs_qite": cumulative_fraction,
                         "qite_ground_fidelity": qite["qite_ground_fidelity"],
+                        "qite_ground_infidelity": max(
+                            1.0 - qite["qite_ground_fidelity"], 0.0
+                        ),
+                        "qite_best_ground_fidelity": qite[
+                            "qite_best_ground_fidelity"
+                        ],
+                        "qite_best_ground_infidelity": max(
+                            1.0 - qite["qite_best_ground_fidelity"], 0.0
+                        ),
+                        "qite_self_infidelity": 0.0,
+                        "qite_best_fidelity_step": qite[
+                            "qite_best_fidelity_step"
+                        ],
                         "qite_energy_abs_error": qite["qite_energy_abs_error"],
                         "qite_average_active_terms": qite["qite_average_active_terms"],
                         "qite_total_active_terms": qite["qite_total_active_terms"],
@@ -260,7 +304,13 @@ def select_best_lambdas(
                         "selected": False,
                         "best_lambda": float("nan"),
                         "fidelity_qite": float("nan"),
+                        "infidelity_qite": float("nan"),
+                        "mean_fidelity_qite": float("nan"),
                         "fidelity_ground_state": float("nan"),
+                        "infidelity_ground_state": float("nan"),
+                        "best_fidelity_ground_state": float("nan"),
+                        "best_infidelity_ground_state": float("nan"),
+                        "best_fidelity_step": float("nan"),
                         "energy_abs_error": float("nan"),
                         "average_active_terms": float("nan"),
                         "total_active_terms": float("nan"),
@@ -269,6 +319,19 @@ def select_best_lambdas(
                         "total_active_fraction_vs_qite": float("nan"),
                         "cumulative_fraction_vs_qite": float("nan"),
                         "qite_ground_fidelity": qite["qite_ground_fidelity"],
+                        "qite_ground_infidelity": max(
+                            1.0 - qite["qite_ground_fidelity"], 0.0
+                        ),
+                        "qite_best_ground_fidelity": qite[
+                            "qite_best_ground_fidelity"
+                        ],
+                        "qite_best_ground_infidelity": max(
+                            1.0 - qite["qite_best_ground_fidelity"], 0.0
+                        ),
+                        "qite_self_infidelity": 0.0,
+                        "qite_best_fidelity_step": qite[
+                            "qite_best_fidelity_step"
+                        ],
                         "qite_energy_abs_error": qite["qite_energy_abs_error"],
                         "qite_average_active_terms": qite[
                             "qite_average_active_terms"
@@ -307,6 +370,10 @@ def plot_selected_metric(
     """Plot one selected-lambda metric versus D for every threshold."""
     figure, axis = plt.subplots(figsize=(8, 5))
     plotted = False
+    def display_value(value: float) -> float:
+        """Keep exact zeros visible when a logarithmic y-axis is requested."""
+        return max(value, 1e-16) if yscale == "log" else value
+
     for threshold in sorted({float(row["fidelity_threshold"]) for row in rows}):
         subset = sorted(
             [
@@ -322,7 +389,7 @@ def plot_selected_metric(
             continue
         axis.plot(
             [row["D"] for row in subset],
-            [row[key] for row in subset],
+            [display_value(float(row[key])) for row in subset],
             marker="o",
             label=rf"$F_{{QITE}} \geq {threshold:g}$",
         )
@@ -332,7 +399,7 @@ def plot_selected_metric(
         for row in rows:
             value = float(row[qite_key])
             if np.isfinite(value):
-                qite_by_D[int(row["D"])] = value
+                qite_by_D[int(row["D"])] = display_value(value)
         if qite_by_D:
             domains = sorted(qite_by_D)
             axis.plot(
@@ -477,13 +544,87 @@ def plot_support_comparison(
     print(f"Wrote {output_path}")
 
 
+def plot_best_final_ground_fidelity(
+    output_path: Path,
+    rows: list[dict[str, Any]],
+) -> None:
+    """Compare best-over-time and final ground-state fidelity versus D."""
+    figure, axes = plt.subplots(1, 2, figsize=(13, 5), sharex=True, sharey=True)
+    panels = (
+        (
+            axes[0],
+            "best_fidelity_ground_state",
+            "qite_best_ground_fidelity",
+            "Best fidelity over time",
+        ),
+        (
+            axes[1],
+            "fidelity_ground_state",
+            "qite_ground_fidelity",
+            "Final-update fidelity",
+        ),
+    )
+
+    selected_rows = [row for row in rows if row["selected"]]
+    thresholds = sorted(
+        {float(row["fidelity_threshold"]) for row in selected_rows}
+    )
+    for axis, sparse_key, qite_key, title in panels:
+        for threshold in thresholds:
+            subset = sorted(
+                (
+                    row
+                    for row in selected_rows
+                    if float(row["fidelity_threshold"]) == threshold
+                    and np.isfinite(float(row[sparse_key]))
+                ),
+                key=lambda row: int(row["D"]),
+            )
+            if subset:
+                axis.plot(
+                    [int(row["D"]) for row in subset],
+                    [float(row[sparse_key]) for row in subset],
+                    marker="o",
+                    label=rf"Sparse-QITE, $F_{{QITE}}\geq {threshold:g}$",
+                )
+
+        qite_by_D: dict[int, float] = {}
+        for row in rows:
+            value = float(row[qite_key])
+            if np.isfinite(value):
+                qite_by_D[int(row["D"])] = value
+        if qite_by_D:
+            domains = sorted(qite_by_D)
+            axis.plot(
+                domains,
+                [qite_by_D[D] for D in domains],
+                color="black",
+                linestyle="--",
+                marker="s",
+                label="QITE",
+            )
+
+        axis.axhline(1.0, color="black", linewidth=1.0)
+        axis.set_xlabel("Domain size D")
+        axis.set_title(title)
+        axis.grid(alpha=0.3)
+
+    axes[0].set_ylabel("Ground-state fidelity")
+    axes[0].legend()
+    figure.suptitle("Best versus final ground-state fidelity")
+    figure.tight_layout()
+    figure.savefig(output_path, format="pdf", bbox_inches="tight")
+    plt.close(figure)
+    print(f"Wrote {output_path}")
+
+
 def main() -> None:
     # -----------------------------------------------------------------------
     # EDIT THIS BLOCK TO CHOOSE THE SCALABILITY SCAN AND ACCEPTANCE LEVELS.
     # -----------------------------------------------------------------------
     parameters = {
         "n_qubits": [8],
-        "D": [2, 3, 4, 5, 6],
+        "D": [2, 3, 4, 5, 6,7],
         "N": [100],
         "dt": [0.05],
         "method": ["default", "vanilla_lasso"],
@@ -499,11 +640,28 @@ def main() -> None:
             1e-4,
             3e-4,
             1e-3,
+            1.5e-3,
+            2e-3,
             3e-3,
+            5e-3,
+            7e-3,
             1e-2,
+            1.25e-2,
+            1.5e-2,
+            2e-2,
+            2.5e-2,
             3e-2,
+            5e-2,
             1e-1,
+            1.5e-1,
+            2e-1,
+            2.5e-1,
             3e-1,
+            4e-1,
+            5e-1,
+            6e-1,
+            7e-1,
+            8e-1,
             1.0,
         ],
         "lasso_max_iter": 500,
@@ -536,6 +694,12 @@ def main() -> None:
     metrics = [
         ("best_lambda", "Selected lambda", "Largest acceptable lambda", "log"),
         ("fidelity_qite", "Fidelity with QITE", "Selected-run fidelity", None),
+        (
+            "mean_fidelity_qite",
+            "Mean fidelity with QITE",
+            "Mean trajectory fidelity with QITE",
+            None,
+        ),
         ("energy_abs_error", "Absolute energy error", "Selected-run energy error", "log"),
         (
             "final_cumulative_terms",
@@ -580,6 +744,46 @@ def main() -> None:
         "Selected-run ground-state fidelity",
         qite_key="qite_ground_fidelity",
         unit_fidelity_line=True,
+    )
+    plot_selected_metric(
+        output_dir / "best_fidelity_ground_state_vs_D.pdf",
+        selected_rows,
+        "best_fidelity_ground_state",
+        "Best observed ground-state fidelity",
+        "Best observed ground-state fidelity",
+        qite_key="qite_best_ground_fidelity",
+        unit_fidelity_line=True,
+    )
+    plot_selected_metric(
+        output_dir / "infidelity_qite_vs_D.pdf",
+        selected_rows,
+        "infidelity_qite",
+        "Final infidelity with QITE, 1 - F",
+        "Selected-run final infidelity with QITE",
+        yscale="log",
+        qite_key="qite_self_infidelity",
+    )
+    plot_selected_metric(
+        output_dir / "infidelity_ground_state_vs_D.pdf",
+        selected_rows,
+        "infidelity_ground_state",
+        "Final ground-state infidelity, 1 - F",
+        "Selected-run final ground-state infidelity",
+        yscale="log",
+        qite_key="qite_ground_infidelity",
+    )
+    plot_selected_metric(
+        output_dir / "best_infidelity_ground_state_vs_D.pdf",
+        selected_rows,
+        "best_infidelity_ground_state",
+        "Best observed ground-state infidelity, 1 - F",
+        "Best observed ground-state infidelity",
+        yscale="log",
+        qite_key="qite_best_ground_infidelity",
+    )
+    plot_best_final_ground_fidelity(
+        output_dir / "fidelity_ground_state_best_vs_final_vs_D.pdf",
+        selected_rows,
     )
 
     plot_support_comparison(

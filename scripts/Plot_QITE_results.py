@@ -11,6 +11,8 @@ standard QITE, fixed-lambda Sparse-QITE, and Adaptive Sparse-QITE.
 
 from __future__ import annotations
 
+from collections import defaultdict
+import csv
 from itertools import product
 import os
 from pathlib import Path
@@ -43,7 +45,7 @@ def curve_label(job: dict[str, Any]) -> str:
     if job["method"] == "adaptive_lasso_v1":
         return "Adaptive Sparse-QITE"
     if job["method"] in {"default", "LU"}:
-        return "QITE (LU)"
+        return "QITE"
     return f"QITE ({job['method']})"
 
 
@@ -172,6 +174,9 @@ def save_locality_heatmap(
     label: str,
     title: str,
     output_path: Path,
+    vmax: float | None = None,
+    show_colorbar: bool = True,
+    show_title: bool = False,
 ) -> None:
     """Save a locality-versus-time heatmap with zero-count cells in silver."""
     figure, axis = plt.subplots(figsize=(9, 5))
@@ -185,16 +190,82 @@ def save_locality_heatmap(
         aspect="auto",
         interpolation="nearest",
         cmap=color_map,
+        vmin=0.0,
+        vmax=vmax,
         extent=(0.5 * dt, (n_steps + 0.5) * dt, 0.5, counts.shape[0] + 0.5),
     )
     axis.set_xlabel("Imaginary time")
     axis.set_ylabel("Pauli locality")
     axis.set_yticks(np.arange(1, counts.shape[0] + 1))
-    axis.set_title(f"{title}\n{label}")
+    if show_title:
+        axis.set_title(f"{title}\n{label}")
     color_bar = figure.colorbar(image, ax=axis)
-    color_bar.set_label("Active terms")
+    if show_colorbar:
+        color_bar.set_label("Active terms")
+    else:
+        # Keep the color-bar column reserved so every heatmap has the same
+        # data-axis dimensions and can use the same width in a panel figure.
+        color_bar.ax.set_visible(False)
     figure.tight_layout()
-    figure.savefig(output_path, format="pdf", bbox_inches="tight")
+    figure.savefig(output_path, format="pdf")
+    plt.close(figure)
+    print(f"Wrote {output_path}")
+
+
+def save_normalized_locality_heatmap(
+    counts: np.ndarray,
+    available_terms: np.ndarray,
+    dt: float,
+    label: str,
+    title: str,
+    output_path: Path,
+    denominator_label: str = "available terms at this locality",
+    title_suffix: str = "normalized by locality",
+    show_colorbar: bool = True,
+    show_title: bool = False,
+) -> None:
+    """Save locality counts divided by the supplied locality denominators."""
+    if available_terms.shape != (counts.shape[0],):
+        raise ValueError(
+            "available_terms must contain one denominator per locality."
+        )
+    normalized = np.zeros_like(counts, dtype=float)
+    np.divide(
+        counts,
+        available_terms[:, None],
+        out=normalized,
+        where=available_terms[:, None] > 0,
+    )
+    normalized = np.clip(normalized, 0.0, 1.0)
+
+    figure, axis = plt.subplots(figsize=(9, 5))
+    color_map = plt.get_cmap("viridis").copy()
+    color_map.set_bad("silver")
+    masked_values = np.ma.masked_equal(normalized, 0.0)
+    n_steps = counts.shape[1]
+    image = axis.imshow(
+        masked_values,
+        origin="lower",
+        aspect="auto",
+        interpolation="nearest",
+        cmap=color_map,
+        vmin=0.0,
+        vmax=1.0,
+        extent=(0.5 * dt, (n_steps + 0.5) * dt, 0.5, counts.shape[0] + 0.5),
+    )
+    axis.set_xlabel("Imaginary time")
+    axis.set_ylabel("Pauli locality")
+    axis.set_yticks(np.arange(1, counts.shape[0] + 1))
+    if show_title:
+        axis.set_title(f"{title}\n{label} — {title_suffix}")
+    color_bar = figure.colorbar(image, ax=axis)
+    if show_colorbar:
+        color_bar.set_label(f"Active fraction of {denominator_label}")
+    else:
+        # Preserve the same layout as the version with a visible color bar.
+        color_bar.ax.set_visible(False)
+    figure.tight_layout()
+    figure.savefig(output_path, format="pdf")
     plt.close(figure)
     print(f"Wrote {output_path}")
 
@@ -206,9 +277,12 @@ def save_curves(
     ylabel: str,
     ylim: tuple[float, float] | None = None,
     horizontal_line: tuple[float, str] | None = None,
+    panel_layout: bool = False,
+    show_title: bool = True,
 ) -> None:
     """Save one consistently styled PDF containing the supplied curves."""
-    figure, axis = plt.subplots(figsize=(8, 5))
+    figure_size = (5.6, 5.0) if panel_layout else (8, 5)
+    figure, axis = plt.subplots(figsize=figure_size)
     for x_values, y_values, label in curves:
         axis.plot(x_values, y_values, marker="o", markersize=3, label=label)
     if horizontal_line is not None:
@@ -216,7 +290,8 @@ def save_curves(
         axis.axhline(value, color="black", linestyle="-", linewidth=1.5, label=label)
     axis.set_xlabel("Imaginary time")
     axis.set_ylabel(ylabel)
-    axis.set_title(title)
+    if show_title:
+        axis.set_title(title)
     if ylim is not None:
         axis.set_ylim(*ylim)
     axis.grid(alpha=0.3)
@@ -227,12 +302,115 @@ def save_curves(
     print(f"Wrote {output_path}")
 
 
+def write_run_summary(
+    output_path: Path,
+    loaded_results: list[
+        tuple[dict[str, Any], np.ndarray, sp.csc_matrix, np.ndarray]
+    ],
+    exact_energy: float,
+    exact_ground_state: np.ndarray,
+    coefficient_threshold: float,
+) -> None:
+    """Write a vertical, human-readable comparison of plotted trajectories."""
+    qite_result = next(
+        (
+            result
+            for result in loaded_results
+            if result[0]["method"] in {"default", "LU"}
+        ),
+        None,
+    )
+    columns = [curve_label(job) for job, *_ in loaded_results]
+    summaries: list[dict[str, Any]] = []
+
+    for job, energy, states, coefficients in loaded_results:
+        active = np.abs(coefficients) > coefficient_threshold
+        active_per_step = np.count_nonzero(active, axis=(1, 2))
+        cumulative_terms = (
+            int(np.count_nonzero(np.any(active, axis=0))) if len(active) else 0
+        )
+        ground_fidelities = fidelity_with_vector(states, exact_ground_state)
+        best_ground_step = int(np.argmax(ground_fidelities))
+
+        if qite_result is not None:
+            qite_states = qite_result[2]
+            qite_fidelities = trajectory_fidelity(qite_states, states)
+            final_qite_fidelity = float(qite_fidelities[-1])
+            mean_qite_fidelity = float(np.mean(qite_fidelities))
+            minimum_qite_fidelity = float(np.min(qite_fidelities))
+        else:
+            final_qite_fidelity = float("nan")
+            mean_qite_fidelity = float("nan")
+            minimum_qite_fidelity = float("nan")
+
+        summaries.append(
+            {
+                "model": job["model"],
+                "method": job["method"],
+                "n_qubits": int(job["n_qubits"]),
+                "D": int(job["D"]),
+                "N_requested": int(job["N"]),
+                "completed_updates": int(coefficients.shape[0]),
+                "dt": float(job["dt"]),
+                "final_imaginary_time": float(
+                    coefficients.shape[0] * job["dt"]
+                ),
+                "J": float(job.get("J", float("nan"))),
+                "h": float(job.get("h", float("nan"))),
+                "T": int(job["T"]),
+                "initial_basis_state": int(job.get("initial_basis_state", 0)),
+                "lasso_lambda": (
+                    float(job["lasso_lambda"])
+                    if job["method"] == "vanilla_lasso"
+                    else "not applicable"
+                ),
+                "support_threshold": coefficient_threshold,
+                "ground_state_energy": exact_energy,
+                "final_energy": float(energy[-1]),
+                "final_energy_absolute_error": abs(float(energy[-1]) - exact_energy),
+                "final_ground_state_fidelity": float(ground_fidelities[-1]),
+                "best_ground_state_fidelity": float(
+                    ground_fidelities[best_ground_step]
+                ),
+                "best_ground_state_fidelity_step": best_ground_step,
+                "final_fidelity_with_qite": final_qite_fidelity,
+                "mean_fidelity_with_qite": mean_qite_fidelity,
+                "minimum_fidelity_with_qite": minimum_qite_fidelity,
+                "coefficient_slots_per_update": int(
+                    coefficients.shape[1] * coefficients.shape[2]
+                ),
+                "final_active_terms": (
+                    int(active_per_step[-1]) if len(active_per_step) else 0
+                ),
+                "maximum_active_terms": (
+                    int(np.max(active_per_step)) if len(active_per_step) else 0
+                ),
+                "average_active_terms": (
+                    float(np.mean(active_per_step)) if len(active_per_step) else 0.0
+                ),
+                "total_active_terms": int(np.sum(active_per_step)),
+                "final_cumulative_terms": cumulative_terms,
+            }
+        )
+
+    metric_order = list(summaries[0])
+    with output_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["metric", *columns])
+        for metric_name in metric_order:
+            writer.writerow(
+                [metric_name, *[summary[metric_name] for summary in summaries]]
+            )
+    print(f"Wrote {output_path}")
+
+
 def plot_configuration(
     folder_name: str,
     jobs: list[dict[str, Any]],
     results_root: Path,
     plots_root: Path,
     coefficient_threshold: float,
+    locality_vmax: float | None = None,
 ) -> int:
     """Plot every available method/lambda for one physical configuration."""
     loaded_results = []
@@ -278,6 +456,13 @@ def plot_configuration(
             job["D"],
             coefficient_threshold,
         )
+        available_terms_by_locality = np.asarray(
+            [
+                np.count_nonzero(localities == locality)
+                for locality in range(1, job["D"] + 1)
+            ],
+            dtype=int,
+        )
         ground_fidelity = fidelity_with_vector(states, exact_ground_state)
 
         energy_curves.append((energy_times, energy, label))
@@ -285,10 +470,19 @@ def plot_configuration(
         percentage_curves.append((coefficient_times, active_percentage, label))
         cumulative_curves.append((coefficient_times, cumulative_count, label))
         ground_fidelity_curves.append((energy_times, ground_fidelity, label))
-        locality_heatmaps.append((job, locality_counts, label))
+        locality_heatmaps.append(
+            (job, locality_counts, available_terms_by_locality, label)
+        )
 
     plot_dir = plots_root / folder_name
     plot_dir.mkdir(parents=True, exist_ok=True)
+    write_run_summary(
+        plot_dir / "run_summary.csv",
+        loaded_results,
+        exact_energy,
+        exact_ground_state,
+        coefficient_threshold,
+    )
 
     save_curves(
         energy_curves,
@@ -296,12 +490,16 @@ def plot_configuration(
         folder_name,
         "Energy",
         horizontal_line=(exact_energy, "Exact ground energy"),
+        panel_layout=True,
+        show_title=False,
     )
     save_curves(
         count_curves,
         plot_dir / "active_coefficients.pdf",
         folder_name,
         "Active coefficients",
+        panel_layout=True,
+        show_title=False,
     )
     save_curves(
         percentage_curves,
@@ -316,14 +514,43 @@ def plot_configuration(
         folder_name,
         "Cumulative distinct basis terms",
     )
-    for job, locality_counts, label in locality_heatmaps:
-        file_tag = result_file_tag(job)
+    for job, locality_counts, available_terms, label in locality_heatmaps:
+        file_tag = method_file_tag(job["method"], job["lasso_lambda"])
+        is_sparse = job["method"] == "vanilla_lasso"
+        is_heisenberg = job["model"].startswith("heisenberg")
+        is_ordered_tfim = job["model"] == "tfim" and job["J"] > job["h"]
+        show_heatmap_colorbar = is_sparse and (
+            is_heisenberg or is_ordered_tfim
+        )
         save_locality_heatmap(
             locality_counts,
             job["dt"],
             label,
             folder_name,
             plot_dir / f"locality_heatmap_{file_tag}.pdf",
+            vmax=locality_vmax,
+            show_colorbar=show_heatmap_colorbar,
+        )
+        save_normalized_locality_heatmap(
+            locality_counts,
+            available_terms,
+            job["dt"],
+            label,
+            folder_name,
+            plot_dir / f"locality_heatmap_normalized_{file_tag}.pdf",
+            show_colorbar=show_heatmap_colorbar,
+        )
+        total_available_terms = int(np.sum(available_terms))
+        save_normalized_locality_heatmap(
+            locality_counts,
+            np.full_like(available_terms, total_available_terms),
+            job["dt"],
+            label,
+            folder_name,
+            plot_dir / f"locality_heatmap_normalized_all_terms_{file_tag}.pdf",
+            denominator_label="the complete Pauli pool",
+            title_suffix="normalized by complete pool",
+            show_colorbar=show_heatmap_colorbar,
         )
     save_curves(
         ground_fidelity_curves,
@@ -332,8 +559,10 @@ def plot_configuration(
         "Fidelity with ground state",
         ylim=(-0.02, 1.02),
         horizontal_line=(1.0, "Unit fidelity"),
+        panel_layout=True,
+        show_title=False,
     )
-    figures_written = 5 + len(locality_heatmaps)
+    figures_written = 5 + 3 * len(locality_heatmaps)
 
     qite_result = next(
         (result for result in loaded_results if result[0]["method"] in {"default", "LU"}),
@@ -364,6 +593,8 @@ def plot_configuration(
             "QITE–Sparse-QITE fidelity",
             ylim=(-0.02, 1.02),
             horizontal_line=(1.0, "Unit fidelity"),
+            panel_layout=True,
+            show_title=False,
         )
         figures_written += 1
     else:
