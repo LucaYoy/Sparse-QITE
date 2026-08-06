@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-"""Load and plot QITE results selected in the parameter block in ``main()``.
+"""Plot the standard, sparse, and adaptive QITE results used in Figure 2.
 
-Edit the lists in ``main()`` so they match the configurations of interest, then
-run::
+Run:
 
     python scripts/Plot_QITE_results.py
 
-Separate PDF figures are created for every physical configuration (model, n,
-D, N, dt, T and couplings). Curves correspond to the selected QITE methods and,
-for sparse-QITE, the selected LASSO lambdas.
+The PDFs are written below ``plots/qite_adaptive``.  Each curve plot compares
+standard QITE, fixed-lambda Sparse-QITE, and Adaptive Sparse-QITE.
 """
 
 from __future__ import annotations
 
-from collections import defaultdict
 from itertools import product
 import os
 from pathlib import Path
@@ -31,7 +28,7 @@ import numpy as np
 import scipy.sparse as sp
 from scipy.sparse.linalg import eigsh
 
-from Generate_QITE_configs import method_file_tag, parameter_jobs, physical_folder_name
+from Generate_QITE_configs import method_file_tag, physical_folder_name
 from Run_QITE_cluster import build_hamiltonian
 
 
@@ -43,9 +40,18 @@ def curve_label(job: dict[str, Any]) -> str:
     """Return a readable legend label for one result trajectory."""
     if job["method"] == "vanilla_lasso":
         return rf"Sparse-QITE ($\lambda={job['lasso_lambda']:g}$)"
+    if job["method"] == "adaptive_lasso_v1":
+        return "Adaptive Sparse-QITE"
     if job["method"] in {"default", "LU"}:
         return "QITE (LU)"
     return f"QITE ({job['method']})"
+
+
+def result_file_tag(job: dict[str, Any]) -> str:
+    """Return the output-folder name used by each method."""
+    if job["method"] == "adaptive_lasso_v1":
+        return "qite_adaptive_lasso"
+    return method_file_tag(job["method"], job["lasso_lambda"])
 
 
 def load_result(result_dir: Path) -> tuple[np.ndarray, sp.csc_matrix, np.ndarray]:
@@ -231,7 +237,7 @@ def plot_configuration(
     """Plot every available method/lambda for one physical configuration."""
     loaded_results = []
     for job in jobs:
-        file_tag = method_file_tag(job["method"], job["lasso_lambda"])
+        file_tag = result_file_tag(job)
         result_dir = results_root / folder_name / file_tag
         try:
             energy, states, coefficients = load_result(result_dir)
@@ -311,7 +317,7 @@ def plot_configuration(
         "Cumulative distinct basis terms",
     )
     for job, locality_counts, label in locality_heatmaps:
-        file_tag = method_file_tag(job["method"], job["lasso_lambda"])
+        file_tag = result_file_tag(job)
         save_locality_heatmap(
             locality_counts,
             job["dt"],
@@ -334,7 +340,9 @@ def plot_configuration(
         None,
     )
     sparse_results = [
-        result for result in loaded_results if result[0]["method"] == "vanilla_lasso"
+        result
+        for result in loaded_results
+        if result[0]["method"] in {"vanilla_lasso", "adaptive_lasso_v1"}
     ]
     if qite_result is not None and sparse_results:
         qite_job, _qite_energy, qite_states, _qite_coefficients = qite_result
@@ -346,7 +354,7 @@ def plot_configuration(
                 (
                     times,
                     fidelity,
-                    rf"QITE vs Sparse-QITE ($\lambda={sparse_job['lasso_lambda']:g}$)",
+                    f"QITE vs {curve_label(sparse_job)}",
                 )
             )
         save_curves(
@@ -365,55 +373,42 @@ def plot_configuration(
 
 
 def main() -> None:
-    # -----------------------------------------------------------------------
-    # EDIT THIS BLOCK TO CHOOSE WHICH COMPLETED RESULTS TO PLOT.
-    #
-    # -----------------------------------------------------------------------
-    parameters = {
-        "n_qubits": [8],
-        "D": [2, 4, 6],
-        "N": [100],
-        "dt": [0.05],
-        "method": ["default", "vanilla_lasso"],
-        "model": ["tfim"],
-        #"model" : ["heisenberg_pbc"],
-
-        "J": [1.0],
-        "h": [0.5],
-        "T": [2],
-        "cluster_lambda": [0.5],
-
-        #"lasso_lambda": [
-        #    1e-5,
-        #    3e-5,
-        #    1e-4,
-        #    3e-4,
-        #    1e-3,
-        #    3e-3,
-        #    1e-2,
-        #    3e-2,
-        #    1e-1,
-        #    3e-1,
-        #    1.0,
-        #],
-        "lasso_lambda" : [1e-3,1e-2,1e-1],
-        "lasso_max_iter": 500,
-        "lasso_tol": 1e-8,
-        "initial_basis_state": 0,
-        "verbose": False,
-    }
-
     results_root = PROJECT_DIR / "outputs" / "qite_runs"
-    plots_root = PROJECT_DIR / "plots" / "qite_runs"
+    plots_root = PROJECT_DIR / "plots" / "qite_adaptive"
     coefficient_threshold = 1e-14
-    # -----------------------------------------------------------------------
 
-    grouped_jobs: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for job in parameter_jobs(parameters):
-        grouped_jobs[physical_folder_name(job)].append(job)
+    configurations = [
+        {"D": 6, "J": 1.0, "h": 0.5, "lasso_lambda": 0.002},
+        {"D": 4, "J": 0.5, "h": 1.0, "lasso_lambda": 0.0015},
+    ]
 
     figures_written = 0
-    for folder_name, jobs in grouped_jobs.items():
+    for configuration in configurations:
+        common_job = {
+            "model": "tfim",
+            "n_qubits": 8,
+            "D": configuration["D"],
+            "N": 100,
+            "dt": 0.05,
+            "T": 2,
+            "J": configuration["J"],
+            "h": configuration["h"],
+            "cluster_lambda": 0.5,
+        }
+        jobs = [
+            {**common_job, "method": "default", "lasso_lambda": None},
+            {
+                **common_job,
+                "method": "vanilla_lasso",
+                "lasso_lambda": configuration["lasso_lambda"],
+            },
+            {
+                **common_job,
+                "method": "adaptive_lasso_v1",
+                "lasso_lambda": None,
+            },
+        ]
+        folder_name = physical_folder_name(common_job)
         figures_written += plot_configuration(
             folder_name,
             jobs,
