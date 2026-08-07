@@ -1,0 +1,52 @@
+{
+  "fidelity": {
+    "compiled_vs_ground_state": 0.8610689348146034,
+    "ground_state_convention": "one lowest-eigenvalue eigenvector; use a ground-space projector for degenerate Hamiltonians",
+    "ground_state_energy": -14.604373635748704,
+    "ground_state_fidelity_degradation": 0.13582088890283617,
+    "uncompiled_vs_compiled": 0.8729835589237961,
+    "uncompiled_vs_ground_state": 0.9968898237174396
+  },
+  "qite": {
+    "D": 6,
+    "active_coefficients": 216655,
+    "configured_steps": 100,
+    "dt": 0.05,
+    "method": "vanilla_lasso",
+    "model": "heisenberg_pbc",
+    "n_qubits": 8,
+    "nonzero_coefficients": 216655,
+    "num_paulis_per_piece": 2016,
+    "num_trotter_pieces": 8,
+    "steps": 100,
+    "support_tolerance": 1e-14
+  },
+  "source": {
+    "config_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/configs/generated/heisenberg_pbc_n8_D6_N100_dt0p05_T2_J1/sparse_qite_lambda_0p000547723.toml",
+    "states_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D6_N100_dt0p05_T2_J1/sparse_qite_lambda_0p000547723/states.npz",
+    "trajectory_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D6_N100_dt0p05_T2_J1/sparse_qite_lambda_0p000547723/trajectory.npz",
+    "trajectory_sha256": "1bc8c8d893f36473a755520c8b4c14bc9f0b6c4ccf89f6a2de69dc0dc76a8314"
+  },
+  "transpilation": {
+    "backend": "GenericBackendV2",
+    "basis_gates": [
+      "u3",
+      "cx"
+    ],
+    "circuit_construction": "PauliEvolutionGate",
+    "depth": 1221409,
+    "elapsed_seconds": 54.312524707987905,
+    "gate_counts": {
+      "cx": 880726,
+      "u3": 599253
+    },
+    "nonempty_evolution_blocks_before_transpilation": 800,
+    "nonlocal_gates": 880726,
+    "optimization_level": 1,
+    "pauli_rotations_before_transpilation": 216655,
+    "seed_transpiler": 40,
+    "size": 1479979,
+    "unitary_frobenius_error": null,
+    "width": 8
+  }
+}

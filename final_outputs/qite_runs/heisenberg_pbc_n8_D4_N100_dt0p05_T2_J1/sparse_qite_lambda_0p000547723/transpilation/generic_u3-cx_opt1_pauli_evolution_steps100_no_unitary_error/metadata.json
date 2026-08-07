@@ -1,0 +1,52 @@
+{
+  "fidelity": {
+    "compiled_vs_ground_state": 0.9065043070063203,
+    "ground_state_convention": "one lowest-eigenvalue eigenvector; use a ground-space projector for degenerate Hamiltonians",
+    "ground_state_energy": -14.604373635748706,
+    "ground_state_fidelity_degradation": 0.033884422066140285,
+    "uncompiled_vs_compiled": 0.9598265273085402,
+    "uncompiled_vs_ground_state": 0.9403887290724606
+  },
+  "qite": {
+    "D": 4,
+    "active_coefficients": 38830,
+    "configured_steps": 100,
+    "dt": 0.05,
+    "method": "vanilla_lasso",
+    "model": "heisenberg_pbc",
+    "n_qubits": 8,
+    "nonzero_coefficients": 38830,
+    "num_paulis_per_piece": 120,
+    "num_trotter_pieces": 8,
+    "steps": 100,
+    "support_tolerance": 1e-14
+  },
+  "source": {
+    "config_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/configs/generated/heisenberg_pbc_n8_D4_N100_dt0p05_T2_J1/sparse_qite_lambda_0p000547723.toml",
+    "states_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D4_N100_dt0p05_T2_J1/sparse_qite_lambda_0p000547723/states.npz",
+    "trajectory_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D4_N100_dt0p05_T2_J1/sparse_qite_lambda_0p000547723/trajectory.npz",
+    "trajectory_sha256": "fbed90d8b3801cb3a605275e6ac07c28ae151568cead9e3994c3c26efdc9c8e7"
+  },
+  "transpilation": {
+    "backend": "GenericBackendV2",
+    "basis_gates": [
+      "u3",
+      "cx"
+    ],
+    "circuit_construction": "PauliEvolutionGate",
+    "depth": 175641,
+    "elapsed_seconds": 7.328582330956124,
+    "gate_counts": {
+      "cx": 118226,
+      "u3": 98347
+    },
+    "nonempty_evolution_blocks_before_transpilation": 800,
+    "nonlocal_gates": 118226,
+    "optimization_level": 1,
+    "pauli_rotations_before_transpilation": 38830,
+    "seed_transpiler": 40,
+    "size": 216573,
+    "unitary_frobenius_error": null,
+    "width": 8
+  }
+}

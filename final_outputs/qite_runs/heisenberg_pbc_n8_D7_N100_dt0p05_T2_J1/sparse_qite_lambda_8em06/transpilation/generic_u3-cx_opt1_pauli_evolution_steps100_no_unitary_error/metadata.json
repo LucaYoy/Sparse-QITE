@@ -1,0 +1,52 @@
+{
+  "fidelity": {
+    "compiled_vs_ground_state": 0.9790667659826133,
+    "ground_state_convention": "one lowest-eigenvalue eigenvector; use a ground-space projector for degenerate Hamiltonians",
+    "ground_state_energy": -14.604373635748722,
+    "ground_state_fidelity_degradation": 0.01848246940920839,
+    "uncompiled_vs_compiled": 0.9815441758343918,
+    "uncompiled_vs_ground_state": 0.9975492353918217
+  },
+  "qite": {
+    "D": 7,
+    "active_coefficients": 1632777,
+    "configured_steps": 100,
+    "dt": 0.05,
+    "method": "vanilla_lasso",
+    "model": "heisenberg_pbc",
+    "n_qubits": 8,
+    "nonzero_coefficients": 1632777,
+    "num_paulis_per_piece": 8128,
+    "num_trotter_pieces": 8,
+    "steps": 100,
+    "support_tolerance": 1e-14
+  },
+  "source": {
+    "config_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/configs/generated/heisenberg_pbc_n8_D7_N100_dt0p05_T2_J1/sparse_qite_lambda_8em06.toml",
+    "states_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D7_N100_dt0p05_T2_J1/sparse_qite_lambda_8em06/states.npz",
+    "trajectory_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D7_N100_dt0p05_T2_J1/sparse_qite_lambda_8em06/trajectory.npz",
+    "trajectory_sha256": "f95da53184f022032551e3aa32c579c5386916bad9ecd782721d57f868045294"
+  },
+  "transpilation": {
+    "backend": "GenericBackendV2",
+    "basis_gates": [
+      "u3",
+      "cx"
+    ],
+    "circuit_construction": "PauliEvolutionGate",
+    "depth": 8381285,
+    "elapsed_seconds": 489.3113436870044,
+    "gate_counts": {
+      "cx": 5886450,
+      "u3": 4201901
+    },
+    "nonempty_evolution_blocks_before_transpilation": 800,
+    "nonlocal_gates": 5886450,
+    "optimization_level": 1,
+    "pauli_rotations_before_transpilation": 1632777,
+    "seed_transpiler": 40,
+    "size": 10088351,
+    "unitary_frobenius_error": null,
+    "width": 8
+  }
+}

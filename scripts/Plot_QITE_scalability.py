@@ -357,6 +357,15 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+def set_domain_axis(axis: plt.Axes, rows: list[dict[str, Any]]) -> None:
+    """Use the physical domain sizes present in the loaded output data."""
+    domains = sorted({int(row["D"]) for row in rows})
+    if not domains:
+        return
+    axis.set_xticks(domains)
+    axis.set_xlim(domains[0] - 0.25, domains[-1] + 0.25)
+
+
 def plot_selected_metric(
     output_path: Path,
     rows: list[dict[str, Any]],
@@ -366,6 +375,7 @@ def plot_selected_metric(
     yscale: str | None = None,
     qite_key: str | None = None,
     unit_fidelity_line: bool = False,
+    show_title: bool = True,
 ) -> None:
     """Plot one selected-lambda metric versus D for every threshold."""
     figure, axis = plt.subplots(figsize=(8, 5))
@@ -423,8 +433,10 @@ def plot_selected_metric(
         plt.close(figure)
         return
     axis.set_xlabel("Domain size D")
+    set_domain_axis(axis, rows)
     axis.set_ylabel(ylabel)
-    axis.set_title(title)
+    if show_title:
+        axis.set_title(title)
     if yscale:
         axis.set_yscale(yscale)
     axis.grid(alpha=0.3)
@@ -484,6 +496,7 @@ def plot_support_comparison(
     qite_key: str,
     ylabel: str,
     title: str,
+    show_title: bool = True,
 ) -> None:
     """Plot selected sparse support and the corresponding QITE reference."""
     figure, axis = plt.subplots(figsize=(8, 5))
@@ -533,8 +546,10 @@ def plot_support_comparison(
         plt.close(figure)
         return
     axis.set_xlabel("Domain size D")
+    set_domain_axis(axis, rows)
     axis.set_ylabel(ylabel)
-    axis.set_title(title)
+    if show_title:
+        axis.set_title(title)
     axis.set_yscale("log")
     axis.grid(alpha=0.3)
     axis.legend()
@@ -606,6 +621,7 @@ def plot_best_final_ground_fidelity(
 
         axis.axhline(1.0, color="black", linewidth=1.0)
         axis.set_xlabel("Domain size D")
+        set_domain_axis(axis, rows)
         axis.set_title(title)
         axis.grid(alpha=0.3)
 
@@ -669,7 +685,7 @@ def main() -> None:
         "initial_basis_state": 0,
         "verbose": False,
     }
-    fidelity_thresholds = [0.95, 0.99, 0.999]
+    fidelity_thresholds = [0.95, 0.99, 0.999, 0.9999, 0.99999]
     coefficient_threshold = 1e-14
     analysis_name = scalability_analysis_name(parameters)
     # -----------------------------------------------------------------------
@@ -771,6 +787,7 @@ def main() -> None:
         "Selected-run final ground-state infidelity",
         yscale="log",
         qite_key="qite_ground_infidelity",
+        show_title=False,
     )
     plot_selected_metric(
         output_dir / "best_infidelity_ground_state_vs_D.pdf",
@@ -801,6 +818,7 @@ def main() -> None:
         "qite_total_active_terms",
         "Total active terms over evolution",
         "Total active terms: selected Sparse-QITE vs QITE",
+        show_title=False,
     )
 
     print(f"Loaded {len(scan_rows)} sparse-QITE result(s).")

@@ -85,6 +85,32 @@ def parse_arguments() -> argparse.Namespace:
         help="Use HamiltonianGate instead of PauliEvolutionGate",
     )
     parser.add_argument(
+        "--synthesis-formula",
+        choices=("lie", "suzuki2"),
+        default="lie",
+        help="Pauli evolution formula (default: lie)",
+    )
+    parser.add_argument(
+        "--adaptive-repetitions",
+        action="store_true",
+        help="Choose repetitions separately for every generator",
+    )
+    parser.add_argument(
+        "--max-coefficient-angle",
+        type=float,
+        default=0.1,
+        help=(
+            "Adaptive target for dt*max(|a|)/repetitions "
+            "(default: 0.1)"
+        ),
+    )
+    parser.add_argument(
+        "--max-repetitions",
+        type=int,
+        default=128,
+        help="Safety cap for adaptive repetitions (default: 128)",
+    )
+    parser.add_argument(
         "--compute-unitary-error",
         action="store_true",
         help=(
@@ -144,14 +170,37 @@ def settings_name(
     pauli_evolution: bool,
     steps: int,
     compute_unitary_error: bool,
-) -> str:
+    synthesis_formula: str,
+    adaptive_repetitions: bool,
+    max_coefficient_angle: float,
+    max_repetitions: int,
+    minimum_repetitions: int,
+    maximum_repetitions_used: int,
+) -> Path:
     """Return a readable output-folder name for this transpilation."""
     gate_tag = "-".join(basis_gates)
     construction = "pauli_evolution" if pauli_evolution else "hamiltonian_gate"
     error_tag = "with_unitary_error" if compute_unitary_error else "no_unitary_error"
-    return (
+    legacy_name = (
         f"generic_{gate_tag}_opt{optimization_level}_{construction}_"
         f"steps{steps}_{error_tag}"
+    )
+    # Preserve the location of all historical default Lie/reps=1 results.
+    if synthesis_formula == "lie" and not adaptive_repetitions:
+        return Path(legacy_name)
+
+    if adaptive_repetitions:
+        angle_tag = format(max_coefficient_angle, ".6g").replace(".", "p")
+        repetition_tag = (
+            f"adaptive_angle{angle_tag}_r{minimum_repetitions}-"
+            f"r{maximum_repetitions_used}_cap{max_repetitions}"
+        )
+    else:
+        repetition_tag = "fixed_r1"
+    return (
+        Path(synthesis_formula)
+        / repetition_tag
+        / f"generic_{gate_tag}_opt{optimization_level}_{construction}_steps{steps}_{error_tag}"
     )
 
 
@@ -185,6 +234,8 @@ def save_outputs(
         output_dir / "metadata.json",
         output_dir / "summary.csv",
     ]
+    if metadata["transpilation"]["adaptive_repetitions"]:
+        paths.append(output_dir / "adaptive_repetitions.csv")
     existing = [path for path in paths if path.exists()]
     if existing and not overwrite:
         names = ", ".join(path.name for path in existing)
@@ -232,6 +283,25 @@ def save_outputs(
         ("basis_gates", ";".join(transpilation["basis_gates"])),
         ("optimization_level", transpilation["optimization_level"]),
         ("circuit_construction", transpilation["circuit_construction"]),
+        ("synthesis_formula", transpilation["synthesis_formula"]),
+        ("adaptive_repetitions", transpilation["adaptive_repetitions"]),
+        ("max_coefficient_angle", transpilation["max_coefficient_angle"]),
+        ("maximum_repetitions_cap", transpilation["maximum_repetitions_cap"]),
+        ("minimum_repetitions_used", transpilation["minimum_repetitions_used"]),
+        ("maximum_repetitions_used", transpilation["maximum_repetitions_used"]),
+        ("mean_repetitions_used", transpilation["mean_repetitions_used"]),
+        (
+            "generators_above_one_repetition",
+            transpilation["generators_above_one_repetition"],
+        ),
+        (
+            "maximum_generator_coefficient",
+            transpilation["maximum_generator_coefficient"],
+        ),
+        (
+            "maximum_realized_coefficient_angle",
+            transpilation["maximum_realized_coefficient_angle"],
+        ),
         ("compiled_depth", transpilation["depth"]),
         ("compiled_size", transpilation["size"]),
         ("compiled_nonlocal_gates", transpilation["nonlocal_gates"]),
@@ -267,6 +337,27 @@ def save_outputs(
         handle.flush()
         os.fsync(handle.fileno())
     temporary_csv.replace(csv_path)
+
+    if transpilation["adaptive_repetitions"]:
+        repetitions_path = output_dir / "adaptive_repetitions.csv"
+        temporary_repetitions = repetitions_path.with_suffix(".csv.tmp")
+        fields = [
+            "step",
+            "piece",
+            "maximum_coefficient",
+            "repetitions",
+            "realized_coefficient_angle",
+            "active_terms",
+        ]
+        with temporary_repetitions.open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
+            writer = csv.DictWriter(handle, fieldnames=fields)
+            writer.writeheader()
+            writer.writerows(transpilation["generator_records"])
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary_repetitions.replace(repetitions_path)
 
 
 def main() -> None:
@@ -326,6 +417,7 @@ def main() -> None:
         f"{args.optimization_level}, basis gates {requested_basis_gates}"
     )
     started = time.perf_counter()
+    synthesis_metadata: dict[str, Any] = {}
     circuit, _target_unitary, unitary_error = Transpile.transpile_circuit_qite(
         config["n_qubits"],
         config["D"],
@@ -339,6 +431,11 @@ def main() -> None:
         PEvolution=pauli_evolution,
         compute_unitary_error=args.compute_unitary_error,
         coefficient_threshold=config.get("support_tol", 1e-14),
+        synthesis_formula=args.synthesis_formula,
+        adaptive_repetitions=args.adaptive_repetitions,
+        max_coefficient_angle=args.max_coefficient_angle,
+        max_repetitions=args.max_repetitions,
+        synthesis_metadata=synthesis_metadata,
     )
     elapsed = time.perf_counter() - started
 
@@ -387,6 +484,12 @@ def main() -> None:
             pauli_evolution,
             steps,
             args.compute_unitary_error,
+            args.synthesis_formula,
+            args.adaptive_repetitions,
+            args.max_coefficient_angle,
+            args.max_repetitions,
+            synthesis_metadata["minimum_repetitions"],
+            synthesis_metadata["maximum_repetitions"],
         )
     )
     metadata = {
@@ -418,17 +521,38 @@ def main() -> None:
             "circuit_construction": (
                 "PauliEvolutionGate" if pauli_evolution else "HamiltonianGate"
             ),
+            "synthesis_formula": synthesis_metadata["formula"],
+            "adaptive_repetitions": synthesis_metadata["adaptive_repetitions"],
+            "max_coefficient_angle": synthesis_metadata["max_coefficient_angle"],
+            "maximum_repetitions_cap": synthesis_metadata["max_repetitions"],
+            "minimum_repetitions_used": synthesis_metadata["minimum_repetitions"],
+            "maximum_repetitions_used": synthesis_metadata["maximum_repetitions"],
+            "mean_repetitions_used": synthesis_metadata["mean_repetitions"],
+            "generators_above_one_repetition": synthesis_metadata[
+                "generators_above_one_repetition"
+            ],
+            "maximum_generator_coefficient": synthesis_metadata[
+                "maximum_generator_coefficient"
+            ],
+            "maximum_realized_coefficient_angle": synthesis_metadata[
+                "maximum_realized_coefficient_angle"
+            ],
+            "generator_records": synthesis_metadata["generator_records"],
             "depth": int(circuit.depth()),
             "size": int(circuit.size()),
             "width": int(circuit.width()),
             "nonlocal_gates": int(circuit.num_nonlocal_gates()),
             "gate_counts": gate_counts,
-            # With PauliEvolutionGate's default one-repetition product
-            # synthesis, every coefficient surviving support_tol produces
-            # one conceptual Pauli rotation before native-gate transpilation.
+            # Estimated structured-synthesis rotation count. The symmetric
+            # formula estimate is an upper bound before adjacent rotations
+            # are simplified.
             "pauli_rotations_before_transpilation": (
-                active_coefficients if pauli_evolution else None
+                synthesis_metadata["estimated_pauli_rotations"]
+                if pauli_evolution else None
             ),
+            "pauli_rotation_count_note": synthesis_metadata[
+                "rotation_count_note"
+            ],
             "nonempty_evolution_blocks_before_transpilation": (
                 nonempty_evolution_blocks
             ),
@@ -461,6 +585,14 @@ def main() -> None:
     print(
         f"Pauli rotations before transpilation: "
         f"{metadata['transpilation']['pauli_rotations_before_transpilation']}"
+    )
+    print(
+        f"Synthesis={args.synthesis_formula}, adaptive={args.adaptive_repetitions}, "
+        f"repetitions min/mean/max="
+        f"{synthesis_metadata['minimum_repetitions']}/"
+        f"{synthesis_metadata['mean_repetitions']:.3g}/"
+        f"{synthesis_metadata['maximum_repetitions']}, generators with reps>1="
+        f"{synthesis_metadata['generators_above_one_repetition']}"
     )
     print(
         f"F(uncompiled, compiled)={fidelity_uncompiled_compiled:.12g}, "
