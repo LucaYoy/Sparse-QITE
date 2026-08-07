@@ -272,25 +272,56 @@ def save_curves(
     horizontal_line: tuple[float, str] | None = None,
     panel_layout: bool = False,
     show_title: bool = True,
+    yscale: str | None = None,
 ) -> None:
     """Save one consistently styled PDF containing the supplied curves."""
     figure_size = (5.6, 5.0) if panel_layout else (8, 5)
     figure, axis = plt.subplots(figsize=figure_size)
-    for x_values, y_values, label in curves:
-        axis.plot(x_values, y_values, marker="o", markersize=3, label=label)
+    # Draw QITE last so a nearly identical Sparse-QITE trajectory cannot
+    # completely cover the dashed reference curve.
+    ordered_curves = sorted(curves, key=lambda curve: curve[2] == "QITE")
+    for x_values, y_values, label in ordered_curves:
+        is_qite = label == "QITE"
+        is_sparse_qite = label.startswith("Sparse-QITE")
+        axis.plot(
+            x_values,
+            y_values,
+            marker=None if is_qite else "o",
+            markersize=3,
+            color=(
+                "black"
+                if is_qite
+                else "#0072B2" if is_sparse_qite else None
+            ),
+            linestyle="--" if is_qite else "-",
+            linewidth=1.7 if is_qite else 1.5,
+            zorder=4 if is_qite else 3,
+            label=label,
+        )
     if horizontal_line is not None:
         value, label = horizontal_line
-        axis.axhline(value, color="black", linestyle="-", linewidth=1.5, label=label)
+        axis.axhline(
+            value,
+            color="tab:red",
+            linestyle="-",
+            linewidth=1.5,
+            label=label,
+        )
     axis.set_xlabel("Imaginary time")
     axis.set_ylabel(ylabel)
     if show_title:
         axis.set_title(title)
     if ylim is not None:
         axis.set_ylim(*ylim)
+    if yscale is not None:
+        axis.set_yscale(yscale)
     axis.grid(alpha=0.3)
     axis.legend()
     figure.tight_layout()
-    figure.savefig(output_path, format="pdf", bbox_inches="tight")
+    if panel_layout:
+        figure.savefig(output_path, format="pdf")
+    else:
+        figure.savefig(output_path, format="pdf", bbox_inches="tight")
     plt.close(figure)
     print(f"Wrote {output_path}")
 
@@ -427,6 +458,7 @@ def plot_configuration(
     percentage_curves = []
     cumulative_curves = []
     ground_fidelity_curves = []
+    ground_infidelity_curves = []
     locality_heatmaps = []
 
     for job, energy, states, coefficients in loaded_results:
@@ -457,12 +489,16 @@ def plot_configuration(
             dtype=int,
         )
         ground_fidelity = fidelity_with_vector(states, exact_ground_state)
+        ground_infidelity = np.maximum(1.0 - ground_fidelity, 1e-16)
 
         energy_curves.append((energy_times, energy, label))
         count_curves.append((coefficient_times, active_count, label))
         percentage_curves.append((coefficient_times, active_percentage, label))
         cumulative_curves.append((coefficient_times, cumulative_count, label))
         ground_fidelity_curves.append((energy_times, ground_fidelity, label))
+        ground_infidelity_curves.append(
+            (energy_times, ground_infidelity, label)
+        )
         locality_heatmaps.append(
             (job, locality_counts, available_terms_by_locality, label)
         )
@@ -555,7 +591,16 @@ def plot_configuration(
         panel_layout=True,
         show_title=False,
     )
-    figures_written = 5 + 3 * len(locality_heatmaps)
+    save_curves(
+        ground_infidelity_curves,
+        plot_dir / "infidelity_vs_ground_state.pdf",
+        folder_name,
+        "Ground-state infidelity, 1 - F",
+        panel_layout=True,
+        show_title=False,
+        yscale="log",
+    )
+    figures_written = 6 + 3 * len(locality_heatmaps)
 
     qite_result = next(
         (result for result in loaded_results if result[0]["method"] in {"default", "LU"}),

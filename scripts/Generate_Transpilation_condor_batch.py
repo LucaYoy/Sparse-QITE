@@ -83,6 +83,19 @@ def render_run_script(transpilation: dict[str, Any]) -> str:
     ]
     if transpilation["hamiltonian_gate"]:
         arguments.append("--hamiltonian-gate")
+    arguments.extend(
+        ["--synthesis-formula", str(transpilation.get("synthesis_formula", "lie"))]
+    )
+    if transpilation.get("adaptive_repetitions", False):
+        arguments.extend(
+            [
+                "--adaptive-repetitions",
+                "--max-coefficient-angle",
+                str(transpilation.get("max_coefficient_angle", 0.1)),
+                "--max-repetitions",
+                str(transpilation.get("max_repetitions", 128)),
+            ]
+        )
     if transpilation["compute_unitary_error"]:
         arguments.append("--compute-unitary-error")
     if transpilation["overwrite_outputs"]:
@@ -263,6 +276,10 @@ def main() -> None:
         "optimization_level": 1,
         "basis_gates": ["u3", "cx"],
         "hamiltonian_gate": False,
+        "synthesis_formula": "lie",
+        "adaptive_repetitions": False,
+        "max_coefficient_angle": 0.1,
+        "max_repetitions": 128,
         # Full-unitary validation scales as O(4**n); normally leave disabled.
         "compute_unitary_error": False,
         "overwrite_outputs": True,

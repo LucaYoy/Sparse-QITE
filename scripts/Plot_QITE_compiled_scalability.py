@@ -36,6 +36,9 @@ PROJECT_DIR = SCRIPT_DIR.parent
 TRANSPILATION_FOLDER = (
     "generic_u3-cx_opt1_pauli_evolution_steps100_no_unitary_error"
 )
+SYNTHESIS_FORMULA = "suzuki2"
+ADAPTIVE_POLICY_GLOB = "adaptive_angle0p1_r*-r*_cap128"
+COMPILED_ANALYSIS_FOLDER = "adaptive_suzuki2_angle0p1"
 INFIDELITY_FLOOR = 1e-16
 
 
@@ -64,13 +67,23 @@ def vertical_summary(path: Path) -> dict[str, str]:
 
 
 def summary_path(result_dir: str) -> Path:
-    """Return the standard summary path belonging to one QITE result."""
-    return (
+    """Return the unique adaptive-Suzuki summary for one QITE result."""
+    synthesis_root = (
         Path(result_dir)
         / "transpilation"
-        / TRANSPILATION_FOLDER
-        / "summary.csv"
+        / SYNTHESIS_FORMULA
     )
+    matches = sorted(
+        synthesis_root.glob(
+            f"{ADAPTIVE_POLICY_GLOB}/{TRANSPILATION_FOLDER}/summary.csv"
+        )
+    )
+    if len(matches) != 1:
+        raise FileNotFoundError(
+            f"Expected exactly one adaptive-Suzuki summary below "
+            f"{synthesis_root}, found {len(matches)}."
+        )
+    return matches[0]
 
 
 def metric(summary: dict[str, str], key: str) -> float:
@@ -111,6 +124,18 @@ def compiled_metrics(result_dir: str) -> dict[str, float]:
         ),
         "transpilation_elapsed_seconds": metric(
             summary, "transpilation_elapsed_seconds"
+        ),
+        "minimum_repetitions": metric(summary, "minimum_repetitions_used"),
+        "mean_repetitions": metric(summary, "mean_repetitions_used"),
+        "maximum_repetitions": metric(summary, "maximum_repetitions_used"),
+        "generators_above_one_repetition": metric(
+            summary, "generators_above_one_repetition"
+        ),
+        "maximum_generator_coefficient": metric(
+            summary, "maximum_generator_coefficient"
+        ),
+        "maximum_realized_coefficient_angle": metric(
+            summary, "maximum_realized_coefficient_angle"
         ),
     }
 
@@ -341,7 +366,7 @@ def main() -> None:
             "label": "Heisenberg PBC, n=8",
         },
     ]
-    fidelity_thresholds = [0.95, 0.99, 0.999]
+    fidelity_thresholds = [0.95, 0.99, 0.999, 0.9999, 0.99999]
     # ------------------------------------------------------------------
 
     scalability_root = PROJECT_DIR / "plots" / "scalability"
@@ -351,7 +376,7 @@ def main() -> None:
             analysis_dir / "selected_lambdas.csv",
             fidelity_thresholds,
         )
-        output_dir = analysis_dir / "compiled"
+        output_dir = analysis_dir / "compiled" / COMPILED_ANALYSIS_FOLDER
         output_dir.mkdir(parents=True, exist_ok=True)
 
         write_compiled_csv(

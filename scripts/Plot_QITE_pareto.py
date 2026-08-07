@@ -190,6 +190,8 @@ def plot_pareto(
     ylabel: str,
     title: str,
     cost_key: str,
+    color_limits: tuple[float, float],
+    show_colorbar: bool = True,
 ) -> None:
     """Plot logarithmic infidelity, the Pareto front, and QITE reference."""
     costs = np.asarray([row["number_of_terms"] for row in rows], dtype=float)
@@ -205,6 +207,8 @@ def plot_pareto(
         infidelities,
         c=colors,
         cmap="viridis",
+        vmin=color_limits[0],
+        vmax=color_limits[1],
         s=50,
         edgecolor="black",
         linewidth=0.45,
@@ -219,9 +223,16 @@ def plot_pareto(
         [row["number_of_terms"] for row in front],
         [max(1.0 - row[fidelity_key], INFIDELITY_FLOOR) for row in front],
         color="tab:red",
-        marker="o",
-        markersize=4,
         linewidth=1.6,
+        zorder=2,
+    )
+    axis.scatter(
+        [row["number_of_terms"] for row in front],
+        [max(1.0 - row[fidelity_key], INFIDELITY_FLOOR) for row in front],
+        s=95,
+        facecolors="none",
+        edgecolors="tab:red",
+        linewidths=1.6,
         label="Pareto front",
         zorder=4,
     )
@@ -258,26 +269,45 @@ def plot_pareto(
     annotated.add(id(front[-1]))
     for row, selected in zip(rows, mask, strict=True):
         if selected and id(row) in annotated:
+            annotation_offset = (5, 5)
+            annotation_alignment = "left"
+            if (
+                fidelity_key == "fidelity_ground_state"
+                and "Disordered TFIM" in title
+                and np.isclose(float(row["lambda"]), 0.0015)
+            ):
+                annotation_offset = (-8, 5)
+                annotation_alignment = "right"
+            elif (
+                "Heisenberg" in title
+                and np.isclose(float(row["lambda"]), 1.0)
+            ):
+                annotation_offset = (9, 5)
             axis.annotate(
                 rf"$\lambda={row['lambda']:g}$",
                 (
                     row["number_of_terms"],
                     max(1.0 - row[fidelity_key], INFIDELITY_FLOOR),
                 ),
-                xytext=(5, 5),
+                xytext=annotation_offset,
                 textcoords="offset points",
                 fontsize=7.5,
+                horizontalalignment=annotation_alignment,
             )
 
     colorbar = figure.colorbar(points, ax=axis, pad=0.02)
-    colorbar.set_label(r"$\log_{10}(\lambda)$")
+    if show_colorbar:
+        colorbar.set_label(r"$\log_{10}(\lambda)$")
+    else:
+        # Keep the color-bar column reserved so every panel has identical
+        # data-axis dimensions when included at the same width.
+        colorbar.ax.set_visible(False)
     # ``symlog`` retains a legitimate zero-term solution while behaving
     # logarithmically for the rest of the several-orders-of-magnitude range.
     axis.set_xscale("symlog", linthresh=1.0)
     axis.set_yscale("log")
     axis.set_xlabel(COST_LABELS[cost_key])
     axis.set_ylabel(ylabel)
-    axis.set_title(title)
     axis.grid(alpha=0.25, which="both")
     axis.legend()
 
@@ -298,7 +328,7 @@ def plot_pareto(
 
     # Explicit margins leave room for the color bar and logarithmic tick labels.
     figure.subplots_adjust(left=0.12, right=0.88, bottom=0.13, top=0.90)
-    figure.savefig(output_path, format="pdf", bbox_inches="tight")
+    figure.savefig(output_path, format="pdf")
     plt.close(figure)
     print(f"Wrote {output_path}")
 
@@ -338,6 +368,7 @@ def main() -> None:
         raise ValueError(f"Unknown cost_key {cost_key!r}. Choose one of: {choices}.")
 
     scalability_root = PROJECT_DIR / "plots" / "scalability"
+    prepared_cases = []
     for case in cases:
         analysis_dir = scalability_root / case["analysis_folder"]
         rows = load_case_rows(
@@ -350,6 +381,16 @@ def main() -> None:
             int(case["D"]),
             cost_key,
         )
+        prepared_cases.append((case, rows, qite_reference))
+
+    all_log_lambdas = [
+        np.log10(float(row["lambda"]))
+        for _case, rows, _reference in prepared_cases
+        for row in rows
+    ]
+    color_limits = (min(all_log_lambdas), max(all_log_lambdas))
+
+    for case, rows, qite_reference in prepared_cases:
 
         output_dir = output_root / case["name"]
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -363,6 +404,8 @@ def main() -> None:
             r"Infidelity with QITE, $1-F$",
             f"{case['label']}: infidelity with QITE",
             cost_key,
+            color_limits,
+            show_colorbar=case["name"] != "disordered_tfim_n8_D4",
         )
         plot_pareto(
             output_dir / "infidelity_vs_ground_state_pareto.pdf",
@@ -372,6 +415,8 @@ def main() -> None:
             r"Ground-state infidelity, $1-F$",
             f"{case['label']}: ground-state infidelity",
             cost_key,
+            color_limits,
+            show_colorbar=case["name"] != "disordered_tfim_n8_D4",
         )
 
 

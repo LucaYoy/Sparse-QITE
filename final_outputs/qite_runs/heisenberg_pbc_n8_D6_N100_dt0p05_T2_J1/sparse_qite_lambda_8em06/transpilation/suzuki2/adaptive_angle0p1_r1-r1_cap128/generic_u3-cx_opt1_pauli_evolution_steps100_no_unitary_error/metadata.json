@@ -1,0 +1,6465 @@
+{
+  "fidelity": {
+    "compiled_vs_ground_state": 0.9971661665427185,
+    "ground_state_convention": "one lowest-eigenvalue eigenvector; use a ground-space projector for degenerate Hamiltonians",
+    "ground_state_energy": -14.604373635748708,
+    "ground_state_fidelity_degradation": -8.933332033000951e-07,
+    "uncompiled_vs_compiled": 0.9999972629029407,
+    "uncompiled_vs_ground_state": 0.9971652732095152
+  },
+  "qite": {
+    "D": 6,
+    "active_coefficients": 438753,
+    "configured_steps": 100,
+    "dt": 0.05,
+    "method": "vanilla_lasso",
+    "model": "heisenberg_pbc",
+    "n_qubits": 8,
+    "nonzero_coefficients": 438753,
+    "num_paulis_per_piece": 2016,
+    "num_trotter_pieces": 8,
+    "steps": 100,
+    "support_tolerance": 1e-14
+  },
+  "source": {
+    "config_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/configs/generated/heisenberg_pbc_n8_D6_N100_dt0p05_T2_J1/sparse_qite_lambda_8em06.toml",
+    "states_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D6_N100_dt0p05_T2_J1/sparse_qite_lambda_8em06/states.npz",
+    "trajectory_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/heisenberg_pbc_n8_D6_N100_dt0p05_T2_J1/sparse_qite_lambda_8em06/trajectory.npz",
+    "trajectory_sha256": "e23b4730b496d1ac4a583090105c057f16d30d0a655f6182bf5605b9107b3101"
+  },
+  "transpilation": {
+    "adaptive_repetitions": true,
+    "backend": "GenericBackendV2",
+    "basis_gates": [
+      "u3",
+      "cx"
+    ],
+    "circuit_construction": "PauliEvolutionGate",
+    "depth": 4452212,
+    "elapsed_seconds": 223.869263813016,
+    "gate_counts": {
+      "cx": 3108274,
+      "u3": 2269729
+    },
+    "generator_records": [
+      {
+        "active_terms": 32,
+        "maximum_coefficient": 0.06198583757316671,
+        "piece": 0,
+        "realized_coefficient_angle": 0.003099291878658336,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 96,
+        "maximum_coefficient": 0.06144052280154512,
+        "piece": 1,
+        "realized_coefficient_angle": 0.003072026140077256,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 176,
+        "maximum_coefficient": 0.06144625093350366,
+        "piece": 2,
+        "realized_coefficient_angle": 0.003072312546675183,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 192,
+        "maximum_coefficient": 0.12288215950501077,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006144107975250539,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 224,
+        "maximum_coefficient": 0.12806434258545446,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006403217129272724,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 224,
+        "maximum_coefficient": 0.25352779027842365,
+        "piece": 5,
+        "realized_coefficient_angle": 0.012676389513921183,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 302,
+        "maximum_coefficient": 0.30462847681123,
+        "piece": 6,
+        "realized_coefficient_angle": 0.015231423840561501,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 490,
+        "maximum_coefficient": 0.24400543128472213,
+        "piece": 7,
+        "realized_coefficient_angle": 0.012200271564236108,
+        "repetitions": 1,
+        "step": 0
+      },
+      {
+        "active_terms": 517,
+        "maximum_coefficient": 0.2373367095854826,
+        "piece": 0,
+        "realized_coefficient_angle": 0.011866835479274132,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 631,
+        "maximum_coefficient": 0.23196898605863442,
+        "piece": 1,
+        "realized_coefficient_angle": 0.011598449302931722,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 700,
+        "maximum_coefficient": 0.23200220596045001,
+        "piece": 2,
+        "realized_coefficient_angle": 0.011600110298022501,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 742,
+        "maximum_coefficient": 0.2320011855836867,
+        "piece": 3,
+        "realized_coefficient_angle": 0.011600059279184336,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 789,
+        "maximum_coefficient": 0.2320567124751358,
+        "piece": 4,
+        "realized_coefficient_angle": 0.01160283562375679,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 755,
+        "maximum_coefficient": 0.23291120674737534,
+        "piece": 5,
+        "realized_coefficient_angle": 0.011645560337368768,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 770,
+        "maximum_coefficient": 0.23280563723889114,
+        "piece": 6,
+        "realized_coefficient_angle": 0.011640281861944558,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 837,
+        "maximum_coefficient": 0.2276164789753647,
+        "piece": 7,
+        "realized_coefficient_angle": 0.011380823948768236,
+        "repetitions": 1,
+        "step": 1
+      },
+      {
+        "active_terms": 843,
+        "maximum_coefficient": 0.21895584354664563,
+        "piece": 0,
+        "realized_coefficient_angle": 0.010947792177332282,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 827,
+        "maximum_coefficient": 0.21289807310107733,
+        "piece": 1,
+        "realized_coefficient_angle": 0.010644903655053868,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 861,
+        "maximum_coefficient": 0.21294109203169356,
+        "piece": 2,
+        "realized_coefficient_angle": 0.01064705460158468,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 802,
+        "maximum_coefficient": 0.21279938955517264,
+        "piece": 3,
+        "realized_coefficient_angle": 0.010639969477758632,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 849,
+        "maximum_coefficient": 0.21286286817494104,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010643143408747053,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 809,
+        "maximum_coefficient": 0.21398174240493442,
+        "piece": 5,
+        "realized_coefficient_angle": 0.010699087120246722,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 847,
+        "maximum_coefficient": 0.21211368734116468,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010605684367058235,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 871,
+        "maximum_coefficient": 0.20700472664542682,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010350236332271341,
+        "repetitions": 1,
+        "step": 2
+      },
+      {
+        "active_terms": 869,
+        "maximum_coefficient": 0.19889318380065402,
+        "piece": 0,
+        "realized_coefficient_angle": 0.009944659190032701,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 854,
+        "maximum_coefficient": 0.19292404610102928,
+        "piece": 1,
+        "realized_coefficient_angle": 0.009646202305051465,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 891,
+        "maximum_coefficient": 0.19282043157647757,
+        "piece": 2,
+        "realized_coefficient_angle": 0.009641021578823879,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 849,
+        "maximum_coefficient": 0.1925299829637837,
+        "piece": 3,
+        "realized_coefficient_angle": 0.009626499148189187,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 873,
+        "maximum_coefficient": 0.19239524981283962,
+        "piece": 4,
+        "realized_coefficient_angle": 0.009619762490641982,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 854,
+        "maximum_coefficient": 0.19182754670646057,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00959137733532303,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 872,
+        "maximum_coefficient": 0.1911866049722679,
+        "piece": 6,
+        "realized_coefficient_angle": 0.009559330248613395,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 895,
+        "maximum_coefficient": 0.18582012523313304,
+        "piece": 7,
+        "realized_coefficient_angle": 0.009291006261656652,
+        "repetitions": 1,
+        "step": 3
+      },
+      {
+        "active_terms": 883,
+        "maximum_coefficient": 0.17897067234187553,
+        "piece": 0,
+        "realized_coefficient_angle": 0.008948533617093777,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 884,
+        "maximum_coefficient": 0.1734492202222527,
+        "piece": 1,
+        "realized_coefficient_angle": 0.008672461011112636,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 895,
+        "maximum_coefficient": 0.17301598353820924,
+        "piece": 2,
+        "realized_coefficient_angle": 0.008650799176910463,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 880,
+        "maximum_coefficient": 0.1728144262200325,
+        "piece": 3,
+        "realized_coefficient_angle": 0.008640721311001626,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 895,
+        "maximum_coefficient": 0.1723150759071987,
+        "piece": 4,
+        "realized_coefficient_angle": 0.008615753795359934,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 876,
+        "maximum_coefficient": 0.1713662854673272,
+        "piece": 5,
+        "realized_coefficient_angle": 0.008568314273366361,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 880,
+        "maximum_coefficient": 0.17067261914716403,
+        "piece": 6,
+        "realized_coefficient_angle": 0.008533630957358202,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 886,
+        "maximum_coefficient": 0.1653602550801591,
+        "piece": 7,
+        "realized_coefficient_angle": 0.008268012754007957,
+        "repetitions": 1,
+        "step": 4
+      },
+      {
+        "active_terms": 885,
+        "maximum_coefficient": 0.15976200947778943,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007988100473889473,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 878,
+        "maximum_coefficient": 0.15464086908601435,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007732043454300718,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 897,
+        "maximum_coefficient": 0.1539525966607295,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007697629833036475,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 879,
+        "maximum_coefficient": 0.15358835639275914,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007679417819637957,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 899,
+        "maximum_coefficient": 0.152976508560848,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0076488254280424,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 889,
+        "maximum_coefficient": 0.1519032711462863,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007595163557314315,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 883,
+        "maximum_coefficient": 0.1509779921232096,
+        "piece": 6,
+        "realized_coefficient_angle": 0.00754889960616048,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 891,
+        "maximum_coefficient": 0.14730150433652614,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007365075216826307,
+        "repetitions": 1,
+        "step": 5
+      },
+      {
+        "active_terms": 884,
+        "maximum_coefficient": 0.14424092064269134,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007212046032134567,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 880,
+        "maximum_coefficient": 0.14266142464362772,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0071330712321813865,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 890,
+        "maximum_coefficient": 0.14072303537162567,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007036151768581284,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 883,
+        "maximum_coefficient": 0.14122357288360635,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007061178644180318,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 883,
+        "maximum_coefficient": 0.13950244091466157,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006975122045733079,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 881,
+        "maximum_coefficient": 0.14005421535137536,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007002710767568768,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 874,
+        "maximum_coefficient": 0.1392224588229031,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006961122941145155,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 876,
+        "maximum_coefficient": 0.13822164174310392,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006911082087155196,
+        "repetitions": 1,
+        "step": 6
+      },
+      {
+        "active_terms": 870,
+        "maximum_coefficient": 0.13608625358153104,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006804312679076552,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 881,
+        "maximum_coefficient": 0.1351132442789441,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006755662213947206,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 889,
+        "maximum_coefficient": 0.13294951564539656,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006647475782269829,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 880,
+        "maximum_coefficient": 0.1339009922423491,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0066950496121174555,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 876,
+        "maximum_coefficient": 0.13283863378561622,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0066419316892808115,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 866,
+        "maximum_coefficient": 0.13330243076957216,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0066651215384786085,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 877,
+        "maximum_coefficient": 0.1325123994043496,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006625619970217481,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 885,
+        "maximum_coefficient": 0.13196566505354435,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006598283252677218,
+        "repetitions": 1,
+        "step": 7
+      },
+      {
+        "active_terms": 869,
+        "maximum_coefficient": 0.13042773247974465,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006521386623987233,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 874,
+        "maximum_coefficient": 0.12986297904362132,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0064931489521810664,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 886,
+        "maximum_coefficient": 0.12826795710185762,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006413397855092881,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 875,
+        "maximum_coefficient": 0.12907298384045104,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006453649192022553,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 883,
+        "maximum_coefficient": 0.12823065079888363,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0064115325399441815,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 880,
+        "maximum_coefficient": 0.1286308798240195,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006431543991200975,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 886,
+        "maximum_coefficient": 0.1280135328840522,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006400676644202611,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 874,
+        "maximum_coefficient": 0.12779067503975217,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006389533751987609,
+        "repetitions": 1,
+        "step": 8
+      },
+      {
+        "active_terms": 867,
+        "maximum_coefficient": 0.1266568936396693,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006332844681983466,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 871,
+        "maximum_coefficient": 0.12638706892848434,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006319353446424217,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 872,
+        "maximum_coefficient": 0.12520699412546799,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006260349706273399,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 863,
+        "maximum_coefficient": 0.12590453905355245,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006295226952677623,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 871,
+        "maximum_coefficient": 0.12526133350183138,
+        "piece": 4,
+        "realized_coefficient_angle": 0.00626306667509157,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 865,
+        "maximum_coefficient": 0.12563593028730816,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006281796514365408,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 862,
+        "maximum_coefficient": 0.12507303749167195,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006253651874583598,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 867,
+        "maximum_coefficient": 0.1250827421349791,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006254137106748956,
+        "repetitions": 1,
+        "step": 9
+      },
+      {
+        "active_terms": 853,
+        "maximum_coefficient": 0.12427277699989582,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006213638849994791,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 867,
+        "maximum_coefficient": 0.12419182469764647,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006209591234882324,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 864,
+        "maximum_coefficient": 0.12326754692207999,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006163377346104,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 870,
+        "maximum_coefficient": 0.1239318770188908,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006196593850944541,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 869,
+        "maximum_coefficient": 0.1233676044829048,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006168380224145241,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 873,
+        "maximum_coefficient": 0.12376446499200429,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006188223249600215,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 865,
+        "maximum_coefficient": 0.12326701975837154,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006163350987918577,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 852,
+        "maximum_coefficient": 0.12343975404867256,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006171987702433629,
+        "repetitions": 1,
+        "step": 10
+      },
+      {
+        "active_terms": 845,
+        "maximum_coefficient": 0.12280186552753947,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0061400932763769735,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 856,
+        "maximum_coefficient": 0.12286063205727499,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061430316028637496,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 860,
+        "maximum_coefficient": 0.12217153127313096,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006108576563656549,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 857,
+        "maximum_coefficient": 0.12275838523936475,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006137919261968237,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 858,
+        "maximum_coefficient": 0.12229073973132498,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006114536986566249,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 864,
+        "maximum_coefficient": 0.12272662691714659,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00613633134585733,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 857,
+        "maximum_coefficient": 0.1222409467238478,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0061120473361923906,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 852,
+        "maximum_coefficient": 0.12250491785660526,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006125245892830263,
+        "repetitions": 1,
+        "step": 11
+      },
+      {
+        "active_terms": 847,
+        "maximum_coefficient": 0.12199694586244585,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006099847293122292,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 852,
+        "maximum_coefficient": 0.12212418820522589,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006106209410261295,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 853,
+        "maximum_coefficient": 0.12183360044314566,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006091680022157283,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 865,
+        "maximum_coefficient": 0.1222103311897098,
+        "piece": 3,
+        "realized_coefficient_angle": 0.00611051655948549,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 854,
+        "maximum_coefficient": 0.12240708894169634,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006120354447084818,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 866,
+        "maximum_coefficient": 0.12218634272731099,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00610931713636555,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 860,
+        "maximum_coefficient": 0.12257224639911943,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006128612319955972,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 852,
+        "maximum_coefficient": 0.12226886810246437,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006113443405123219,
+        "repetitions": 1,
+        "step": 12
+      },
+      {
+        "active_terms": 842,
+        "maximum_coefficient": 0.12209001928098161,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006104500964049081,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 844,
+        "maximum_coefficient": 0.12261920330203459,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061309601651017296,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 844,
+        "maximum_coefficient": 0.12242160780127426,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006121080390063713,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 851,
+        "maximum_coefficient": 0.12273252707965251,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006136626353982626,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 851,
+        "maximum_coefficient": 0.12294294303724623,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006147147151862312,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 861,
+        "maximum_coefficient": 0.12267703917907068,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006133851958953534,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 848,
+        "maximum_coefficient": 0.12312217589494877,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006156108794747438,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 835,
+        "maximum_coefficient": 0.12267518388974415,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061337591944872075,
+        "repetitions": 1,
+        "step": 13
+      },
+      {
+        "active_terms": 827,
+        "maximum_coefficient": 0.12253096162061661,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00612654808103083,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 830,
+        "maximum_coefficient": 0.12295485953373182,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006147742976686591,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 834,
+        "maximum_coefficient": 0.12277739506881599,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0061388697534408,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 840,
+        "maximum_coefficient": 0.12306818849701956,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061534094248509785,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 833,
+        "maximum_coefficient": 0.12333687964100214,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006166843982050107,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 839,
+        "maximum_coefficient": 0.12302710384366863,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006151355192183432,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 833,
+        "maximum_coefficient": 0.12349180627303036,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006174590313651519,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 818,
+        "maximum_coefficient": 0.12293035665777997,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006146517832888999,
+        "repetitions": 1,
+        "step": 14
+      },
+      {
+        "active_terms": 818,
+        "maximum_coefficient": 0.12282829148322551,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006141414574161275,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 818,
+        "maximum_coefficient": 0.12316483544680472,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006158241772340236,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 826,
+        "maximum_coefficient": 0.12302198717598407,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006151099358799204,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 833,
+        "maximum_coefficient": 0.12328956701083887,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006164478350541944,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 824,
+        "maximum_coefficient": 0.12355877607492269,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006177938803746135,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 827,
+        "maximum_coefficient": 0.12318913885104887,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006159456942552444,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 823,
+        "maximum_coefficient": 0.12374320920125842,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0061871604600629215,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 814,
+        "maximum_coefficient": 0.12310377785089563,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006155188892544782,
+        "repetitions": 1,
+        "step": 15
+      },
+      {
+        "active_terms": 810,
+        "maximum_coefficient": 0.12302544173613719,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00615127208680686,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 810,
+        "maximum_coefficient": 0.12326557873787336,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006163278936893668,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 820,
+        "maximum_coefficient": 0.12316457618031454,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006158228809015728,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 820,
+        "maximum_coefficient": 0.12340694558313348,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006170347279156674,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 814,
+        "maximum_coefficient": 0.12371159232851597,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006185579616425799,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 819,
+        "maximum_coefficient": 0.12331155089843251,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006165577544921626,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 816,
+        "maximum_coefficient": 0.12389863413806071,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006194931706903036,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 808,
+        "maximum_coefficient": 0.12318123967067021,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006159061983533511,
+        "repetitions": 1,
+        "step": 16
+      },
+      {
+        "active_terms": 802,
+        "maximum_coefficient": 0.12314345712114187,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006157172856057094,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 805,
+        "maximum_coefficient": 0.12334633263451328,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006167316631725664,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 808,
+        "maximum_coefficient": 0.12324554855712924,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006162277427856463,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 809,
+        "maximum_coefficient": 0.123476891848387,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006173844592419351,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 806,
+        "maximum_coefficient": 0.12380590142411489,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006190295071205745,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 810,
+        "maximum_coefficient": 0.12338786833025757,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061693934165128785,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 809,
+        "maximum_coefficient": 0.12399385882303533,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006199692941151767,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 801,
+        "maximum_coefficient": 0.12322062404940874,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006161031202470437,
+        "repetitions": 1,
+        "step": 17
+      },
+      {
+        "active_terms": 794,
+        "maximum_coefficient": 0.12319597629155801,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006159798814577901,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 792,
+        "maximum_coefficient": 0.12336987689977003,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006168493844988502,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 796,
+        "maximum_coefficient": 0.12328329847380971,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006164164923690486,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 795,
+        "maximum_coefficient": 0.12351806892079617,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006175903446039809,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 792,
+        "maximum_coefficient": 0.12385835399832176,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006192917699916089,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 802,
+        "maximum_coefficient": 0.1234091572730301,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006170457863651505,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 792,
+        "maximum_coefficient": 0.12405130732939595,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006202565366469798,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 779,
+        "maximum_coefficient": 0.12321645045631106,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006160822522815554,
+        "repetitions": 1,
+        "step": 18
+      },
+      {
+        "active_terms": 780,
+        "maximum_coefficient": 0.12322545591959738,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0061612727959798694,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 784,
+        "maximum_coefficient": 0.12334604077421059,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00616730203871053,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 787,
+        "maximum_coefficient": 0.1232850487755455,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006164252438777275,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 777,
+        "maximum_coefficient": 0.1235169482865295,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006175847414326475,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 781,
+        "maximum_coefficient": 0.12388645021135392,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006194322510567696,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 791,
+        "maximum_coefficient": 0.12340819049322832,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006170409524661417,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 786,
+        "maximum_coefficient": 0.12408248760030649,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006204124380015325,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 771,
+        "maximum_coefficient": 0.12322140580214298,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061610702901071495,
+        "repetitions": 1,
+        "step": 19
+      },
+      {
+        "active_terms": 770,
+        "maximum_coefficient": 0.12324376170998799,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0061621880854994,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 776,
+        "maximum_coefficient": 0.12332437664286751,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006166218832143376,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 788,
+        "maximum_coefficient": 0.12330423630772644,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006165211815386322,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 786,
+        "maximum_coefficient": 0.12349397051394288,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006174698525697145,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 785,
+        "maximum_coefficient": 0.12389762193587875,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006194881096793938,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 783,
+        "maximum_coefficient": 0.12339894098349868,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006169947049174934,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 785,
+        "maximum_coefficient": 0.12410540052719463,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006205270026359732,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 769,
+        "maximum_coefficient": 0.12319160435205843,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006159580217602922,
+        "repetitions": 1,
+        "step": 20
+      },
+      {
+        "active_terms": 778,
+        "maximum_coefficient": 0.12322601236695992,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006161300618347996,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 773,
+        "maximum_coefficient": 0.12330907897016867,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006165453948508434,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 785,
+        "maximum_coefficient": 0.12327400341360722,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006163700170680362,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 778,
+        "maximum_coefficient": 0.12349687859474279,
+        "piece": 3,
+        "realized_coefficient_angle": 0.00617484392973714,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 775,
+        "maximum_coefficient": 0.12388276262343598,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006194138131171799,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 783,
+        "maximum_coefficient": 0.12337120739645514,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061685603698227575,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 772,
+        "maximum_coefficient": 0.12410088303417517,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006205044151708759,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 762,
+        "maximum_coefficient": 0.123190413479641,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006159520673982051,
+        "repetitions": 1,
+        "step": 21
+      },
+      {
+        "active_terms": 772,
+        "maximum_coefficient": 0.12322652718188344,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006161326359094173,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 759,
+        "maximum_coefficient": 0.1232910445913177,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006164552229565886,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 774,
+        "maximum_coefficient": 0.12325652937052525,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006162826468526263,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 766,
+        "maximum_coefficient": 0.12347231482758682,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006173615741379341,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 768,
+        "maximum_coefficient": 0.12389129369378109,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006194564684689055,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 765,
+        "maximum_coefficient": 0.12335310499004759,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00616765524950238,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 771,
+        "maximum_coefficient": 0.12409979071640496,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006204989535820249,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 752,
+        "maximum_coefficient": 0.12315347495862161,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006157673747931081,
+        "repetitions": 1,
+        "step": 22
+      },
+      {
+        "active_terms": 758,
+        "maximum_coefficient": 0.12320114292990977,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006160057146495489,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 758,
+        "maximum_coefficient": 0.12326418094232658,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006163209047116329,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 764,
+        "maximum_coefficient": 0.1232313079796674,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006161565398983371,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 761,
+        "maximum_coefficient": 0.12345827788341512,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006172913894170757,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 760,
+        "maximum_coefficient": 0.12386162921448715,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0061930814607243576,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 764,
+        "maximum_coefficient": 0.12333855834090633,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006166927917045317,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 765,
+        "maximum_coefficient": 0.12408059951236605,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006204029975618303,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 754,
+        "maximum_coefficient": 0.12313440683695226,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006156720341847614,
+        "repetitions": 1,
+        "step": 23
+      },
+      {
+        "active_terms": 747,
+        "maximum_coefficient": 0.12318323789883087,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006159161894941544,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 759,
+        "maximum_coefficient": 0.12323455447809273,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006161727723904636,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 750,
+        "maximum_coefficient": 0.12321775954226856,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006160887977113429,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 760,
+        "maximum_coefficient": 0.12342137133439154,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061710685667195776,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 739,
+        "maximum_coefficient": 0.12384731892421819,
+        "piece": 4,
+        "realized_coefficient_angle": 0.00619236594621091,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 752,
+        "maximum_coefficient": 0.12331095793623797,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061655478968118994,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 751,
+        "maximum_coefficient": 0.12407329878527117,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006203664939263559,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 723,
+        "maximum_coefficient": 0.1231135299479846,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006155676497399231,
+        "repetitions": 1,
+        "step": 24
+      },
+      {
+        "active_terms": 729,
+        "maximum_coefficient": 0.12316987820462262,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006158493910231131,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 734,
+        "maximum_coefficient": 0.12321831073653564,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006160915536826782,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 728,
+        "maximum_coefficient": 0.12319771616221882,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006159885808110941,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 733,
+        "maximum_coefficient": 0.12340175384029599,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061700876920148,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 717,
+        "maximum_coefficient": 0.12384166489100143,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006192083244550072,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 718,
+        "maximum_coefficient": 0.12331237511897047,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006165618755948524,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 732,
+        "maximum_coefficient": 0.12406908984522484,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006203454492261243,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 704,
+        "maximum_coefficient": 0.12309471391096634,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061547356955483174,
+        "repetitions": 1,
+        "step": 25
+      },
+      {
+        "active_terms": 714,
+        "maximum_coefficient": 0.1231526413990644,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00615763206995322,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 716,
+        "maximum_coefficient": 0.12321263686445114,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061606318432225575,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 713,
+        "maximum_coefficient": 0.12318421684040155,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006159210842020078,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 717,
+        "maximum_coefficient": 0.12339949712115156,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006169974856057578,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 694,
+        "maximum_coefficient": 0.1238403415466533,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006192017077332666,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 710,
+        "maximum_coefficient": 0.12327085475540296,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006163542737770148,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 703,
+        "maximum_coefficient": 0.12405402026193843,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006202701013096922,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 690,
+        "maximum_coefficient": 0.12310487934513896,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061552439672569485,
+        "repetitions": 1,
+        "step": 26
+      },
+      {
+        "active_terms": 697,
+        "maximum_coefficient": 0.12314202825119115,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006157101412559558,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 696,
+        "maximum_coefficient": 0.12318640080697686,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061593200403488434,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 691,
+        "maximum_coefficient": 0.12316020249485359,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00615801012474268,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 700,
+        "maximum_coefficient": 0.12337340428633349,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006168670214316675,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 684,
+        "maximum_coefficient": 0.12381967136896171,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006190983568448086,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 704,
+        "maximum_coefficient": 0.12326596444732212,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006163298222366106,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 699,
+        "maximum_coefficient": 0.12403642662223925,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006201821331111963,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 687,
+        "maximum_coefficient": 0.12314590058621598,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061572950293108,
+        "repetitions": 1,
+        "step": 27
+      },
+      {
+        "active_terms": 689,
+        "maximum_coefficient": 0.12313440858150754,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006156720429075377,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 692,
+        "maximum_coefficient": 0.12317720190146637,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006158860095073319,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 690,
+        "maximum_coefficient": 0.12315888823303264,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006157944411651632,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 682,
+        "maximum_coefficient": 0.12335754641339342,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006167877320669671,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 672,
+        "maximum_coefficient": 0.12380306547711578,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006190153273855789,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 673,
+        "maximum_coefficient": 0.12325003621931052,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006162501810965526,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 684,
+        "maximum_coefficient": 0.12404119587594256,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006202059793797128,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 665,
+        "maximum_coefficient": 0.12318059738954314,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006159029869477157,
+        "repetitions": 1,
+        "step": 28
+      },
+      {
+        "active_terms": 666,
+        "maximum_coefficient": 0.1231178061937073,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155890309685365,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 668,
+        "maximum_coefficient": 0.12315007453737378,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006157503726868689,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 659,
+        "maximum_coefficient": 0.12313658160688329,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006156829080344164,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 652,
+        "maximum_coefficient": 0.12335567686111322,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006167783843055661,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 661,
+        "maximum_coefficient": 0.12380089410433948,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006190044705216974,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 667,
+        "maximum_coefficient": 0.1232408228096529,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061620411404826455,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 665,
+        "maximum_coefficient": 0.12404159287023121,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006202079643511561,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 674,
+        "maximum_coefficient": 0.12320799512382083,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006160399756191042,
+        "repetitions": 1,
+        "step": 29
+      },
+      {
+        "active_terms": 682,
+        "maximum_coefficient": 0.12311333452108442,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155666726054221,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 665,
+        "maximum_coefficient": 0.12315119200384042,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006157559600192021,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 668,
+        "maximum_coefficient": 0.12313882954654964,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006156941477327482,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 677,
+        "maximum_coefficient": 0.12334803223762385,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006167401611881193,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 669,
+        "maximum_coefficient": 0.12378810285317476,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006189405142658738,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 682,
+        "maximum_coefficient": 0.1232251094186641,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161255470933206,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 674,
+        "maximum_coefficient": 0.1240233569725524,
+        "piece": 6,
+        "realized_coefficient_angle": 0.00620116784862762,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 670,
+        "maximum_coefficient": 0.1232200807440832,
+        "piece": 7,
+        "realized_coefficient_angle": 0.00616100403720416,
+        "repetitions": 1,
+        "step": 30
+      },
+      {
+        "active_terms": 674,
+        "maximum_coefficient": 0.12311716762966957,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155858381483479,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 659,
+        "maximum_coefficient": 0.12314964255807699,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061574821279038496,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 667,
+        "maximum_coefficient": 0.12313188481864301,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006156594240932151,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 665,
+        "maximum_coefficient": 0.12335444966907415,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006167722483453708,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 666,
+        "maximum_coefficient": 0.12378084161037105,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006189042080518552,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 674,
+        "maximum_coefficient": 0.12321776783249586,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006160888391624793,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 670,
+        "maximum_coefficient": 0.12402908356274432,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006201454178137216,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 645,
+        "maximum_coefficient": 0.12323178786400327,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006161589393200164,
+        "repetitions": 1,
+        "step": 31
+      },
+      {
+        "active_terms": 650,
+        "maximum_coefficient": 0.12310903481870822,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155451740935411,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 647,
+        "maximum_coefficient": 0.12312897632861572,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156448816430786,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 666,
+        "maximum_coefficient": 0.1231293600564494,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00615646800282247,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 648,
+        "maximum_coefficient": 0.12334087653644493,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006167043826822247,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 653,
+        "maximum_coefficient": 0.12376728632834384,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188364316417193,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 645,
+        "maximum_coefficient": 0.12321291560328332,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006160645780164166,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 661,
+        "maximum_coefficient": 0.12402383691922468,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006201191845961234,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 634,
+        "maximum_coefficient": 0.12324650733684585,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006162325366842292,
+        "repetitions": 1,
+        "step": 32
+      },
+      {
+        "active_terms": 635,
+        "maximum_coefficient": 0.1231049976495655,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155249882478276,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 624,
+        "maximum_coefficient": 0.12312703989950449,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156351994975225,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 665,
+        "maximum_coefficient": 0.12311902169195955,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155951084597978,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 649,
+        "maximum_coefficient": 0.1233341143262955,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061667057163147755,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 636,
+        "maximum_coefficient": 0.12377373394979796,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188686697489898,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 664,
+        "maximum_coefficient": 0.12320896195318005,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006160448097659003,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 655,
+        "maximum_coefficient": 0.12401394541659934,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200697270829968,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 629,
+        "maximum_coefficient": 0.12326819703136903,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006163409851568452,
+        "repetitions": 1,
+        "step": 33
+      },
+      {
+        "active_terms": 628,
+        "maximum_coefficient": 0.12310461220347652,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155230610173826,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 628,
+        "maximum_coefficient": 0.12312881916514264,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061564409582571325,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 620,
+        "maximum_coefficient": 0.12312010493703182,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006156005246851591,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 639,
+        "maximum_coefficient": 0.12333867564508234,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166933782254118,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 633,
+        "maximum_coefficient": 0.12377996961628294,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188998480814147,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 640,
+        "maximum_coefficient": 0.12320957562415531,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006160478781207766,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 632,
+        "maximum_coefficient": 0.12400861228229113,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200430614114557,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 614,
+        "maximum_coefficient": 0.12326098721102507,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006163049360551254,
+        "repetitions": 1,
+        "step": 34
+      },
+      {
+        "active_terms": 614,
+        "maximum_coefficient": 0.12308996272828424,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154498136414212,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 621,
+        "maximum_coefficient": 0.12312745941197031,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156372970598516,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 616,
+        "maximum_coefficient": 0.12310775207116116,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155387603558059,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 619,
+        "maximum_coefficient": 0.12333417167242626,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061667085836213135,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 607,
+        "maximum_coefficient": 0.12377555210549503,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188777605274752,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 603,
+        "maximum_coefficient": 0.12321075950533472,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006160537975266736,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 607,
+        "maximum_coefficient": 0.12402016463579743,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006201008231789872,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 601,
+        "maximum_coefficient": 0.12327401500187977,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006163700750093989,
+        "repetitions": 1,
+        "step": 35
+      },
+      {
+        "active_terms": 594,
+        "maximum_coefficient": 0.12309125453121547,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154562726560774,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 594,
+        "maximum_coefficient": 0.12312152352890224,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156076176445112,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 583,
+        "maximum_coefficient": 0.12310001632231718,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00615500081611586,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 592,
+        "maximum_coefficient": 0.12333135303953296,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166567651976648,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 599,
+        "maximum_coefficient": 0.1237704002562981,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188520012814905,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 581,
+        "maximum_coefficient": 0.12322024196058548,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161012098029274,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 586,
+        "maximum_coefficient": 0.12400163292297127,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200081646148564,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 580,
+        "maximum_coefficient": 0.12328583951198518,
+        "piece": 7,
+        "realized_coefficient_angle": 0.00616429197559926,
+        "repetitions": 1,
+        "step": 36
+      },
+      {
+        "active_terms": 552,
+        "maximum_coefficient": 0.12308858899377492,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154429449688747,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 558,
+        "maximum_coefficient": 0.12312101478212825,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156050739106413,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 580,
+        "maximum_coefficient": 0.12311190057649499,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00615559502882475,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 573,
+        "maximum_coefficient": 0.12332978347767834,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061664891738839175,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 563,
+        "maximum_coefficient": 0.12377464939408149,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188732469704075,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 572,
+        "maximum_coefficient": 0.12322066957873642,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161033478936821,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 552,
+        "maximum_coefficient": 0.12401234110688716,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200617055344359,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 549,
+        "maximum_coefficient": 0.12328304384484412,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061641521922422065,
+        "repetitions": 1,
+        "step": 37
+      },
+      {
+        "active_terms": 538,
+        "maximum_coefficient": 0.12308821201755157,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154410600877579,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 541,
+        "maximum_coefficient": 0.12311995178227056,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155997589113529,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 553,
+        "maximum_coefficient": 0.1231140998233356,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00615570499116678,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 538,
+        "maximum_coefficient": 0.12333182106511009,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166591053255505,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 538,
+        "maximum_coefficient": 0.12376354663677591,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188177331838796,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 535,
+        "maximum_coefficient": 0.12322686235674596,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161343117837299,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 524,
+        "maximum_coefficient": 0.12400414469534234,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200207234767117,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 529,
+        "maximum_coefficient": 0.12328147706972103,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164073853486052,
+        "repetitions": 1,
+        "step": 38
+      },
+      {
+        "active_terms": 521,
+        "maximum_coefficient": 0.12309634584211288,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154817292105644,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 526,
+        "maximum_coefficient": 0.12311779316661524,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155889658330763,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 510,
+        "maximum_coefficient": 0.12310991670441891,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155495835220946,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 515,
+        "maximum_coefficient": 0.12332546789359072,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166273394679536,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 501,
+        "maximum_coefficient": 0.12376421624208728,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188210812104364,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 505,
+        "maximum_coefficient": 0.12322533026142006,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061612665130710035,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 507,
+        "maximum_coefficient": 0.12401015373092993,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200507686546497,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 503,
+        "maximum_coefficient": 0.12327634728335528,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006163817364167764,
+        "repetitions": 1,
+        "step": 39
+      },
+      {
+        "active_terms": 498,
+        "maximum_coefficient": 0.12310808157254331,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155404078627166,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 503,
+        "maximum_coefficient": 0.12310847409402867,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155423704701434,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 509,
+        "maximum_coefficient": 0.12311929750906808,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155964875453404,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 500,
+        "maximum_coefficient": 0.12333109459437339,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061665547297186695,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 500,
+        "maximum_coefficient": 0.12376965182390526,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188482591195263,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 510,
+        "maximum_coefficient": 0.12322430098821086,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161215049410543,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 522,
+        "maximum_coefficient": 0.12400290518081705,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200145259040853,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 500,
+        "maximum_coefficient": 0.12328581527984771,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164290763992386,
+        "repetitions": 1,
+        "step": 40
+      },
+      {
+        "active_terms": 495,
+        "maximum_coefficient": 0.12309952199731274,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154976099865637,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 512,
+        "maximum_coefficient": 0.12311085020246479,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00615554251012324,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 510,
+        "maximum_coefficient": 0.12310673032789506,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155336516394753,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 500,
+        "maximum_coefficient": 0.1233278435161191,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061663921758059554,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 522,
+        "maximum_coefficient": 0.12376053258328354,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0061880266291641775,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 516,
+        "maximum_coefficient": 0.12322696825587062,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161348412793532,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 528,
+        "maximum_coefficient": 0.12400000122011916,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200000061005958,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 506,
+        "maximum_coefficient": 0.12329395984138139,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061646979920690695,
+        "repetitions": 1,
+        "step": 41
+      },
+      {
+        "active_terms": 509,
+        "maximum_coefficient": 0.12308968367090288,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154484183545144,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 508,
+        "maximum_coefficient": 0.12311128316869062,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155564158434532,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 512,
+        "maximum_coefficient": 0.12310934089667905,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155467044833953,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 499,
+        "maximum_coefficient": 0.12332344066940991,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166172033470496,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 524,
+        "maximum_coefficient": 0.12376124209766856,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188062104883429,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 508,
+        "maximum_coefficient": 0.12322681914495956,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161340957247978,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 522,
+        "maximum_coefficient": 0.12400078339280263,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200039169640132,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 500,
+        "maximum_coefficient": 0.12329115891241954,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061645579456209776,
+        "repetitions": 1,
+        "step": 42
+      },
+      {
+        "active_terms": 497,
+        "maximum_coefficient": 0.12309929782823133,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154964891411567,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 501,
+        "maximum_coefficient": 0.12311644616124388,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155822308062195,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 504,
+        "maximum_coefficient": 0.12310559685120852,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155279842560426,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 501,
+        "maximum_coefficient": 0.12332358471396027,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166179235698014,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 499,
+        "maximum_coefficient": 0.12377161771105247,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188580885552623,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 493,
+        "maximum_coefficient": 0.12322452628317068,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161226314158535,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 505,
+        "maximum_coefficient": 0.12400401421301298,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200200710650649,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 488,
+        "maximum_coefficient": 0.12329746660540924,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164873330270462,
+        "repetitions": 1,
+        "step": 43
+      },
+      {
+        "active_terms": 486,
+        "maximum_coefficient": 0.12309104515284036,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154552257642019,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 482,
+        "maximum_coefficient": 0.12310541757021391,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155270878510696,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 487,
+        "maximum_coefficient": 0.12310116627704132,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0061550583138520664,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 482,
+        "maximum_coefficient": 0.12331471338894458,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006165735669447229,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 486,
+        "maximum_coefficient": 0.12376463394761622,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188231697380812,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 494,
+        "maximum_coefficient": 0.12321968179518067,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006160984089759034,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 488,
+        "maximum_coefficient": 0.12400080872785778,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200040436392889,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 479,
+        "maximum_coefficient": 0.12329788289930221,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164894144965111,
+        "repetitions": 1,
+        "step": 44
+      },
+      {
+        "active_terms": 470,
+        "maximum_coefficient": 0.12308125978530116,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154062989265058,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 472,
+        "maximum_coefficient": 0.1231009781182946,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00615504890591473,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 494,
+        "maximum_coefficient": 0.12309587107131686,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006154793553565844,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 475,
+        "maximum_coefficient": 0.12332315471164666,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166157735582333,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 477,
+        "maximum_coefficient": 0.1237526250705008,
+        "piece": 4,
+        "realized_coefficient_angle": 0.00618763125352504,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 482,
+        "maximum_coefficient": 0.12322076920114539,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00616103846005727,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 474,
+        "maximum_coefficient": 0.12400810568767522,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200405284383761,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 474,
+        "maximum_coefficient": 0.12329476125488546,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164738062744274,
+        "repetitions": 1,
+        "step": 45
+      },
+      {
+        "active_terms": 465,
+        "maximum_coefficient": 0.12310011187921358,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006155005593960679,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 467,
+        "maximum_coefficient": 0.12310648557312782,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155324278656392,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 482,
+        "maximum_coefficient": 0.12311111124584283,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155555562292142,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 468,
+        "maximum_coefficient": 0.12331703362399127,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006165851681199564,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 467,
+        "maximum_coefficient": 0.12374846819494423,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187423409747212,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 469,
+        "maximum_coefficient": 0.12324357809818205,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006162178904909103,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 473,
+        "maximum_coefficient": 0.12400048079204291,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200024039602146,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12329269438981647,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164634719490823,
+        "repetitions": 1,
+        "step": 46
+      },
+      {
+        "active_terms": 462,
+        "maximum_coefficient": 0.12308927001228334,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154463500614167,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 462,
+        "maximum_coefficient": 0.12310569513374055,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155284756687028,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 469,
+        "maximum_coefficient": 0.12309713198259206,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006154856599129604,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12332801696715623,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166400848357812,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12375569305885323,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187784652942662,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 466,
+        "maximum_coefficient": 0.12322403929684536,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161201964842268,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 469,
+        "maximum_coefficient": 0.12400544811274827,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200272405637414,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 461,
+        "maximum_coefficient": 0.12329668112535057,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164834056267529,
+        "repetitions": 1,
+        "step": 47
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12308383065737948,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0061541915328689745,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 461,
+        "maximum_coefficient": 0.12310893853507748,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155446926753874,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 464,
+        "maximum_coefficient": 0.12310399062230847,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155199531115423,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12332144140921784,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166072070460892,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12376374279990876,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188187139995438,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 492,
+        "maximum_coefficient": 0.12322695979067841,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161347989533921,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 480,
+        "maximum_coefficient": 0.12400581778150535,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200290889075268,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 467,
+        "maximum_coefficient": 0.12329895123987697,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164947561993849,
+        "repetitions": 1,
+        "step": 48
+      },
+      {
+        "active_terms": 480,
+        "maximum_coefficient": 0.12308368621638738,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154184310819369,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 489,
+        "maximum_coefficient": 0.1231056870962183,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061552843548109155,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 497,
+        "maximum_coefficient": 0.12310134189707436,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155067094853719,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 489,
+        "maximum_coefficient": 0.12332311214028885,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166155607014443,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 479,
+        "maximum_coefficient": 0.12374354166372965,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187177083186483,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 495,
+        "maximum_coefficient": 0.12322297129159365,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161148564579683,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 492,
+        "maximum_coefficient": 0.1239954428290344,
+        "piece": 6,
+        "realized_coefficient_angle": 0.00619977214145172,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 461,
+        "maximum_coefficient": 0.12329898680549733,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164949340274867,
+        "repetitions": 1,
+        "step": 49
+      },
+      {
+        "active_terms": 473,
+        "maximum_coefficient": 0.12308841340787254,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154420670393627,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 480,
+        "maximum_coefficient": 0.12310312283764163,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155156141882082,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 474,
+        "maximum_coefficient": 0.123106846060922,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0061553423030461,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 482,
+        "maximum_coefficient": 0.12331704639129709,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006165852319564855,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 465,
+        "maximum_coefficient": 0.12375919067572905,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187959533786452,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 462,
+        "maximum_coefficient": 0.12323623088498693,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161811544249347,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 477,
+        "maximum_coefficient": 0.12400162490464962,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0062000812452324815,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 456,
+        "maximum_coefficient": 0.1233015269902078,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061650763495103905,
+        "repetitions": 1,
+        "step": 50
+      },
+      {
+        "active_terms": 455,
+        "maximum_coefficient": 0.12308688296445221,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00615434414822261,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.1231169890639789,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155849453198945,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 462,
+        "maximum_coefficient": 0.12309841464272564,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0061549207321362825,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 462,
+        "maximum_coefficient": 0.12332223584260123,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166111792130061,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 456,
+        "maximum_coefficient": 0.12375980431989297,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187990215994649,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 464,
+        "maximum_coefficient": 0.12322470054952794,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161235027476397,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 469,
+        "maximum_coefficient": 0.12399638852075956,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006199819426037978,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 455,
+        "maximum_coefficient": 0.1232972549654893,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164862748274465,
+        "repetitions": 1,
+        "step": 51
+      },
+      {
+        "active_terms": 453,
+        "maximum_coefficient": 0.12308976161814865,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154488080907433,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.12310961225452186,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061554806127260935,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 465,
+        "maximum_coefficient": 0.12310012828620384,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155006414310192,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12333475847248916,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166737923624458,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12377177087103702,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188588543551851,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12323730927793286,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161865463896643,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 469,
+        "maximum_coefficient": 0.12400111955786773,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200055977893387,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 452,
+        "maximum_coefficient": 0.12330185512286411,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006165092756143206,
+        "repetitions": 1,
+        "step": 52
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.1230849766070967,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154248830354835,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.12310819482225444,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155409741112722,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 461,
+        "maximum_coefficient": 0.12308682158178623,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006154341079089312,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12332177036757963,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166088518378982,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 456,
+        "maximum_coefficient": 0.12375165211701937,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187582605850969,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12322494171981764,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161247085990883,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 468,
+        "maximum_coefficient": 0.1240019028797981,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200095143989906,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 453,
+        "maximum_coefficient": 0.12330187564208955,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006165093782104478,
+        "repetitions": 1,
+        "step": 53
+      },
+      {
+        "active_terms": 451,
+        "maximum_coefficient": 0.12308946815842535,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154473407921268,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.1231208926489635,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156044632448176,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 461,
+        "maximum_coefficient": 0.12309022113937698,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0061545110569688494,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 458,
+        "maximum_coefficient": 0.12333100931112861,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166550465556431,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 456,
+        "maximum_coefficient": 0.12375853822181186,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0061879269110905934,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.12322237096274613,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061611185481373065,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 466,
+        "maximum_coefficient": 0.12400383093098812,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200191546549406,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.1233038101135876,
+        "piece": 7,
+        "realized_coefficient_angle": 0.00616519050567938,
+        "repetitions": 1,
+        "step": 54
+      },
+      {
+        "active_terms": 449,
+        "maximum_coefficient": 0.12307530890888083,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006153765445444041,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 458,
+        "maximum_coefficient": 0.12310626770404968,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155313385202484,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12310312109364237,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155156054682118,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 458,
+        "maximum_coefficient": 0.12332505837550384,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166252918775192,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 455,
+        "maximum_coefficient": 0.12375853811773574,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187926905886787,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12323214605443733,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161607302721867,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 469,
+        "maximum_coefficient": 0.12400902694255395,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200451347127697,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 451,
+        "maximum_coefficient": 0.12329328107797127,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164664053898564,
+        "repetitions": 1,
+        "step": 55
+      },
+      {
+        "active_terms": 448,
+        "maximum_coefficient": 0.1230860600553465,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154303002767325,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 455,
+        "maximum_coefficient": 0.12310569509509858,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155284754754929,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 458,
+        "maximum_coefficient": 0.12310499877709065,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155249938854533,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 456,
+        "maximum_coefficient": 0.12332650925067434,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166325462533717,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12376687753327013,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188343876663507,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12322708374399603,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161354187199802,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 465,
+        "maximum_coefficient": 0.12399281299235415,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006199640649617708,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 449,
+        "maximum_coefficient": 0.12329784463124756,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164892231562379,
+        "repetitions": 1,
+        "step": 56
+      },
+      {
+        "active_terms": 447,
+        "maximum_coefficient": 0.12307851825793671,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006153925912896836,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 456,
+        "maximum_coefficient": 0.1231129932873152,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00615564966436576,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.12309286345280605,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006154643172640303,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12332734877438425,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166367438719213,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 452,
+        "maximum_coefficient": 0.12376170118067832,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188085059033916,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12323291157268207,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161645578634104,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 464,
+        "maximum_coefficient": 0.12400108411435075,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200054205717538,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 447,
+        "maximum_coefficient": 0.12329294386036832,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164647193018416,
+        "repetitions": 1,
+        "step": 57
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.12308169737576789,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154084868788395,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 453,
+        "maximum_coefficient": 0.12310880499238236,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155440249619119,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 457,
+        "maximum_coefficient": 0.12310876328049891,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155438164024946,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 451,
+        "maximum_coefficient": 0.12332000605708907,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166000302854454,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.12376946315973424,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188473157986712,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 459,
+        "maximum_coefficient": 0.1232263074173282,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161315370866411,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 460,
+        "maximum_coefficient": 0.12399615635147324,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006199807817573662,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.1232981638440296,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164908192201481,
+        "repetitions": 1,
+        "step": 58
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.12308670811212047,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154335405606024,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 449,
+        "maximum_coefficient": 0.12315995561230253,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061579977806151265,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 455,
+        "maximum_coefficient": 0.12310147132689396,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155073566344698,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12333048268731431,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166524134365716,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.12376305658885034,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188152829442517,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12323436676053025,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161718338026513,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 463,
+        "maximum_coefficient": 0.12399934868827807,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006199967434413904,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.12329066937058922,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164533468529462,
+        "repetitions": 1,
+        "step": 59
+      },
+      {
+        "active_terms": 441,
+        "maximum_coefficient": 0.12308991686727054,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154495843363528,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 539,
+        "maximum_coefficient": 0.12311526817646615,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0061557634088233075,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12310316146468338,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00615515807323417,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12332029650138532,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166014825069266,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 447,
+        "maximum_coefficient": 0.12375944415981567,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187972207990784,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12322846552857114,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161423276428557,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 458,
+        "maximum_coefficient": 0.12401447479268247,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200723739634124,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.1232963909638721,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006164819548193605,
+        "repetitions": 1,
+        "step": 60
+      },
+      {
+        "active_terms": 440,
+        "maximum_coefficient": 0.12308418153349526,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154209076674764,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 449,
+        "maximum_coefficient": 0.12311027615705758,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00615551380785288,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 454,
+        "maximum_coefficient": 0.12309225953225926,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0061546129766129635,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 452,
+        "maximum_coefficient": 0.12333248021575637,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0061666240107878184,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 448,
+        "maximum_coefficient": 0.1237561607003785,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006187808035018925,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.12323113039564804,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161556519782402,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 455,
+        "maximum_coefficient": 0.12400033808091804,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200016904045902,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 444,
+        "maximum_coefficient": 0.12329337502298798,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061646687511493995,
+        "repetitions": 1,
+        "step": 61
+      },
+      {
+        "active_terms": 443,
+        "maximum_coefficient": 0.12307641071436,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006153820535718,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.12312045442308893,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156022721154447,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 448,
+        "maximum_coefficient": 0.12310002223260831,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006155001111630416,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 451,
+        "maximum_coefficient": 0.12333257630368683,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166628815184341,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 440,
+        "maximum_coefficient": 0.12403090714399878,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006201545357199939,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.1232322980269646,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161614901348231,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 453,
+        "maximum_coefficient": 0.12399561523884577,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006199780761942289,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 442,
+        "maximum_coefficient": 0.12330298419485783,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061651492097428914,
+        "repetitions": 1,
+        "step": 62
+      },
+      {
+        "active_terms": 441,
+        "maximum_coefficient": 0.1230734922496821,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006153674612484106,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 446,
+        "maximum_coefficient": 0.12311012459868775,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006155506229934388,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 444,
+        "maximum_coefficient": 0.12373847555727607,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006186923777863804,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.12331844445418617,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006165922222709309,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 453,
+        "maximum_coefficient": 0.12377558049134052,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0061887790245670265,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 448,
+        "maximum_coefficient": 0.12322873751287,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006161436875643501,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 458,
+        "maximum_coefficient": 0.12400617039435816,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006200308519717908,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 438,
+        "maximum_coefficient": 0.12232845236798245,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006116422618399123,
+        "repetitions": 1,
+        "step": 63
+      },
+      {
+        "active_terms": 474,
+        "maximum_coefficient": 0.12308001121558616,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006154000560779308,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 439,
+        "maximum_coefficient": 0.1230352484099422,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006151762420497111,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 448,
+        "maximum_coefficient": 0.1235883718504979,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006179418592524895,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 452,
+        "maximum_coefficient": 0.12332501879758431,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006166250939879216,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 441,
+        "maximum_coefficient": 0.12386561909296437,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006193280954648219,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 442,
+        "maximum_coefficient": 0.12354452837810105,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006177226418905053,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 449,
+        "maximum_coefficient": 0.12465820189116465,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006232910094558233,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 437,
+        "maximum_coefficient": 0.12292412891371754,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0061462064456858775,
+        "repetitions": 1,
+        "step": 64
+      },
+      {
+        "active_terms": 433,
+        "maximum_coefficient": 0.12314514282356992,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006157257141178496,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 467,
+        "maximum_coefficient": 0.12312574640947647,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006156287320473824,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 446,
+        "maximum_coefficient": 0.12399775736944328,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006199887868472164,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 441,
+        "maximum_coefficient": 0.123208451706329,
+        "piece": 3,
+        "realized_coefficient_angle": 0.00616042258531645,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 493,
+        "maximum_coefficient": 0.12377082554270569,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006188541277135285,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 444,
+        "maximum_coefficient": 0.12369774190356397,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006184887095178199,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 444,
+        "maximum_coefficient": 0.12446736452711583,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006223368226355792,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 434,
+        "maximum_coefficient": 0.12414768366419235,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0062073841832096174,
+        "repetitions": 1,
+        "step": 65
+      },
+      {
+        "active_terms": 431,
+        "maximum_coefficient": 0.12362570272936822,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006181285136468411,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 440,
+        "maximum_coefficient": 0.12470134768347108,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0062350673841735545,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 443,
+        "maximum_coefficient": 0.12356320469755355,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006178160234877678,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 439,
+        "maximum_coefficient": 0.12429713709594845,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0062148568547974225,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 430,
+        "maximum_coefficient": 0.12386795578511964,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006193397789255982,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 437,
+        "maximum_coefficient": 0.12288213874311106,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0061441069371555536,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 438,
+        "maximum_coefficient": 0.12623005516391683,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006311502758195842,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 435,
+        "maximum_coefficient": 0.12381516612741304,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006190758306370652,
+        "repetitions": 1,
+        "step": 66
+      },
+      {
+        "active_terms": 426,
+        "maximum_coefficient": 0.12410213795461744,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0062051068977308724,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 450,
+        "maximum_coefficient": 0.12350336965329452,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006175168482664726,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 444,
+        "maximum_coefficient": 0.12426946714759529,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006213473357379765,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 443,
+        "maximum_coefficient": 0.12343783473660791,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006171891736830396,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 446,
+        "maximum_coefficient": 0.1245939060066927,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006229695300334636,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 438,
+        "maximum_coefficient": 0.12444852581827658,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006222426290913829,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 445,
+        "maximum_coefficient": 0.12418348195420281,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006209174097710141,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 431,
+        "maximum_coefficient": 0.12675255345082076,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006337627672541039,
+        "repetitions": 1,
+        "step": 67
+      },
+      {
+        "active_terms": 426,
+        "maximum_coefficient": 0.1260115018361255,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006300575091806275,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 440,
+        "maximum_coefficient": 0.12538672762516911,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006269336381258456,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 441,
+        "maximum_coefficient": 0.12528913231436276,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006264456615718138,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 428,
+        "maximum_coefficient": 0.12800870550659355,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006400435275329678,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 434,
+        "maximum_coefficient": 0.1277159088325792,
+        "piece": 4,
+        "realized_coefficient_angle": 0.00638579544162896,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 431,
+        "maximum_coefficient": 0.1337964330383136,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00668982165191568,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 562,
+        "maximum_coefficient": 0.12391489685455567,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006195744842727784,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 437,
+        "maximum_coefficient": 0.12825371384754952,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006412685692377476,
+        "repetitions": 1,
+        "step": 68
+      },
+      {
+        "active_terms": 419,
+        "maximum_coefficient": 0.12898260929607125,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006449130464803563,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 436,
+        "maximum_coefficient": 0.12779948415890643,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006389974207945322,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 443,
+        "maximum_coefficient": 0.12611244452347461,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006305622226173731,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 428,
+        "maximum_coefficient": 0.1305759637584047,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006528798187920235,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 428,
+        "maximum_coefficient": 0.13219545039911068,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006609772519955534,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 425,
+        "maximum_coefficient": 0.12808490617627982,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006404245308813991,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 418,
+        "maximum_coefficient": 0.13129052660520293,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006564526330260147,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 427,
+        "maximum_coefficient": 0.12711694813549732,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006355847406774866,
+        "repetitions": 1,
+        "step": 69
+      },
+      {
+        "active_terms": 414,
+        "maximum_coefficient": 0.1268452751620004,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00634226375810002,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 432,
+        "maximum_coefficient": 0.1286101929573842,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006430509647869211,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 434,
+        "maximum_coefficient": 0.12850886189094624,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006425443094547312,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 427,
+        "maximum_coefficient": 0.13331919529967248,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006665959764983624,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 429,
+        "maximum_coefficient": 0.13372787926080357,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0066863939630401785,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 419,
+        "maximum_coefficient": 0.13172586238690764,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0065862931193453825,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 410,
+        "maximum_coefficient": 0.13510973720293515,
+        "piece": 6,
+        "realized_coefficient_angle": 0.006755486860146757,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 420,
+        "maximum_coefficient": 0.1304242140600618,
+        "piece": 7,
+        "realized_coefficient_angle": 0.00652121070300309,
+        "repetitions": 1,
+        "step": 70
+      },
+      {
+        "active_terms": 410,
+        "maximum_coefficient": 0.13008912201089198,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006504456100544599,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 427,
+        "maximum_coefficient": 0.13458200304566292,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006729100152283146,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 431,
+        "maximum_coefficient": 0.1341256213803416,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00670628106901708,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 429,
+        "maximum_coefficient": 0.1347024807981863,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006735124039909316,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 420,
+        "maximum_coefficient": 0.13375688617506226,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0066878443087531134,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 423,
+        "maximum_coefficient": 0.13012344737228768,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006506172368614384,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 413,
+        "maximum_coefficient": 0.13495853447515288,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0067479267237576445,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 412,
+        "maximum_coefficient": 0.1489982784557872,
+        "piece": 7,
+        "realized_coefficient_angle": 0.00744991392278936,
+        "repetitions": 1,
+        "step": 71
+      },
+      {
+        "active_terms": 403,
+        "maximum_coefficient": 0.13541662461509482,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006770831230754741,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 423,
+        "maximum_coefficient": 0.13600731713536135,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006800365856768068,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 434,
+        "maximum_coefficient": 0.13010290921576254,
+        "piece": 2,
+        "realized_coefficient_angle": 0.006505145460788127,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 420,
+        "maximum_coefficient": 0.13092575188737404,
+        "piece": 3,
+        "realized_coefficient_angle": 0.006546287594368702,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 407,
+        "maximum_coefficient": 0.1393038328136555,
+        "piece": 4,
+        "realized_coefficient_angle": 0.006965191640682775,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 419,
+        "maximum_coefficient": 0.1359350213524451,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006796751067622255,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 401,
+        "maximum_coefficient": 0.14697983565631342,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007348991782815672,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 408,
+        "maximum_coefficient": 0.13864344107101503,
+        "piece": 7,
+        "realized_coefficient_angle": 0.006932172053550752,
+        "repetitions": 1,
+        "step": 72
+      },
+      {
+        "active_terms": 397,
+        "maximum_coefficient": 0.13936409533535835,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006968204766767918,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 414,
+        "maximum_coefficient": 0.13514368285576328,
+        "piece": 1,
+        "realized_coefficient_angle": 0.006757184142788164,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 424,
+        "maximum_coefficient": 0.14566173154555884,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007283086577277942,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 417,
+        "maximum_coefficient": 0.146640183316171,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007332009165808551,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 407,
+        "maximum_coefficient": 0.147521261284169,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007376063064208451,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 414,
+        "maximum_coefficient": 0.1388233875279614,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0069411693763980695,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 398,
+        "maximum_coefficient": 0.14602294924877868,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007301147462438934,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 396,
+        "maximum_coefficient": 0.14671250680843934,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007335625340421967,
+        "repetitions": 1,
+        "step": 73
+      },
+      {
+        "active_terms": 399,
+        "maximum_coefficient": 0.14156611905687674,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007078305952843838,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 403,
+        "maximum_coefficient": 0.1510267534335236,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00755133767167618,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 414,
+        "maximum_coefficient": 0.1470702005646937,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007353510028234685,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 411,
+        "maximum_coefficient": 0.14319343530858653,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007159671765429327,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 396,
+        "maximum_coefficient": 0.14114256335003014,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007057128167501508,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 403,
+        "maximum_coefficient": 0.13827913831395944,
+        "piece": 5,
+        "realized_coefficient_angle": 0.006913956915697972,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 394,
+        "maximum_coefficient": 0.14448676586202075,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007224338293101038,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 396,
+        "maximum_coefficient": 0.14412997284007353,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007206498642003677,
+        "repetitions": 1,
+        "step": 74
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.13931023532738482,
+        "piece": 0,
+        "realized_coefficient_angle": 0.006965511766369241,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 400,
+        "maximum_coefficient": 0.1442239199789515,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007211195998947576,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 412,
+        "maximum_coefficient": 0.1419205671244892,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00709602835622446,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 409,
+        "maximum_coefficient": 0.14758586452345474,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007379293226172737,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 394,
+        "maximum_coefficient": 0.14020177161208933,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007010088580604467,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 407,
+        "maximum_coefficient": 0.14909458746632254,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007454729373316127,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 388,
+        "maximum_coefficient": 0.14203920077870946,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007101960038935474,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 385,
+        "maximum_coefficient": 0.15128910419206842,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007564455209603422,
+        "repetitions": 1,
+        "step": 75
+      },
+      {
+        "active_terms": 395,
+        "maximum_coefficient": 0.14419402311398832,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007209701155699417,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 403,
+        "maximum_coefficient": 0.15294184618388545,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007647092309194273,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 400,
+        "maximum_coefficient": 0.1476423062634487,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007382115313172436,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 404,
+        "maximum_coefficient": 0.1470100980840035,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0073505049042001756,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 392,
+        "maximum_coefficient": 0.14079498852521638,
+        "piece": 4,
+        "realized_coefficient_angle": 0.00703974942626082,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 401,
+        "maximum_coefficient": 0.148160642443342,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007408032122167101,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 390,
+        "maximum_coefficient": 0.1394052912372556,
+        "piece": 6,
+        "realized_coefficient_angle": 0.00697026456186278,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 386,
+        "maximum_coefficient": 0.14990571770749872,
+        "piece": 7,
+        "realized_coefficient_angle": 0.0074952858853749365,
+        "repetitions": 1,
+        "step": 76
+      },
+      {
+        "active_terms": 393,
+        "maximum_coefficient": 0.14303832043922746,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007151916021961373,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 393,
+        "maximum_coefficient": 0.15198590764948525,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007599295382474263,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.1497078762486567,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007485393812432835,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 399,
+        "maximum_coefficient": 0.14612799166283028,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007306399583141514,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.14264155164345296,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007132077582172648,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 402,
+        "maximum_coefficient": 0.1494160618428667,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007470803092143336,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.1412437700426302,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0070621885021315105,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 388,
+        "maximum_coefficient": 0.14886250727781788,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007443125363890895,
+        "repetitions": 1,
+        "step": 77
+      },
+      {
+        "active_terms": 384,
+        "maximum_coefficient": 0.1459317263684573,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007296586318422865,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.15168792250144955,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007584396125072478,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 385,
+        "maximum_coefficient": 0.15240087733570465,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007620043866785233,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 397,
+        "maximum_coefficient": 0.14473638095191993,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007236819047595997,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 393,
+        "maximum_coefficient": 0.14529623164331218,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0072648115821656095,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 389,
+        "maximum_coefficient": 0.14425626040774556,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007212813020387278,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 379,
+        "maximum_coefficient": 0.14688820832714125,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0073444104163570625,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.15029909406843361,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007514954703421681,
+        "repetitions": 1,
+        "step": 78
+      },
+      {
+        "active_terms": 377,
+        "maximum_coefficient": 0.14804827936759518,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007402413968379759,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 379,
+        "maximum_coefficient": 0.147029949650024,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007351497482501201,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 389,
+        "maximum_coefficient": 0.1498497769567056,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00749248884783528,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 397,
+        "maximum_coefficient": 0.14155516422263503,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007077758211131752,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 395,
+        "maximum_coefficient": 0.14608381577298726,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007304190788649363,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 392,
+        "maximum_coefficient": 0.14942589293041006,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007471294646520504,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 383,
+        "maximum_coefficient": 0.1518005155477135,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007590025777385676,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 382,
+        "maximum_coefficient": 0.16357945880716468,
+        "piece": 7,
+        "realized_coefficient_angle": 0.008178972940358234,
+        "repetitions": 1,
+        "step": 79
+      },
+      {
+        "active_terms": 384,
+        "maximum_coefficient": 0.1409678308330776,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00704839154165388,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 383,
+        "maximum_coefficient": 0.15220079101916276,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007610039550958138,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 380,
+        "maximum_coefficient": 0.15162529990630152,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007581264995315077,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 390,
+        "maximum_coefficient": 0.1457736975401995,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007288684877009975,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 387,
+        "maximum_coefficient": 0.14494522857396652,
+        "piece": 4,
+        "realized_coefficient_angle": 0.0072472614286983265,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 391,
+        "maximum_coefficient": 0.14567331146072798,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0072836655730363995,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 385,
+        "maximum_coefficient": 0.14036659940238758,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007018329970119379,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 377,
+        "maximum_coefficient": 0.15285079335227003,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007642539667613502,
+        "repetitions": 1,
+        "step": 80
+      },
+      {
+        "active_terms": 382,
+        "maximum_coefficient": 0.14954105274924906,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007477052637462453,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 375,
+        "maximum_coefficient": 0.16870515127586522,
+        "piece": 1,
+        "realized_coefficient_angle": 0.008435257563793262,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 376,
+        "maximum_coefficient": 0.1477034475864659,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007385172379323295,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 388,
+        "maximum_coefficient": 0.14847620225064276,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007423810112532138,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 375,
+        "maximum_coefficient": 0.15574808759672454,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007787404379836227,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 385,
+        "maximum_coefficient": 0.16159529449463386,
+        "piece": 5,
+        "realized_coefficient_angle": 0.008079764724731693,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.15398347193235964,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007699173596617983,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 370,
+        "maximum_coefficient": 0.1474458408695537,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007372292043477686,
+        "repetitions": 1,
+        "step": 81
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.1677481064132746,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00838740532066373,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 366,
+        "maximum_coefficient": 0.15380370276948122,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007690185138474061,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 373,
+        "maximum_coefficient": 0.14808550957464606,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007404275478732303,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 380,
+        "maximum_coefficient": 0.1578508233409096,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007892541167045481,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 376,
+        "maximum_coefficient": 0.15594286168348434,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007797143084174217,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 376,
+        "maximum_coefficient": 0.1620087971589285,
+        "piece": 5,
+        "realized_coefficient_angle": 0.008100439857946425,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.1559012004408531,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007795060022042655,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 367,
+        "maximum_coefficient": 0.14139491463190387,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007069745731595194,
+        "repetitions": 1,
+        "step": 82
+      },
+      {
+        "active_terms": 370,
+        "maximum_coefficient": 0.1484772405039366,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0074238620251968306,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 365,
+        "maximum_coefficient": 0.1514934520440982,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00757467260220491,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 368,
+        "maximum_coefficient": 0.14943216371900309,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007471608185950155,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 368,
+        "maximum_coefficient": 0.15261793752153102,
+        "piece": 3,
+        "realized_coefficient_angle": 0.0076308968760765514,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 367,
+        "maximum_coefficient": 0.15085211962164582,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007542605981082292,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.16400546095312094,
+        "piece": 5,
+        "realized_coefficient_angle": 0.008200273047656047,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 370,
+        "maximum_coefficient": 0.16194511998851494,
+        "piece": 6,
+        "realized_coefficient_angle": 0.008097255999425746,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.14338664226001807,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007169332113000904,
+        "repetitions": 1,
+        "step": 83
+      },
+      {
+        "active_terms": 364,
+        "maximum_coefficient": 0.15493229850796839,
+        "piece": 0,
+        "realized_coefficient_angle": 0.00774661492539842,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 365,
+        "maximum_coefficient": 0.1524054520807084,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007620272604035421,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.15329731777030184,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007664865888515092,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 360,
+        "maximum_coefficient": 0.15226355542941505,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007613177771470753,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 366,
+        "maximum_coefficient": 0.14908269364615329,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007454134682307665,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.15957022774321572,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007978511387160787,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.16027611955640436,
+        "piece": 6,
+        "realized_coefficient_angle": 0.008013805977820218,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.14800156631669698,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007400078315834849,
+        "repetitions": 1,
+        "step": 84
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.1539587605051913,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007697938025259566,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 358,
+        "maximum_coefficient": 0.1516091125402277,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0075804556270113845,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.15218788444161624,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007609394222080812,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 364,
+        "maximum_coefficient": 0.15230066134588757,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007615033067294379,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.14890800544209054,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007445400272104528,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 365,
+        "maximum_coefficient": 0.15539254744791928,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007769627372395964,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 361,
+        "maximum_coefficient": 0.15520943986630828,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007760471993315414,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 355,
+        "maximum_coefficient": 0.14533542101465685,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007266771050732843,
+        "repetitions": 1,
+        "step": 85
+      },
+      {
+        "active_terms": 361,
+        "maximum_coefficient": 0.14985463754305955,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007492731877152978,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 364,
+        "maximum_coefficient": 0.147524066383898,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007376203319194901,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.15353780143746149,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007676890071873075,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 356,
+        "maximum_coefficient": 0.1494711475680981,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007473557378404905,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.17804655943965775,
+        "piece": 4,
+        "realized_coefficient_angle": 0.008902327971982888,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 359,
+        "maximum_coefficient": 0.17160652831407147,
+        "piece": 5,
+        "realized_coefficient_angle": 0.008580326415703573,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.16921781210909015,
+        "piece": 6,
+        "realized_coefficient_angle": 0.008460890605454508,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 353,
+        "maximum_coefficient": 0.17590557315808786,
+        "piece": 7,
+        "realized_coefficient_angle": 0.008795278657904393,
+        "repetitions": 1,
+        "step": 86
+      },
+      {
+        "active_terms": 354,
+        "maximum_coefficient": 0.16867276998649633,
+        "piece": 0,
+        "realized_coefficient_angle": 0.008433638499324816,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 356,
+        "maximum_coefficient": 0.16800589253446774,
+        "piece": 1,
+        "realized_coefficient_angle": 0.008400294626723388,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 356,
+        "maximum_coefficient": 0.170765777033033,
+        "piece": 2,
+        "realized_coefficient_angle": 0.00853828885165165,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 355,
+        "maximum_coefficient": 0.16233694316665065,
+        "piece": 3,
+        "realized_coefficient_angle": 0.008116847158332533,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 358,
+        "maximum_coefficient": 0.16866046865911197,
+        "piece": 4,
+        "realized_coefficient_angle": 0.008433023432955598,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 359,
+        "maximum_coefficient": 0.16449975513188764,
+        "piece": 5,
+        "realized_coefficient_angle": 0.008224987756594382,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.16159374412220198,
+        "piece": 6,
+        "realized_coefficient_angle": 0.0080796872061101,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 352,
+        "maximum_coefficient": 0.16640943785129358,
+        "piece": 7,
+        "realized_coefficient_angle": 0.00832047189256468,
+        "repetitions": 1,
+        "step": 87
+      },
+      {
+        "active_terms": 355,
+        "maximum_coefficient": 0.1619224766472851,
+        "piece": 0,
+        "realized_coefficient_angle": 0.008096123832364256,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.16103517005388562,
+        "piece": 1,
+        "realized_coefficient_angle": 0.008051758502694281,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 355,
+        "maximum_coefficient": 0.1621361692375339,
+        "piece": 2,
+        "realized_coefficient_angle": 0.008106808461876695,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 358,
+        "maximum_coefficient": 0.15509377303887567,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007754688651943784,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 353,
+        "maximum_coefficient": 0.16056188378272124,
+        "piece": 4,
+        "realized_coefficient_angle": 0.008028094189136062,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.157815845721021,
+        "piece": 5,
+        "realized_coefficient_angle": 0.00789079228605105,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 358,
+        "maximum_coefficient": 0.15501568248086423,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007750784124043212,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 351,
+        "maximum_coefficient": 0.1585418800204379,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007927094001021895,
+        "repetitions": 1,
+        "step": 88
+      },
+      {
+        "active_terms": 351,
+        "maximum_coefficient": 0.15545794847644118,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007772897423822059,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.15468343950966812,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0077341719754834065,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 350,
+        "maximum_coefficient": 0.14862690702689696,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007431345351344848,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 354,
+        "maximum_coefficient": 0.1465267956094463,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007326339780472315,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 354,
+        "maximum_coefficient": 0.14778491899681234,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007389245949840618,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.143676275976214,
+        "piece": 5,
+        "realized_coefficient_angle": 0.0071838137988107,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 352,
+        "maximum_coefficient": 0.1458166657769358,
+        "piece": 6,
+        "realized_coefficient_angle": 0.00729083328884679,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 342,
+        "maximum_coefficient": 0.14215763222544597,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007107881611272299,
+        "repetitions": 1,
+        "step": 89
+      },
+      {
+        "active_terms": 356,
+        "maximum_coefficient": 0.14225392878002144,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007112696439001072,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.14261864422493167,
+        "piece": 1,
+        "realized_coefficient_angle": 0.007130932211246584,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 351,
+        "maximum_coefficient": 0.1410968955251656,
+        "piece": 2,
+        "realized_coefficient_angle": 0.007054844776258281,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 358,
+        "maximum_coefficient": 0.14206691933689516,
+        "piece": 3,
+        "realized_coefficient_angle": 0.007103345966844758,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.14002550214510698,
+        "piece": 4,
+        "realized_coefficient_angle": 0.007001275107255349,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 379,
+        "maximum_coefficient": 0.14283392961222893,
+        "piece": 5,
+        "realized_coefficient_angle": 0.007141696480611447,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 373,
+        "maximum_coefficient": 0.14439142613759348,
+        "piece": 6,
+        "realized_coefficient_angle": 0.007219571306879675,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 347,
+        "maximum_coefficient": 0.14094639302693796,
+        "piece": 7,
+        "realized_coefficient_angle": 0.007047319651346898,
+        "repetitions": 1,
+        "step": 90
+      },
+      {
+        "active_terms": 373,
+        "maximum_coefficient": 0.14121871097781602,
+        "piece": 0,
+        "realized_coefficient_angle": 0.007060935548890802,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 365,
+        "maximum_coefficient": 0.1773107623849892,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00886553811924946,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 352,
+        "maximum_coefficient": 0.1763616628443371,
+        "piece": 2,
+        "realized_coefficient_angle": 0.008818083142216855,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 368,
+        "maximum_coefficient": 0.17563446601617616,
+        "piece": 3,
+        "realized_coefficient_angle": 0.008781723300808808,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.1976107057390631,
+        "piece": 4,
+        "realized_coefficient_angle": 0.009880535286953157,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 368,
+        "maximum_coefficient": 0.19971680441546347,
+        "piece": 5,
+        "realized_coefficient_angle": 0.009985840220773173,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 372,
+        "maximum_coefficient": 0.2001614201263593,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010008071006317966,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 353,
+        "maximum_coefficient": 0.20272289162422655,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010136144581211329,
+        "repetitions": 1,
+        "step": 91
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.1994522739557769,
+        "piece": 0,
+        "realized_coefficient_angle": 0.009972613697788846,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.19726238099812993,
+        "piece": 1,
+        "realized_coefficient_angle": 0.009863119049906497,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 360,
+        "maximum_coefficient": 0.19936863395365034,
+        "piece": 2,
+        "realized_coefficient_angle": 0.009968431697682517,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.19806586630034329,
+        "piece": 3,
+        "realized_coefficient_angle": 0.009903293315017166,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 377,
+        "maximum_coefficient": 0.20018039653396405,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010009019826698204,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 386,
+        "maximum_coefficient": 0.20139225522627957,
+        "piece": 5,
+        "realized_coefficient_angle": 0.01006961276131398,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 385,
+        "maximum_coefficient": 0.2022664194456578,
+        "piece": 6,
+        "realized_coefficient_angle": 0.01011332097228289,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 378,
+        "maximum_coefficient": 0.20240418871268712,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010120209435634357,
+        "repetitions": 1,
+        "step": 92
+      },
+      {
+        "active_terms": 382,
+        "maximum_coefficient": 0.2013105685521969,
+        "piece": 0,
+        "realized_coefficient_angle": 0.010065528427609846,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 375,
+        "maximum_coefficient": 0.1994021755896294,
+        "piece": 1,
+        "realized_coefficient_angle": 0.00997010877948147,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 372,
+        "maximum_coefficient": 0.20038592087354012,
+        "piece": 2,
+        "realized_coefficient_angle": 0.010019296043677007,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 377,
+        "maximum_coefficient": 0.19990342971291408,
+        "piece": 3,
+        "realized_coefficient_angle": 0.009995171485645705,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 375,
+        "maximum_coefficient": 0.20125947823951432,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010062973911975717,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 386,
+        "maximum_coefficient": 0.20325823733131831,
+        "piece": 5,
+        "realized_coefficient_angle": 0.010162911866565916,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 388,
+        "maximum_coefficient": 0.20406352824312762,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010203176412156382,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.2038025516960698,
+        "piece": 7,
+        "realized_coefficient_angle": 0.01019012758480349,
+        "repetitions": 1,
+        "step": 93
+      },
+      {
+        "active_terms": 381,
+        "maximum_coefficient": 0.20265401417318415,
+        "piece": 0,
+        "realized_coefficient_angle": 0.010132700708659209,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.20060677117926914,
+        "piece": 1,
+        "realized_coefficient_angle": 0.010030338558963459,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 371,
+        "maximum_coefficient": 0.201342571962466,
+        "piece": 2,
+        "realized_coefficient_angle": 0.0100671285981233,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 381,
+        "maximum_coefficient": 0.2011954409320324,
+        "piece": 3,
+        "realized_coefficient_angle": 0.01005977204660162,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 372,
+        "maximum_coefficient": 0.20184232426845827,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010092116213422915,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 381,
+        "maximum_coefficient": 0.20427629511732298,
+        "piece": 5,
+        "realized_coefficient_angle": 0.010213814755866149,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 384,
+        "maximum_coefficient": 0.20412356744968707,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010206178372484354,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.20446928059215635,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010223464029607818,
+        "repetitions": 1,
+        "step": 94
+      },
+      {
+        "active_terms": 373,
+        "maximum_coefficient": 0.20322368899128,
+        "piece": 0,
+        "realized_coefficient_angle": 0.010161184449564,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 371,
+        "maximum_coefficient": 0.2012127016068839,
+        "piece": 1,
+        "realized_coefficient_angle": 0.010060635080344195,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 371,
+        "maximum_coefficient": 0.2018785107763188,
+        "piece": 2,
+        "realized_coefficient_angle": 0.01009392553881594,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 380,
+        "maximum_coefficient": 0.20185588731787274,
+        "piece": 3,
+        "realized_coefficient_angle": 0.010092794365893637,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 368,
+        "maximum_coefficient": 0.20219638785020888,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010109819392510445,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 375,
+        "maximum_coefficient": 0.2047608797980456,
+        "piece": 5,
+        "realized_coefficient_angle": 0.01023804398990228,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 378,
+        "maximum_coefficient": 0.20459464988895645,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010229732494447823,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 359,
+        "maximum_coefficient": 0.2048862929723964,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010244314648619822,
+        "repetitions": 1,
+        "step": 95
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.20345384893695248,
+        "piece": 0,
+        "realized_coefficient_angle": 0.010172692446847625,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.2010618510008927,
+        "piece": 1,
+        "realized_coefficient_angle": 0.010053092550044634,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 369,
+        "maximum_coefficient": 0.20194977737438696,
+        "piece": 2,
+        "realized_coefficient_angle": 0.010097488868719348,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 375,
+        "maximum_coefficient": 0.20212245375606863,
+        "piece": 3,
+        "realized_coefficient_angle": 0.010106122687803433,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 364,
+        "maximum_coefficient": 0.20213515575463625,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010106757787731813,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 374,
+        "maximum_coefficient": 0.20478024365938804,
+        "piece": 5,
+        "realized_coefficient_angle": 0.010239012182969402,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 380,
+        "maximum_coefficient": 0.20458568187931792,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010229284093965896,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 360,
+        "maximum_coefficient": 0.2049267417597915,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010246337087989575,
+        "repetitions": 1,
+        "step": 96
+      },
+      {
+        "active_terms": 368,
+        "maximum_coefficient": 0.20328049128150655,
+        "piece": 0,
+        "realized_coefficient_angle": 0.010164024564075329,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 359,
+        "maximum_coefficient": 0.20067584873598857,
+        "piece": 1,
+        "realized_coefficient_angle": 0.01003379243679943,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 360,
+        "maximum_coefficient": 0.2016346326686645,
+        "piece": 2,
+        "realized_coefficient_angle": 0.010081731633433226,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 370,
+        "maximum_coefficient": 0.201968908759885,
+        "piece": 3,
+        "realized_coefficient_angle": 0.01009844543799425,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 361,
+        "maximum_coefficient": 0.20169772636034083,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010084886318017043,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 371,
+        "maximum_coefficient": 0.2044327925845792,
+        "piece": 5,
+        "realized_coefficient_angle": 0.01022163962922896,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 373,
+        "maximum_coefficient": 0.20416751022389645,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010208375511194823,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 355,
+        "maximum_coefficient": 0.2046918452775281,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010234592263876406,
+        "repetitions": 1,
+        "step": 97
+      },
+      {
+        "active_terms": 365,
+        "maximum_coefficient": 0.20265282719135058,
+        "piece": 0,
+        "realized_coefficient_angle": 0.01013264135956753,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.199852748798786,
+        "piece": 1,
+        "realized_coefficient_angle": 0.0099926374399393,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.2009479079533044,
+        "piece": 2,
+        "realized_coefficient_angle": 0.01004739539766522,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 366,
+        "maximum_coefficient": 0.2014568247346313,
+        "piece": 3,
+        "realized_coefficient_angle": 0.010072841236731566,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.20086016608126953,
+        "piece": 4,
+        "realized_coefficient_angle": 0.010043008304063477,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 364,
+        "maximum_coefficient": 0.20366706354257663,
+        "piece": 5,
+        "realized_coefficient_angle": 0.010183353177128832,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 367,
+        "maximum_coefficient": 0.20342192673450368,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010171096336725185,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 357,
+        "maximum_coefficient": 0.2038805375420117,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010194026877100587,
+        "repetitions": 1,
+        "step": 98
+      },
+      {
+        "active_terms": 364,
+        "maximum_coefficient": 0.20119672376609,
+        "piece": 0,
+        "realized_coefficient_angle": 0.0100598361883045,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 352,
+        "maximum_coefficient": 0.19868806940654335,
+        "piece": 1,
+        "realized_coefficient_angle": 0.009934403470327167,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 350,
+        "maximum_coefficient": 0.1998785268860218,
+        "piece": 2,
+        "realized_coefficient_angle": 0.009993926344301091,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 363,
+        "maximum_coefficient": 0.20052531048346814,
+        "piece": 3,
+        "realized_coefficient_angle": 0.010026265524173407,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 354,
+        "maximum_coefficient": 0.19962506206195724,
+        "piece": 4,
+        "realized_coefficient_angle": 0.009981253103097863,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 358,
+        "maximum_coefficient": 0.2025693000071702,
+        "piece": 5,
+        "realized_coefficient_angle": 0.01012846500035851,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 362,
+        "maximum_coefficient": 0.20232887677429762,
+        "piece": 6,
+        "realized_coefficient_angle": 0.010116443838714882,
+        "repetitions": 1,
+        "step": 99
+      },
+      {
+        "active_terms": 355,
+        "maximum_coefficient": 0.20306051779810294,
+        "piece": 7,
+        "realized_coefficient_angle": 0.010153025889905147,
+        "repetitions": 1,
+        "step": 99
+      }
+    ],
+    "generators_above_one_repetition": 0,
+    "max_coefficient_angle": 0.1,
+    "maximum_generator_coefficient": 0.30462847681123,
+    "maximum_realized_coefficient_angle": 0.015231423840561501,
+    "maximum_repetitions_cap": 128,
+    "maximum_repetitions_used": 1,
+    "mean_repetitions_used": 1.0,
+    "minimum_repetitions_used": 1,
+    "nonempty_evolution_blocks_before_transpilation": 800,
+    "nonlocal_gates": 3108274,
+    "optimization_level": 1,
+    "pauli_rotation_count_note": "For suzuki2 this is the unmerged upper estimate 2*M*reps; Qiskit may merge adjacent rotations.",
+    "pauli_rotations_before_transpilation": 877506,
+    "seed_transpiler": 40,
+    "size": 5378003,
+    "synthesis_formula": "suzuki2",
+    "unitary_frobenius_error": null,
+    "width": 8
+  }
+}
