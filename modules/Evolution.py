@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Callable, List, Optional
+from typing import Any, Tuple, Callable, List, Optional, NamedTuple
 import numpy as np
 import scipy
 import cmath 
@@ -10,14 +10,48 @@ def _soft_threshold_real(x: np.ndarray, threshold: float) -> np.ndarray:
     """Real soft-thresholding used by proximal methods."""
     return np.sign(x) * np.maximum(np.abs(x) - threshold, 0.0)
 
+
+def _qite_objective(coefficients: np.ndarray,
+                    S: np.ndarray,
+                    b: np.ndarray,
+                    constant: float) -> float:
+    """Evaluate the unpenalized QITE approximation objective."""
+    value = (
+        coefficients.transpose() @ np.asarray(S) @ coefficients
+        - b.transpose() @ coefficients
+        + constant
+    )
+    return float(np.real(value))
+
+
+def _debias_lasso_support(A: np.ndarray,
+                          b: np.ndarray,
+                          coefficients: np.ndarray,
+                          support_tol: float) -> np.ndarray:
+    """Refit coefficients without an L1 penalty on their active support."""
+    active = np.abs(coefficients) > support_tol
+    if not np.any(active):
+        return coefficients
+
+    active_coefficients = scipy.linalg.solve(
+        A[np.ix_(active, active)],
+        b[active],
+        assume_a='sym',
+    )
+    debiased_coefficients = np.zeros_like(coefficients)
+    debiased_coefficients[active] = active_coefficients
+    return debiased_coefficients
+
+
 def _solve_lasso_qite(A: np.ndarray,
                       b: np.ndarray,
                       lam: float,
                       max_iter: int = 500,
                       tol: float = 1e-8,
-                      ridge: float = 1e-10,
                       support_tol: float = 1e-14,
-                      x0: Optional[np.ndarray] = None) -> np.ndarray:
+                      x0: Optional[np.ndarray] = None,
+                      lr: float = 1e-3,
+                      debias: bool = True) -> np.ndarray:
     """
     Solve the QITE LASSO subproblem:
         min_x 0.5 * x^T A x - b^T x + lam * ||x||_1
@@ -32,38 +66,21 @@ def _solve_lasso_qite(A: np.ndarray,
     A = np.asarray(A)
     b = np.asarray(b).reshape(-1)
 
-    # QITE coefficients are real in this setup; remove tiny imaginary noise.
-    A_real = np.real(A)
-    b_real = np.real(b)
-
-    if A_real.shape[0] != b_real.shape[0]:
-        raise ValueError("A and b have incompatible shapes for LASSO solve.")
-
-    A_sym = 0.5 * (A_real + A_real.T)
-    if ridge > 0:
-        A_sym = A_sym + ridge * np.eye(A_sym.shape[0], dtype=float)
-
     if lam == 0.0:
-        return scipy.linalg.solve(A_sym, b_real, assume_a='sym')
-
-    lipschitz = float(np.linalg.norm(A_sym, ord=2))
-    if lipschitz == 0.0:
-        return np.zeros(A_sym.shape[1], dtype=float)
-
-    step = 1.0 / (lipschitz + 1e-16)
+        return scipy.linalg.solve(A, b, assume_a='sym')
 
     if x0 is None:
-        x = np.zeros(A_sym.shape[1], dtype=float)
+        x = np.zeros(A.shape[1], dtype=float)
     else:
         x = np.asarray(np.real(x0), dtype=float).reshape(-1)
-        if x.shape[0] != A_sym.shape[1]:
+        if x.shape[0] != A.shape[1]:
             raise ValueError("x0 has incompatible shape for LASSO solve.")
     y = x.copy()
     t = 1.0
 
     for _ in range(max_iter):
-        grad = A_sym @ y - b_real
-        x_new = _soft_threshold_real(y - step * grad, lam * step)
+        grad = A @ y - b
+        x_new = _soft_threshold_real(y - lr * grad, lam * lr)
         if np.linalg.norm(x_new - x) <= tol * (np.linalg.norm(x) + 1e-12):
             x = x_new
             break
@@ -72,17 +89,137 @@ def _solve_lasso_qite(A: np.ndarray,
         t = t_new
         x = x_new
 
-    # Debias on active support to recover precision lost to shrinkage.
-    active = np.abs(x) > support_tol
-    if np.any(active):
-        A_active = A_sym[np.ix_(active, active)]
-        b_active = b_real[active]
-        x_active = scipy.linalg.solve(A_active, b_active, assume_a='sym')
-        x_debias = np.zeros_like(x)
-        x_debias[active] = x_active
-        x = x_debias
+    if debias:
+        x = _debias_lasso_support(A, b, x, support_tol)
 
     return x
+
+
+class _AdaptiveLassoResult(NamedTuple):
+    coefficients: np.ndarray
+    lambda_value: float
+    grid_index: int
+    objective: float
+
+def _solve_adaptive_lasso_qite(A: np.ndarray,
+                               S: np.ndarray,
+                               b: np.ndarray,
+                               constant: float,
+                               objective_tol: float,
+                               ridge: float,
+                               max_iter: int,
+                               tol: float,
+                               support_tol: float,
+                               x0: Optional[np.ndarray]) -> _AdaptiveLassoResult:
+    """Select the largest feasible lambda on a logarithmic grid."""
+    A_reg = np.asarray(A) + ridge * np.eye(A.shape[0], dtype=float)
+    step_size = 1.0 / (np.linalg.norm(A_reg, ord=2) + 1e-16)
+
+    lambda_max = float(np.max(np.abs(b)))
+    if lambda_max == 0.0:
+        lambda_grid = np.array([0.0])
+    else:
+        positive_grid = lambda_max * np.geomspace(1.0, 1e-8, num=25)
+        lambda_grid = np.append(positive_grid, 0.0)
+
+    def evaluate_lambda(ld: float,
+                        warm_start: Optional[np.ndarray]
+                        ) -> tuple[np.ndarray, float]:
+        if ld>0:
+            coefficients = _solve_lasso_qite(
+                A_reg,
+                b,
+                lam=ld,
+                max_iter=max_iter,
+                tol=tol,
+                support_tol=support_tol,
+                x0=warm_start,
+                lr=step_size,
+                debias=False,
+            )
+        else:
+            ep=1e-10
+            coefficients = np.real(scipy.linalg.solve(A+ep*np.eye(A.shape[0]),b,assume_a='her'))
+        return coefficients, _qite_objective(
+            coefficients,
+            S,
+            b,
+            constant,
+        )
+
+    # Lambda zero minimizes the unpenalized objective. Testing it first also
+    # identifies tolerances that cannot be met by the current Pauli pool.
+    last_index = len(lambda_grid) - 1
+    qite_coefficients, qite_objective = evaluate_lambda(0.0, x0)
+    tolerance_feasible = qite_objective < objective_tol
+
+    selected_index = last_index
+    selected_coefficients = qite_coefficients
+
+    # The solution at lambda_max is exactly zero, so no FISTA solve is
+    # needed for the upper endpoint.
+    sparsest_coefficients = np.zeros_like(qite_coefficients)
+    sparsest_objective = _qite_objective(
+        sparsest_coefficients,
+        S,
+        b,
+        constant,
+    )
+
+    if sparsest_objective - qite_objective < objective_tol:
+        selected_index = 0
+        selected_coefficients = sparsest_coefficients
+    else:
+        # Non-debiased LASSO feasibility is monotone along this descending
+        # grid, allowing a binary search for the first feasible index.
+        infeasible_index = 0
+        feasible_index = last_index
+        evaluated = {
+            infeasible_index: sparsest_coefficients,
+            feasible_index: qite_coefficients,
+        }
+
+        while feasible_index - infeasible_index > 1:
+            middle_index = (infeasible_index + feasible_index) // 2
+            nearest_index = min(
+                evaluated,
+                key=lambda index: abs(index - middle_index),
+            )
+            coefficients, objective = evaluate_lambda(
+                float(lambda_grid[middle_index]),
+                evaluated[nearest_index],
+            )
+            evaluated[middle_index] = coefficients
+
+            if objective - qite_objective < objective_tol:
+                feasible_index = middle_index
+            else:
+                infeasible_index = middle_index
+
+        selected_index = feasible_index
+        selected_coefficients = evaluated[feasible_index]
+
+    selected_lambda = float(lambda_grid[selected_index])
+    if selected_lambda > 0.0:
+        selected_coefficients = _debias_lasso_support(
+            A_reg,
+            b,
+            selected_coefficients,
+            support_tol,
+        )
+
+    selected_objective = _qite_objective(
+        selected_coefficients,
+        S,
+        b,
+        constant,
+    )
+    return _AdaptiveLassoResult(
+        coefficients=selected_coefficients,
+        lambda_value=selected_lambda,
+        grid_index=selected_index,
+        objective=selected_objective,
+    )
 
 def QITE(n_qubits: int, 
          H: sp.spmatrix, 
@@ -175,6 +312,7 @@ def QITE(n_qubits: int,
 
     # Jaccard_lasso starts with every coefficient slot available. After the
     # cumulative support stabilizes, the mask retains only discovered slots.
+    ridge = 1e-10
     allowed_mask = np.ones((H_trot.Nk, num_paulis), dtype=bool)
     cumulative_support: set[int] = set()
     jaccard_streak = 0
@@ -264,6 +402,9 @@ def QITE(n_qubits: int,
 
             #solution of equation (S+S^T)*a = b (step 4 in algorithm)
             A = np.asarray(S + S.T)
+            #remove small imaginary noise
+            A = np.real(A)
+            b = np.real(b)
             if method=='lstsq':
                 #least square solution of equation (S+S^T)*a = b (step 4 in algorithm)
                 v,res,rank,s=scipy.linalg.lstsq(A,b,lapack_driver='gelsd')
@@ -280,54 +421,59 @@ def QITE(n_qubits: int,
                 #errors.append(a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant)
             elif method=='vanilla_lasso':
                 x0 = np.real(a[i-1,l]) if i > 0 else None
+                A_reg = A + ridge * np.eye(A.shape[0], dtype=float)
+                lr = 1.0 / (np.linalg.norm(A_reg, ord=2) + 1e-16)
                 a[i,l] = _solve_lasso_qite(
-                    A,
+                    A_reg,
                     b,
                     lam=lasso_lambda,
                     max_iter=lasso_max_iter,
                     tol=lasso_tol,
-                    ridge=1e-10,
                     support_tol=support_tol,
                     x0=x0,
+                    lr=lr
                 )
             elif method=='Jaccard_lasso':
                 if basis_indices.size == 0:
                     a[i,l] = 0.0
                 else:
                     x0 = np.real(a[i-1,l,basis_indices]) if i > 0 else None
+                    A_reg = A + ridge * np.eye(A.shape[0], dtype=float)
+                    lr = 1.0 / (np.linalg.norm(A_reg, ord=2) + 1e-16)
                     reduced_coefficients = _solve_lasso_qite(
-                        A,
+                        A_reg,
                         b,
                         lam=lasso_lambda,
                         max_iter=lasso_max_iter,
                         tol=lasso_tol,
-                        ridge=1e-10,
                         support_tol=support_tol,
                         x0=x0,
+                        lr=lr
                     )
                     a[i,l] = 0.0
                     a[i,l,basis_indices] = reduced_coefficients
             elif method=='adaptive_lasso_v1':
-                lambda_max = max(np.abs(b))
-                lambda_grid = [lambda_max,lambda_max*0.5,lambda_max*0.2,lambda_max*0.1]
-
                 x0 = np.real(a[i-1,l]) if i > 0 else None
-                for ld in lambda_grid:
-                    # Solve LASSO problem for each lambda in the grid
-                    a[i,l] = _solve_lasso_qite(
-                        A,
-                        b,
-                        lam=ld,
-                        max_iter=lasso_max_iter,
-                        tol=lasso_tol,
-                        ridge=1e-10,
-                        support_tol= 1e-14,
-                        x0=x0,
-                    )
-                    objective = np.real_if_close((a[i,l].transpose()@S@a[i,l]-b.transpose()@a[i,l] + constant).item())
-                    if objective < objective_tol:
-                        print(f"Step {i}, Lambda {ld}: Objective function is within tolerance. with  lambda at index  {lambda_grid.index(ld)}")  # Check if the objective function is within the tolerance
-                        break
+                adaptive_result = _solve_adaptive_lasso_qite(
+                    A=A,
+                    S=S,
+                    b=b,
+                    constant=constant,
+                    objective_tol=objective_tol,
+                    ridge=ridge,
+                    max_iter=lasso_max_iter,
+                    tol=lasso_tol,
+                    support_tol=support_tol,
+                    x0=x0,
+                )
+                a[i,l] = adaptive_result.coefficients
+
+                print(
+                    f"Step {i}, term {l}, Lambda "
+                    f"{adaptive_result.lambda_value}: objective is within "
+                    "tolerance at grid index "
+                    f"{adaptive_result.grid_index}."
+                )
 
             else:
                 raise ValueError(
