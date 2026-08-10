@@ -514,22 +514,24 @@ def plot_configuration(
         folder_name,
         "Cumulative distinct basis terms",
     )
+    shared_locality_vmax = locality_vmax
+    if shared_locality_vmax is None:
+        shared_locality_vmax = max(
+            1.0,
+            max(float(np.max(counts)) for _, counts, _, _ in locality_heatmaps),
+        )
+
     for job, locality_counts, available_terms, label in locality_heatmaps:
         file_tag = method_file_tag(job["method"], job["lasso_lambda"])
-        is_sparse = job["method"] == "vanilla_lasso"
-        is_heisenberg = job["model"].startswith("heisenberg")
-        is_ordered_tfim = job["model"] == "tfim" and job["J"] > job["h"]
-        show_heatmap_colorbar = is_sparse and (
-            is_heisenberg or is_ordered_tfim
-        )
         save_locality_heatmap(
             locality_counts,
             job["dt"],
             label,
             folder_name,
             plot_dir / f"locality_heatmap_{file_tag}.pdf",
-            vmax=locality_vmax,
-            show_colorbar=show_heatmap_colorbar,
+            vmax=shared_locality_vmax,
+            show_colorbar=True,
+            show_title=True,
         )
         save_normalized_locality_heatmap(
             locality_counts,
@@ -538,7 +540,8 @@ def plot_configuration(
             label,
             folder_name,
             plot_dir / f"locality_heatmap_normalized_{file_tag}.pdf",
-            show_colorbar=show_heatmap_colorbar,
+            show_colorbar=True,
+            show_title=True,
         )
         total_available_terms = int(np.sum(available_terms))
         save_normalized_locality_heatmap(
@@ -550,7 +553,8 @@ def plot_configuration(
             plot_dir / f"locality_heatmap_normalized_all_terms_{file_tag}.pdf",
             denominator_label="the complete Pauli pool",
             title_suffix="normalized by complete pool",
-            show_colorbar=show_heatmap_colorbar,
+            show_colorbar=True,
+            show_title=True,
         )
     save_curves(
         ground_fidelity_curves,
@@ -610,7 +614,7 @@ def main() -> None:
 
     configurations = [
         {"D": 6, "J": 1.0, "h": 0.5, "lasso_lambda": 0.002},
-        {"D": 4, "J": 0.5, "h": 1.0, "lasso_lambda": 0.0015},
+        {"D": 4, "J": 0.5, "h": 1.0, "lasso_lambda": 0.05},
     ]
 
     figures_written = 0

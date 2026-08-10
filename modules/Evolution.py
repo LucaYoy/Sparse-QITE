@@ -100,8 +100,6 @@ class _AdaptiveLassoResult(NamedTuple):
     lambda_value: float
     grid_index: int
     objective: float
-    tolerance_feasible: bool
-
 
 def _solve_adaptive_lasso_qite(A: np.ndarray,
                                S: np.ndarray,
@@ -127,17 +125,21 @@ def _solve_adaptive_lasso_qite(A: np.ndarray,
     def evaluate_lambda(ld: float,
                         warm_start: Optional[np.ndarray]
                         ) -> tuple[np.ndarray, float]:
-        coefficients = _solve_lasso_qite(
-            A_reg,
-            b,
-            lam=ld,
-            max_iter=max_iter,
-            tol=tol,
-            support_tol=support_tol,
-            x0=warm_start,
-            lr=step_size,
-            debias=False,
-        )
+        if ld>0:
+            coefficients = _solve_lasso_qite(
+                A_reg,
+                b,
+                lam=ld,
+                max_iter=max_iter,
+                tol=tol,
+                support_tol=support_tol,
+                x0=warm_start,
+                lr=step_size,
+                debias=False,
+            )
+        else:
+            ep=1e-10
+            coefficients = np.real(scipy.linalg.solve(A+ep*np.eye(A.shape[0]),b,assume_a='her'))
         return coefficients, _qite_objective(
             coefficients,
             S,
@@ -148,55 +150,54 @@ def _solve_adaptive_lasso_qite(A: np.ndarray,
     # Lambda zero minimizes the unpenalized objective. Testing it first also
     # identifies tolerances that cannot be met by the current Pauli pool.
     last_index = len(lambda_grid) - 1
-    zero_coefficients, zero_objective = evaluate_lambda(0.0, x0)
-    tolerance_feasible = zero_objective < objective_tol
+    qite_coefficients, qite_objective = evaluate_lambda(0.0, x0)
+    tolerance_feasible = qite_objective < objective_tol
 
     selected_index = last_index
-    selected_coefficients = zero_coefficients
+    selected_coefficients = qite_coefficients
 
-    if tolerance_feasible and last_index > 0:
-        # The solution at lambda_max is exactly zero, so no FISTA solve is
-        # needed for the upper endpoint.
-        max_coefficients = np.zeros_like(zero_coefficients)
-        max_objective = _qite_objective(
-            max_coefficients,
-            S,
-            b,
-            constant,
-        )
+    # The solution at lambda_max is exactly zero, so no FISTA solve is
+    # needed for the upper endpoint.
+    sparsest_coefficients = np.zeros_like(qite_coefficients)
+    sparsest_objective = _qite_objective(
+        sparsest_coefficients,
+        S,
+        b,
+        constant,
+    )
 
-        if max_objective < objective_tol:
-            selected_index = 0
-            selected_coefficients = max_coefficients
-        else:
-            # Non-debiased LASSO feasibility is monotone along this descending
-            # grid, allowing a binary search for the first feasible index.
-            infeasible_index = 0
-            feasible_index = last_index
-            evaluated = {
-                infeasible_index: max_coefficients,
-                feasible_index: zero_coefficients,
-            }
+    if sparsest_objective - qite_objective < objective_tol:
+        selected_index = 0
+        selected_coefficients = sparsest_coefficients
+    else:
+        # Non-debiased LASSO feasibility is monotone along this descending
+        # grid, allowing a binary search for the first feasible index.
+        infeasible_index = 0
+        feasible_index = last_index
+        evaluated = {
+            infeasible_index: sparsest_coefficients,
+            feasible_index: qite_coefficients,
+        }
 
-            while feasible_index - infeasible_index > 1:
-                middle_index = (infeasible_index + feasible_index) // 2
-                nearest_index = min(
-                    evaluated,
-                    key=lambda index: abs(index - middle_index),
-                )
-                coefficients, objective = evaluate_lambda(
-                    float(lambda_grid[middle_index]),
-                    evaluated[nearest_index],
-                )
-                evaluated[middle_index] = coefficients
+        while feasible_index - infeasible_index > 1:
+            middle_index = (infeasible_index + feasible_index) // 2
+            nearest_index = min(
+                evaluated,
+                key=lambda index: abs(index - middle_index),
+            )
+            coefficients, objective = evaluate_lambda(
+                float(lambda_grid[middle_index]),
+                evaluated[nearest_index],
+            )
+            evaluated[middle_index] = coefficients
 
-                if objective < objective_tol:
-                    feasible_index = middle_index
-                else:
-                    infeasible_index = middle_index
+            if objective - qite_objective < objective_tol:
+                feasible_index = middle_index
+            else:
+                infeasible_index = middle_index
 
-            selected_index = feasible_index
-            selected_coefficients = evaluated[feasible_index]
+        selected_index = feasible_index
+        selected_coefficients = evaluated[feasible_index]
 
     selected_lambda = float(lambda_grid[selected_index])
     if selected_lambda > 0.0:
@@ -218,7 +219,6 @@ def _solve_adaptive_lasso_qite(A: np.ndarray,
         lambda_value=selected_lambda,
         grid_index=selected_index,
         objective=selected_objective,
-        tolerance_feasible=tolerance_feasible,
     )
 
 def QITE(n_qubits: int, 
@@ -468,19 +468,12 @@ def QITE(n_qubits: int,
                 )
                 a[i,l] = adaptive_result.coefficients
 
-                if adaptive_result.tolerance_feasible:
-                    print(
-                        f"Step {i}, term {l}, Lambda "
-                        f"{adaptive_result.lambda_value}: objective is within "
-                        "tolerance at grid index "
-                        f"{adaptive_result.grid_index}."
-                    )
-                else:
-                    print(
-                        f"Step {i}, term {l}: objective tolerance is "
-                        "infeasible at Lambda 0 "
-                        f"(objective={adaptive_result.objective})."
-                    )
+                print(
+                    f"Step {i}, term {l}, Lambda "
+                    f"{adaptive_result.lambda_value}: objective is within "
+                    "tolerance at grid index "
+                    f"{adaptive_result.grid_index}."
+                )
 
             else:
                 raise ValueError(

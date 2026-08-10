@@ -28,6 +28,7 @@ cases = [
         "D": 6,
         "J": 1.0,
         "h": 0.5,
+        "epsilon": 0.01,
         "folder": "tfim_n8_D6_N100_dt0p05_T2_J1_h0p5",
     },
     {
@@ -35,6 +36,7 @@ cases = [
         "D": 4,
         "J": 0.5,
         "h": 1.0,
+        "epsilon": 0.01,
         "folder": "tfim_n8_D4_N100_dt0p05_T2_J0p5_h1",
     },
 ]
@@ -66,6 +68,7 @@ for case in cases:
         n_steps,
         dt,
         method="adaptive_lasso_v1",
+        objective_tol=case["epsilon"],
     )
 
     output_dir = (
