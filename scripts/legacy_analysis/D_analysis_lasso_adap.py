@@ -1,4 +1,10 @@
-import sys;sys.path.append('../')
+import sys
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = SCRIPT_DIR.parents[1]
+sys.path.insert(0, str(PROJECT_DIR))
+
 import scipy.sparse as sp
 import numpy as np
 from matplotlib import pyplot as plt
@@ -6,7 +12,6 @@ from matplotlib import pyplot as plt
 from modules import Hamiltonian as ham
 from modules import PauliStrings
 from modules import Evolution as evol
-from pathlib import Path
 import pickle
 
 import importlib

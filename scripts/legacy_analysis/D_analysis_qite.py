@@ -1,4 +1,10 @@
-import sys;sys.path.append('../')
+import sys
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = SCRIPT_DIR.parents[1]
+sys.path.insert(0, str(PROJECT_DIR))
+
 import scipy.sparse as sp
 import numpy as np
 from matplotlib import pyplot as plt
@@ -6,7 +12,6 @@ from matplotlib import pyplot as plt
 from modules import Hamiltonian as ham
 from modules import PauliStrings
 from modules import Evolution as evol
-from pathlib import Path
 import pickle
 
 import importlib
@@ -33,19 +38,16 @@ psi_0=sp.csc_matrix(psi0np/np.linalg.norm(psi0np))
 D_grid = [2, 3, 4, 5, 6, 7, 8]
 lasso_lambda = 0.001
 results = {}
-output_path = Path("results_LASSOQITE_D.pkl")
+output_path = Path("results_QITE_D.pkl")
 
 for D in D_grid:
-    
-    print(f"Computing QITE with vanilla Lasso and D={D}")
-    EQ_lasso, psi_QITE_lasso, a_lasso = evol.QITE(n_qubits, H, H_trot, D, psi_0, NQ, dt,
-                                                  method='vanilla_lasso', lasso_lambda=lasso_lambda,
-                                                  lasso_max_iter=800, lasso_tol=1e-9)
+    print(f"Computing QITE with D={D}")
+    EQ_vanilla, psi_QITE_vanilla, a_vanilla = evol.QITE(n_qubits, H, H_trot, D, psi_0, NQ, dt)
     
     results[D] = {
-        "Energy": EQ_lasso,
-        "Psi": psi_QITE_lasso,
-        "a": a_lasso
+        "Energy": EQ_vanilla,
+        "Psi": psi_QITE_vanilla,
+        "a": a_vanilla
     }
     temp_path = output_path.with_suffix(output_path.suffix + ".tmp")
     with temp_path.open("wb") as handle:

@@ -75,6 +75,71 @@ def support_of_Ak(k: int, D: int, T: int, n_qubits: int) -> List[int]:
     support = cyclic_range(start, stop, n_qubits)
     return support
 
+
+def _build_synthesis_metadata(
+    *,
+    synthesis_formula: str,
+    adaptive_repetitions: bool,
+    max_coefficient_angle: float,
+    max_repetitions: int,
+    dt: float,
+    repetition_counts: List[int],
+    maximum_coefficients: List[float],
+    active_term_counts: List[int],
+    generator_indices: List[Tuple[int, int]],
+) -> dict:
+    """Summarize the product-formula choices made for active generators."""
+    reps_array = np.asarray(repetition_counts, dtype=int)
+    maxima_array = np.asarray(maximum_coefficients, dtype=float)
+    terms_array = np.asarray(active_term_counts, dtype=int)
+    rotation_multiplier = 1 if synthesis_formula == "lie" else 2
+
+    return {
+        "formula": synthesis_formula,
+        "adaptive_repetitions": bool(adaptive_repetitions),
+        "max_coefficient_angle": float(max_coefficient_angle),
+        "max_repetitions": int(max_repetitions),
+        "repetition_counts": reps_array.tolist(),
+        "generator_records": [
+            {
+                "step": int(step),
+                "piece": int(piece),
+                "maximum_coefficient": float(maximum_coefficient),
+                "repetitions": int(repetitions),
+                "realized_coefficient_angle": float(
+                    dt * maximum_coefficient / repetitions
+                ),
+                "active_terms": int(active_terms),
+            }
+            for (step, piece), maximum_coefficient, repetitions, active_terms
+            in zip(
+                generator_indices,
+                maxima_array,
+                reps_array,
+                terms_array,
+            )
+        ],
+        "minimum_repetitions": int(reps_array.min()) if reps_array.size else 0,
+        "maximum_repetitions": int(reps_array.max()) if reps_array.size else 0,
+        "mean_repetitions": float(reps_array.mean()) if reps_array.size else 0.0,
+        "generators_above_one_repetition": int(np.count_nonzero(reps_array > 1)),
+        "maximum_generator_coefficient": (
+            float(maxima_array.max()) if maxima_array.size else 0.0
+        ),
+        "maximum_realized_coefficient_angle": (
+            float(np.max(dt * maxima_array / reps_array))
+            if reps_array.size else 0.0
+        ),
+        "estimated_pauli_rotations": int(
+            np.sum(terms_array * reps_array * rotation_multiplier)
+        ),
+        "rotation_count_note": (
+            "For suzuki2 this is the unmerged upper estimate 2*M*reps; "
+            "Qiskit may merge adjacent rotations."
+        ),
+    }
+
+
 def transpile_circuit_qite(n_qubits: int, 
                             D: int, 
                             T: int, 
@@ -214,55 +279,18 @@ def transpile_circuit_qite(n_qubits: int,
         trace_norm = None
 
     if synthesis_metadata is not None:
-        reps_array = np.asarray(repetition_counts, dtype=int)
-        maxima_array = np.asarray(maximum_coefficients, dtype=float)
-        terms_array = np.asarray(active_term_counts, dtype=int)
-        rotation_multiplier = 1 if synthesis_formula == "lie" else 2
         synthesis_metadata.update(
-            {
-                "formula": synthesis_formula,
-                "adaptive_repetitions": bool(adaptive_repetitions),
-                "max_coefficient_angle": float(max_coefficient_angle),
-                "max_repetitions": int(max_repetitions),
-                "repetition_counts": reps_array.tolist(),
-                "generator_records": [
-                    {
-                        "step": int(step),
-                        "piece": int(piece),
-                        "maximum_coefficient": float(maximum_coefficient),
-                        "repetitions": int(repetitions),
-                        "realized_coefficient_angle": float(
-                            dt * maximum_coefficient / repetitions
-                        ),
-                        "active_terms": int(active_terms),
-                    }
-                    for (step, piece), maximum_coefficient, repetitions, active_terms
-                    in zip(
-                        generator_indices,
-                        maxima_array,
-                        reps_array,
-                        terms_array,
-                    )
-                ],
-                "minimum_repetitions": int(reps_array.min()) if reps_array.size else 0,
-                "maximum_repetitions": int(reps_array.max()) if reps_array.size else 0,
-                "mean_repetitions": float(reps_array.mean()) if reps_array.size else 0.0,
-                "generators_above_one_repetition": int(np.count_nonzero(reps_array > 1)),
-                "maximum_generator_coefficient": (
-                    float(maxima_array.max()) if maxima_array.size else 0.0
-                ),
-                "maximum_realized_coefficient_angle": (
-                    float(np.max(dt * maxima_array / reps_array))
-                    if reps_array.size else 0.0
-                ),
-                "estimated_pauli_rotations": int(
-                    np.sum(terms_array * reps_array * rotation_multiplier)
-                ),
-                "rotation_count_note": (
-                    "For suzuki2 this is the unmerged upper estimate 2*M*reps; "
-                    "Qiskit may merge adjacent rotations."
-                ),
-            }
+            _build_synthesis_metadata(
+                synthesis_formula=synthesis_formula,
+                adaptive_repetitions=adaptive_repetitions,
+                max_coefficient_angle=max_coefficient_angle,
+                max_repetitions=max_repetitions,
+                dt=dt,
+                repetition_counts=repetition_counts,
+                maximum_coefficients=maximum_coefficients,
+                active_term_counts=active_term_counts,
+                generator_indices=generator_indices,
+            )
         )
     #print(f'Error (trace norm) between transpiled circuit unitary and target unitary: {trace_norm:e}')
 

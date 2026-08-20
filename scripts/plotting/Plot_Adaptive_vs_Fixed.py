@@ -25,7 +25,7 @@ import scipy.sparse as sp
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parents[2]
+PROJECT_DIR = SCRIPT_DIR.parents[1]
 DEFAULT_DATA_ROOT = PROJECT_DIR / "final_outputs" / "qite_runs"
 DEFAULT_OUTPUT_DIR = PROJECT_DIR / "final_plots" / "qite_adaptive"
 SUPPORT_TOL = 1e-14

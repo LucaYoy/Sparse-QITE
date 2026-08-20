@@ -3,7 +3,7 @@
 
 Edit the parameter and fidelity-threshold lists in ``main()``, then run::
 
-    python scripts/Plot_QITE_scalability.py
+    python scripts/plotting/Plot_QITE_scalability.py
 
 For each D and fidelity threshold, the selected run is the largest tested
 LASSO lambda that reaches the QITE time horizon and satisfies
@@ -15,6 +15,7 @@ from __future__ import annotations
 import csv
 import os
 from pathlib import Path
+import sys
 from typing import Any
 
 os.environ.setdefault("MPLCONFIGDIR", f"/tmp/qite-matplotlib-{os.getuid()}")
@@ -26,6 +27,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+SCRIPTS_DIR = SCRIPT_DIR.parent
+PROJECT_DIR = SCRIPTS_DIR.parent
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
 from Generate_QITE_configs import method_file_tag, parameter_jobs, physical_folder_name
 from Plot_QITE_results import (
     coefficient_localities,
@@ -34,10 +41,6 @@ from Plot_QITE_results import (
     ground_state,
     load_result,
 )
-
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parent
 
 
 def phase_label(parameters: dict[str, Any]) -> str:

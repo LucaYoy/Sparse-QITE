@@ -3,7 +3,7 @@
 
 Run:
 
-    python scripts/Plot_QITE_results.py
+    python scripts/plotting/Plot_QITE_results.py
 
 The PDFs are written below ``plots/qite_adaptive``.  Each curve plot compares
 standard QITE, fixed-lambda Sparse-QITE, and Adaptive Sparse-QITE.
@@ -16,6 +16,7 @@ import csv
 from itertools import product
 import os
 from pathlib import Path
+import sys
 from typing import Any
 
 # Use a writable Matplotlib cache on cluster nodes.
@@ -30,12 +31,14 @@ import numpy as np
 import scipy.sparse as sp
 from scipy.sparse.linalg import eigsh
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+SCRIPTS_DIR = SCRIPT_DIR.parent
+PROJECT_DIR = SCRIPTS_DIR.parent
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
 from Generate_QITE_configs import method_file_tag, physical_folder_name
 from Run_QITE_cluster import build_hamiltonian
-
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parent
 
 
 def curve_label(job: dict[str, Any]) -> str:

@@ -8,7 +8,7 @@ This script combines:
 
 Edit the cases and fidelity thresholds in ``main()``, then run:
 
-    python scripts/Plot_QITE_compiled_scalability.py
+    python scripts/plotting/Plot_QITE_compiled_scalability.py
 
 Each sparse-QITE curve uses the lambda selected at the stated fidelity
 threshold. Standard QITE is plotted as a dashed black reference.
@@ -32,7 +32,7 @@ import numpy as np
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parent
+PROJECT_DIR = SCRIPT_DIR.parents[1]
 TRANSPILATION_FOLDER = (
     "generic_u3-cx_opt1_pauli_evolution_steps100_no_unitary_error"
 )

@@ -4,7 +4,7 @@
 The input is the ``lambda_scan.csv`` produced by ``Plot_QITE_scalability.py``.
 Edit the cases and plotting choices in ``main()``, then run:
 
-    python scripts/Plot_QITE_pareto.py
+    python scripts/plotting/Plot_QITE_pareto.py
 
 For each case, two separate logarithmic-infidelity PDF figures are written:
 
@@ -35,7 +35,7 @@ import numpy as np
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parent
+PROJECT_DIR = SCRIPT_DIR.parents[1]
 
 
 COST_LABELS = {

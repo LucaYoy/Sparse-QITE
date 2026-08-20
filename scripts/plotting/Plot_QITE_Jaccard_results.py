@@ -3,7 +3,7 @@
 
 Edit the parameter lists in ``main()`` and run from the project directory::
 
-    python scripts/Plot_QITE_Jaccard_results.py
+    python scripts/plotting/Plot_QITE_Jaccard_results.py
 
 The Jaccard diagnostics are reconstructed from the saved coefficient tensor
 using the support tolerance, cumulative-Jaccard threshold, and patience stored
@@ -16,6 +16,7 @@ from __future__ import annotations
 import csv
 import os
 from pathlib import Path
+import sys
 from typing import Any
 
 os.environ.setdefault("MPLCONFIGDIR", f"/tmp/qite-matplotlib-{os.getuid()}")
@@ -27,6 +28,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+SCRIPTS_DIR = SCRIPT_DIR.parent
+PROJECT_DIR = SCRIPTS_DIR.parent
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
 from Generate_QITE_configs import method_file_tag, parameter_jobs, physical_folder_name
 from Plot_QITE_results import (
     coefficient_localities,
@@ -36,10 +43,6 @@ from Plot_QITE_results import (
     locality_counts_over_time,
     trajectory_fidelity,
 )
-
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parent
 
 
 def reconstruct_jaccard_metrics(
