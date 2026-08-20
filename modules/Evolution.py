@@ -101,6 +101,20 @@ class _AdaptiveLassoResult(NamedTuple):
     grid_index: int
     objective: float
 
+
+class _QITEState(NamedTuple):
+    start_step: int
+    current_state: sp.spmatrix
+    energy: np.ndarray
+    states: sp.lil_matrix
+    coefficients: np.ndarray
+    allowed_mask: np.ndarray
+    cumulative_support: set[int]
+    jaccard_streak: int
+    frozen: bool
+    freeze_step: Optional[int]
+
+
 def _solve_adaptive_lasso_qite(A: np.ndarray,
                                S: np.ndarray,
                                b: np.ndarray,
@@ -221,6 +235,102 @@ def _solve_adaptive_lasso_qite(A: np.ndarray,
         objective=selected_objective,
     )
 
+
+def _initialize_qite_state(
+    *,
+    n_qubits: int,
+    n_steps: int,
+    num_trotter_terms: int,
+    num_paulis: int,
+    hamiltonian: sp.spmatrix,
+    initial_state: sp.spmatrix,
+    method: str,
+    resume_state: Optional[dict[str, Any]],
+) -> _QITEState:
+    """Create a fresh QITE trajectory or restore one from a checkpoint."""
+    allowed_mask = np.ones((num_trotter_terms, num_paulis), dtype=bool)
+    cumulative_support: set[int] = set()
+    jaccard_streak = 0
+    frozen = False
+    freeze_step: Optional[int] = None
+
+    states = sp.lil_matrix((2**n_qubits, n_steps + 1), dtype=complex)
+    coefficients = np.zeros(
+        (n_steps, num_trotter_terms, num_paulis),
+        dtype=complex,
+    )
+    energy = np.zeros(n_steps + 1)
+
+    if resume_state is None:
+        start_step = 0
+        current_state = initial_state.copy()
+        states[:, 0] = current_state
+        energy[0] = np.real(
+            (current_state.getH() @ hamiltonian @ current_state).trace()
+        )
+    else:
+        start_step = int(resume_state["next_step"])
+        if not 0 <= start_step <= n_steps:
+            raise ValueError("Checkpoint next_step is outside the requested evolution.")
+
+        saved_energy = np.asarray(resume_state["energy"])
+        saved_states = sp.csc_matrix(resume_state["states"])
+        saved_coefficients = np.asarray(resume_state["coefficients"])
+        expected_coefficient_shape = (
+            start_step,
+            num_trotter_terms,
+            num_paulis,
+        )
+        if saved_energy.shape != (start_step + 1,):
+            raise ValueError("Checkpoint energy length does not match next_step.")
+        if saved_states.shape != (2**n_qubits, start_step + 1):
+            raise ValueError("Checkpoint state trajectory does not match next_step.")
+        if saved_coefficients.shape != expected_coefficient_shape:
+            raise ValueError(
+                "Checkpoint coefficient shape does not match this Pauli pool: "
+                f"{saved_coefficients.shape} != {expected_coefficient_shape}."
+            )
+
+        energy[:start_step + 1] = saved_energy
+        states[:, :start_step + 1] = saved_states
+        coefficients[:start_step] = saved_coefficients
+        saved_current_state = resume_state.get("current_state")
+        if saved_current_state is None:
+            current_state = saved_states[:, -1].tocsc()
+        else:
+            current_state = saved_current_state.copy()
+            if current_state.shape != (2**n_qubits, 1):
+                raise ValueError("Checkpoint current_state has an incompatible shape.")
+
+        if method == "Jaccard_lasso":
+            saved_mask = np.asarray(resume_state["allowed_mask"], dtype=bool)
+            if saved_mask.shape != allowed_mask.shape:
+                raise ValueError("Checkpoint allowed_mask has an incompatible shape.")
+            allowed_mask[:] = saved_mask
+            cumulative_support = {
+                int(index) for index in resume_state["cumulative_support"]
+            }
+            jaccard_streak = int(resume_state["jaccard_streak"])
+            frozen = bool(resume_state["frozen"])
+            saved_freeze_step = resume_state.get("freeze_step")
+            freeze_step = (
+                None if saved_freeze_step is None else int(saved_freeze_step)
+            )
+
+    return _QITEState(
+        start_step=start_step,
+        current_state=current_state,
+        energy=energy,
+        states=states,
+        coefficients=coefficients,
+        allowed_mask=allowed_mask,
+        cumulative_support=cumulative_support,
+        jaccard_streak=jaccard_streak,
+        frozen=frozen,
+        freeze_step=freeze_step,
+    )
+
+
 def QITE(n_qubits: int, 
          H: sp.spmatrix, 
          H_trot: TrotterHamiltonian, 
@@ -310,68 +420,27 @@ def QITE(n_qubits: int,
         if support_tol < 0.0:
             raise ValueError("support_tol must be non-negative.")
 
-    # Jaccard_lasso starts with every coefficient slot available. After the
-    # cumulative support stabilizes, the mask retains only discovered slots.
     ridge = 1e-10
-    allowed_mask = np.ones((H_trot.Nk, num_paulis), dtype=bool)
-    cumulative_support: set[int] = set()
-    jaccard_streak = 0
-    frozen = False
-    freeze_step: Optional[int] = None
-
-    psi_out=sp.lil_matrix((2**n_qubits,N+1),dtype=complex)
-    a=np.zeros((N,H_trot.Nk,num_paulis),dtype=complex)
-    E_QITE=np.zeros(N+1)
-    start_step = 0
-
-    if resume_state is None:
-        psi_out[:,0]=psi_0.copy()
-        psi_QITE=psi_0.copy()
-        E_QITE[0]=np.real((psi_QITE.getH()@H@psi_QITE).trace())
-    else:
-        start_step = int(resume_state["next_step"])
-        if not 0 <= start_step <= N:
-            raise ValueError("Checkpoint next_step is outside the requested evolution.")
-
-        saved_energy = np.asarray(resume_state["energy"])
-        saved_states = sp.csc_matrix(resume_state["states"])
-        saved_coefficients = np.asarray(resume_state["coefficients"])
-        expected_coefficient_shape = (start_step, H_trot.Nk, num_paulis)
-        if saved_energy.shape != (start_step + 1,):
-            raise ValueError("Checkpoint energy length does not match next_step.")
-        if saved_states.shape != (2**n_qubits, start_step + 1):
-            raise ValueError("Checkpoint state trajectory does not match next_step.")
-        if saved_coefficients.shape != expected_coefficient_shape:
-            raise ValueError(
-                "Checkpoint coefficient shape does not match this Pauli pool: "
-                f"{saved_coefficients.shape} != {expected_coefficient_shape}."
-            )
-
-        E_QITE[:start_step+1] = saved_energy
-        psi_out[:,:start_step+1] = saved_states
-        a[:start_step] = saved_coefficients
-        saved_current_state = resume_state.get("current_state")
-        if saved_current_state is None:
-            psi_QITE = saved_states[:,-1].tocsc()
-        else:
-            psi_QITE = saved_current_state.copy()
-            if psi_QITE.shape != (2**n_qubits, 1):
-                raise ValueError("Checkpoint current_state has an incompatible shape.")
-
-        if method == 'Jaccard_lasso':
-            saved_mask = np.asarray(resume_state["allowed_mask"], dtype=bool)
-            if saved_mask.shape != allowed_mask.shape:
-                raise ValueError("Checkpoint allowed_mask has an incompatible shape.")
-            allowed_mask[:] = saved_mask
-            cumulative_support = {
-                int(index) for index in resume_state["cumulative_support"]
-            }
-            jaccard_streak = int(resume_state["jaccard_streak"])
-            frozen = bool(resume_state["frozen"])
-            saved_freeze_step = resume_state.get("freeze_step")
-            freeze_step = (
-                None if saved_freeze_step is None else int(saved_freeze_step)
-            )
+    state = _initialize_qite_state(
+        n_qubits=n_qubits,
+        n_steps=N,
+        num_trotter_terms=H_trot.Nk,
+        num_paulis=num_paulis,
+        hamiltonian=H,
+        initial_state=psi_0,
+        method=method,
+        resume_state=resume_state,
+    )
+    start_step = state.start_step
+    psi_QITE = state.current_state
+    E_QITE = state.energy
+    psi_out = state.states
+    a = state.coefficients
+    allowed_mask = state.allowed_mask
+    cumulative_support = state.cumulative_support
+    jaccard_streak = state.jaccard_streak
+    frozen = state.frozen
+    freeze_step = state.freeze_step
 
     #errors = []
     completed_steps = start_step
