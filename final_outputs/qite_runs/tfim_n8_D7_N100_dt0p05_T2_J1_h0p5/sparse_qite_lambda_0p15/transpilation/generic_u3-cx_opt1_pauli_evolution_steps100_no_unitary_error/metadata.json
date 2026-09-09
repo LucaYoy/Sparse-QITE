@@ -1,0 +1,52 @@
+{
+  "fidelity": {
+    "compiled_vs_ground_state": 0.9561944964350719,
+    "ground_state_convention": "one lowest-eigenvalue eigenvector; use a ground-space projector for degenerate Hamiltonians",
+    "ground_state_energy": -8.509082235140276,
+    "ground_state_fidelity_degradation": 0.002642945815719888,
+    "uncompiled_vs_compiled": 0.99982500769406,
+    "uncompiled_vs_ground_state": 0.9588374422507918
+  },
+  "qite": {
+    "D": 7,
+    "active_coefficients": 3972,
+    "configured_steps": 100,
+    "dt": 0.05,
+    "method": "vanilla_lasso",
+    "model": "tfim",
+    "n_qubits": 8,
+    "nonzero_coefficients": 3972,
+    "num_paulis_per_piece": 8128,
+    "num_trotter_pieces": 8,
+    "steps": 100,
+    "support_tolerance": 1e-14
+  },
+  "source": {
+    "config_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/configs/generated/tfim_n8_D7_N100_dt0p05_T2_J1_h0p5/sparse_qite_lambda_0p15.toml",
+    "states_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/tfim_n8_D7_N100_dt0p05_T2_J1_h0p5/sparse_qite_lambda_0p15/states.npz",
+    "trajectory_path": "/lhome/ific/r/ragolur/Projects/ACQ-main/Sparse-QITE-via-LASSO-main/outputs/qite_runs/tfim_n8_D7_N100_dt0p05_T2_J1_h0p5/sparse_qite_lambda_0p15/trajectory.npz",
+    "trajectory_sha256": "16dfef68a08d974e39610e18fa797eacb5bcd1bfc9d16a1b5939c97b7948612b"
+  },
+  "transpilation": {
+    "backend": "GenericBackendV2",
+    "basis_gates": [
+      "u3",
+      "cx"
+    ],
+    "circuit_construction": "PauliEvolutionGate",
+    "depth": 15944,
+    "elapsed_seconds": 2.02156855200883,
+    "gate_counts": {
+      "cx": 12242,
+      "u3": 8687
+    },
+    "nonempty_evolution_blocks_before_transpilation": 257,
+    "nonlocal_gates": 12242,
+    "optimization_level": 1,
+    "pauli_rotations_before_transpilation": 3972,
+    "seed_transpiler": 40,
+    "size": 20929,
+    "unitary_frobenius_error": null,
+    "width": 8
+  }
+}
