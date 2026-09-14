@@ -464,6 +464,6 @@ def Heisenberg_OBC_DN(J,n_qubits,sparse=True):
     N_k=1
     R=1
     index=[0]
-    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index)
+    H_trot=TrotterHamiltonian(T,N_k,R,H_T,index,BC)
 
     return H,H_trot

@@ -355,7 +355,7 @@ def OBC_DN(H_trot,n_qubits,sparse=True,PDstr=False,verbose=False):
                 s[ind]=qi[k]
             pstr=''.join(s)
             PD[0][i]=sp.csc_matrix(Pauli(pstr).to_matrix(sparse=sparse))
-            PD_str=pstr
+            PD_str[0][i]=pstr
             i=i+1
 
     unique_elements = set(elem for sublist in PD_str for elem in sublist)
