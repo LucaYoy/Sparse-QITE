@@ -79,10 +79,10 @@ CASES = (
         dt=0.05,
         J=1.0,
         h=0.5,
-        fixed_lambda=0.0083,
-        fixed_dir="sparse_qite_lambda_0p0083",
-        adaptive_epsilon=0.0049,
-        adaptive_dir="adaptive_lasso_epsilon_0p0049",
+        fixed_lambda=0.097,
+        fixed_dir="sparse_qite_lambda_0p097",
+        adaptive_epsilon=0.032,
+        adaptive_dir="adaptive_lasso_epsilon_0p032",
     ),
 )
 
