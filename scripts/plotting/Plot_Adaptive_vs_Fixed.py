@@ -72,17 +72,17 @@ CASES = (
     ),
     Case(
         phase="ordered",
-        folder="tfim_n8_D5_N100_dt0p05_T2_J1_h0p5",
+        folder="tfim_n8_D6_N100_dt0p05_T2_J1_h0p5",
         n_qubits=8,
-        D=5,
+        D=6,
         N=100,
         dt=0.05,
         J=1.0,
         h=0.5,
-        fixed_lambda=0.097,
-        fixed_dir="sparse_qite_lambda_0p097",
-        adaptive_epsilon=0.032,
-        adaptive_dir="adaptive_lasso_epsilon_0p032",
+        fixed_lambda=0.057,
+        fixed_dir="sparse_qite_lambda_0p057",
+        adaptive_epsilon=0.0224,
+        adaptive_dir="adaptive_lasso_epsilon_0p0224",
     ),
 )
 
