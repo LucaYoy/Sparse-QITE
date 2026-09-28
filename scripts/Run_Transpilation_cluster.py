@@ -420,8 +420,6 @@ def main() -> None:
     synthesis_metadata: dict[str, Any] = {}
     circuit, _target_unitary, unitary_error = Transpile.transpile_circuit_qite(
         config["n_qubits"],
-        config["D"],
-        config.get("T", 2),
         pauli_pool,
         coefficients,
         config["dt"],

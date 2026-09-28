@@ -1,80 +1,11 @@
 from typing import List, Tuple
 import numpy as np
-from qiskit.quantum_info import SparsePauliOp,Pauli
+from qiskit.quantum_info import SparsePauliOp
 from qiskit.circuit.library import PauliEvolutionGate,HamiltonianGate
 import scipy.sparse as sp
 from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info import Operator
 from qiskit.synthesis import LieTrotter, SuzukiTrotter
-
-def cyclic_range(start: int, stop: int, n: int) -> List[int]:
-    """
-    Generate a range of indices with periodic boundary conditions.
-    
-    This function creates a list of consecutive indices from start (inclusive) to stop
-    (exclusive), wrapping around at n to handle periodic boundary conditions on a chain
-    or ring of n qubits.
-    
-    Args:
-        start: Starting index (inclusive).
-        stop: Stopping index (exclusive).
-        n: Total number of elements in the cyclic system (wrap-around point).
-    
-    Returns:
-        List of indices in cyclic order. If start < stop, returns [start, start+1, ..., stop-1].
-        If start >= stop, returns [start, ..., n-1, 0, 1, ..., stop-1] (wraps around).
-    
-    Examples:
-        cyclic_range(2, 5, 10) -> [2, 3, 4]
-        cyclic_range(8, 2, 10) -> [8, 9, 0, 1]
-    """
-    if start < stop:
-        return list(range(start, stop))
-    else:
-        # wrap around: [start, n) ∪ [0, stop)
-        return list(range(start, n)) + list(range(0, stop))
-
-def support_of_Ak(k: int, D: int, T: int, n_qubits: int) -> List[int]:
-    """
-    Compute the qubit support region for the k-th Hamiltonian piece operator.
-    
-    This function determines which qubits are involved in the k-th Hamiltonian piece
-    when using a domain of size D to approximate a T-local Hamiltonian. The support
-    is centered around qubit k with appropriate offset to cover the necessary interaction
-    range, respecting periodic boundary conditions.
-    
-    Args:
-        k: Index of the Hamiltonian piece (starting qubit of the T-local term).
-        D: Domain size - number of qubits in the Pauli string basis.
-        T: Trotter size - locality of the Hamiltonian piece (number of qubits it acts on).
-        n_qubits: Total number of qubits in the system.
-    
-    Returns:
-        List of qubit indices forming the support region, in cyclic order.
-        The length of this list is D.
-    
-    Notes:
-        - The support is computed with displacement = (D - T) // 2
-        - For even (D - T): perfectly centered around the T-local term
-        - For odd (D - T): centered with rightward bias (offset = 1)
-        - Start index: (k - half) % n_qubits
-        - Stop index: (k + T + half + offset) % n_qubits
-        - Handles wrap-around for periodic boundary conditions
-    
-    Examples:
-        For n_qubits=10, k=0, T=2, D=4:
-            half=1, offset=0 -> support from qubit 9 to qubit 3 (wraps): [9, 0, 1, 2]
-    """
-    a = D - T
-    half = a // 2
-    offset = a % 2  # 0 if even, 1 if odd
-
-    start = (k - half) % n_qubits
-    stop  = (k + T + half + offset) % n_qubits
-
-    support = cyclic_range(start, stop, n_qubits)
-    return support
-
 
 def _build_synthesis_metadata(
     *,
@@ -141,8 +72,6 @@ def _build_synthesis_metadata(
 
 
 def transpile_circuit_qite(n_qubits: int, 
-                            D: int, 
-                            T: int, 
                             PD: List[List[str]], 
                             a: np.ndarray, 
                             dt: float, 
@@ -168,10 +97,9 @@ def transpile_circuit_qite(n_qubits: int,
     
     Args:
         n_qubits: Number of qubits in the quantum system.
-        D: Domain size - number of qubits covered by each Pauli string basis.
-        T: Trotter size - locality of each Hamiltonian piece.
         PD: Pauli decomposition - list of Pauli string lists for each Hamiltonian piece.
             Structure: PD[piece_index][pauli_index] -> Pauli string (e.g., "IIXYZ").
+            Each string spans all n_qubits; support is inferred from non-identity positions.
         a: Coefficients for the Pauli operators.
            Shape: (steps, num_pieces, num_paulis).
         dt: Time step.
@@ -222,6 +150,15 @@ def transpile_circuit_qite(n_qubits: int,
     active_term_counts = []
     generator_indices = []
 
+    # Piece indices need not equal their starting qubits. Infer support from
+    # the full-system labels, which also handles open and periodic boundaries.
+    # Keep one qubit for identity-only pools to preserve their global phase.
+    supports = [
+        sorted({i for string in pool for i, pauli in enumerate(string) if pauli != "I"})
+        or [0]
+        for pool in PD
+    ]
+
     # loop through the Pauli operators and construct the circuits
     for step in range(steps):
         for k in range(len(PD)):
@@ -242,9 +179,8 @@ def transpile_circuit_qite(n_qubits: int,
                 active_term_counts.append(int(np.count_nonzero(mask)))
                 generator_indices.append((step, k))
 
-                support = support_of_Ak(k,D,T,n_qubits)
+                support = supports[k]
                 PD_k_reduced = np.asarray([''.join(string[i] for i in support) for string in PD[k]])
-                #print(PD_k_reduced,PD[k],support)
 
                 Ak_reduced = SparsePauliOp(
                     PD_k_reduced[mask], filtered_coeffs[mask]
